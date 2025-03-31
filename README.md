@@ -12,7 +12,7 @@
   - <strong>POKÉDEX</strong>: It lets you search between all 251 Pokémon, and see the sprite, stats, size and more from each of them.
   - <strong>COMPARE</strong>: Have you ever wondered how big could be Onix against Metapod? Or maybe Charizard versus Venusaur? Now you can, since this feature scales each Pokémon sprite according to its size and compares their stats.
   - <strong>GAME</strong>: Remember that part from the episodes when you had to guess "Who's That Pokémon"? This app includes my own version, with a hints/lifes system and leaderboard.
-  - <strong>LANGUAGE</strong>: Change the app langauge betweeen English and Spanish.
+  - <strong>LANGUAGE</strong>: Change the app language betweeen English and Spanish.
   <br></br>
 </p>
 
