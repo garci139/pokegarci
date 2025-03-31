@@ -1,0 +1,50 @@
+<resources>
+    <string name="app_name">PokeGarci</string>
+    <string name="title_activity_adapter">Adapter</string>
+    <!-- Strings used for fragments for navigation -->
+    <string name="first_fragment_label">First Fragment</string>
+    <string name="second_fragment_label">Second Fragment</string>
+    <string name="next">Next</string>
+    <string name="previous">Previous</string>
+
+    <string name="hello_first_fragment">Hello first fragment</string>
+    <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
+    <string name="spanishLanguageButton">SPANISH</string>
+    <string name="englishLanguageButton">ENGLISH</string>
+    <string name="pokedexMainMenuTitle">POKEDEX</string>
+    <string name="sizeMainMenuTitle">COMPARE</string>
+    <string name="gameMainMenuTitle">GAME</string>
+    <string name="settingsMainMenuTitle">SETTINGS</string>
+    <string name="testEachPokemonName">Pikachu</string>
+    <string name="textEachPokemonId">0039</string>
+    <string name="queryHintSearchView">Name or ID</string>
+    <string name="expandedPokemonName">Name</string>
+    <string name="expandedPokemonId">#000</string>
+    <string name="expandedPokemonHeight">14.5 m</string>
+    <string name="expandedPokemonWeight">32.5 kg</string>
+    <string name="expandedPokemonDescriptionTitle">Description</string>
+    <string name="expandedPokemonDescription">Description test.</string>
+    <string name="expandedStatsTitle">Base stats</string>
+    <string name="HP">HP</string>
+    <string name="Attack">Attack</string>
+    <string name="Defense">Defense</string>
+    <string name="SpAttack">Sp. Attack</string>
+    <string name="SpDefense">Sp. Defense</string>
+    <string name="Speed">Speed</string>
+    <string name="closeExpandedCard">Close</string>
+
+    <string name="pressToEnter">Touch to enter!</string>
+    <string name="developedBy">Developed by:\n Pablo Garcia Ortega</string>
+    <string name="sizeInstructionsText">COMPARE</string>
+    <string name="changePkmn1SizeButton">Change left</string>
+    <string name="changePkmn2SizeButton">Change right</string>
+
+    <string name="name">Name</string>
+    <string name="resetLogoDescription">Reset</string>
+    <string name="level">Level</string>
+    <string name="score">Score</string>
+
+    <string name="losePhrase">"At least you tried. Try again!"</string>
+    <string name="winPhrase">"You should be a Gym Leader!"</string>
+    <string name="resultsScore">SCORE: %d</string>
+</resources>

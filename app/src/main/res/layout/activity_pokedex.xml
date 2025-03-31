@@ -1,0 +1,499 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingTop="18dp"
+    android:id="@+id/pokedexLayout"
+    android:paddingHorizontal="12dp"
+    android:background="@drawable/gradient_list"
+    tools:context=".PokedexActivity">
+
+    <androidx.appcompat.widget.SearchView
+        android:id="@+id/searchView"
+        android:layout_marginTop="30dp"
+        app:queryBackground="@android:color/transparent"
+        app:searchIcon="@drawable/pokeball"
+        app:iconifiedByDefault="false"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="4dp"
+        android:inputType="text"
+        style="@style/CustomSearchView"
+        android:background="@drawable/search_view_bg"
+        android:queryHint="@string/queryHintSearchView"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"/>
+
+    <ProgressBar
+        android:id="@+id/progressBar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        android:indeterminate="true"
+        android:theme="@style/Widget.AppCompat.ProgressBar"
+        android:indeterminateTint="@android:color/white"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"/>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/pokedexBox"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingBottom="150dp"
+        android:clipToPadding="false"
+        android:layout_marginTop="18dp"
+        android:fadeScrollbars="true"
+        app:layout_constraintTop_toBottomOf="@id/searchView"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"/>
+
+    <View
+        android:id="@+id/disableRecyclerView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#00000000"
+        android:padding="2dp"
+        android:visibility="gone"
+        android:clickable="true"
+        android:focusable="true"/>
+
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/expandedPokemonCard"
+        android:layout_width="match_parent"
+        android:layout_height="600dp"
+        android:layout_marginHorizontal="4dp"
+        app:cardCornerRadius="18dp"
+        app:cardElevation="16dp"
+        app:strokeWidth="5dp"
+        app:strokeColor="@color/black"
+        app:cardBackgroundColor="@color/expanded_card_bg"
+        android:visibility="gone"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:padding="26dp"
+            android:gravity="center">
+
+            <TextView
+                android:id="@+id/expandedPokemonName"
+                android:layout_width="wrap_content"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                android:layout_height="wrap_content"
+                android:textColor="@color/black"
+                android:text="@string/expandedPokemonName"
+                android:layout_gravity="start"
+                android:textStyle="bold"
+                android:textSize="22sp"
+                android:gravity="start" />
+
+            <TextView
+                android:id="@+id/expandedPokemonId"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:text="@string/expandedPokemonId"
+                android:layout_gravity="end"
+                android:textStyle="bold"
+                android:textColor="@color/black"
+                android:textSize="22sp"
+                android:gravity="end" />
+
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/expandedPokemonImageBox"
+                android:layout_width="match_parent"
+                android:layout_height="170dp"
+                android:layout_marginTop="16dp"
+                app:cardCornerRadius="0dp"
+                app:cardElevation="0dp"
+                app:strokeWidth="5dp"
+                app:layout_constraintTop_toBottomOf="@id/expandedPokemonName"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:strokeColor="@color/black"
+                app:cardBackgroundColor="@color/white">
+
+                <View
+                    android:id="@+id/expandedSubView"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"/>
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <ImageView
+                        android:id="@+id/expandedPokemonImage"
+                        android:layout_width="150dp"
+                        android:layout_height="150dp"
+                        android:scaleType="fitCenter"
+                        android:layout_gravity="center"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        android:padding="10dp"/>
+
+                    <TextView
+                        android:id="@+id/expandedPokemonHeight"
+                        android:layout_width="wrap_content"
+                        android:paddingEnd="8dp"
+                        android:paddingBottom="2dp"
+                        android:paddingStart="10dp"
+                        android:layout_height="26dp"
+                        android:gravity="center"
+                        android:text="@string/expandedPokemonHeight"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        android:textSize="12sp"
+                        android:textColor="@color/black"
+                        android:background="@drawable/custom_stats_gridlayout"/>
+
+                    <TextView
+                        android:id="@+id/expandedPokemonWeight"
+                        android:layout_width="wrap_content"
+                        android:paddingStart="8dp"
+                        android:paddingBottom="2dp"
+                        android:paddingEnd="10dp"
+                        android:layout_height="26dp"
+                        android:gravity="center"
+                        android:text="@string/expandedPokemonWeight"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        android:textSize="12sp"
+                        android:textColor="@color/black"
+                        android:background="@drawable/custom_stats_gridlayout"/>
+
+                    <LinearLayout
+                        android:id="@+id/expandedPokemonTypes"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:gravity="center_horizontal"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        android:layout_margin="12dp">
+
+                        <ImageView
+                            android:id="@+id/expandedFirstTypeIcon"
+                            android:background="@drawable/image_border_bg"
+                            android:padding="1dp"
+                            android:layout_width="24dp"
+                            android:layout_height="24dp"
+                            android:layout_marginBottom="4dp"/>
+
+                        <ImageView
+                            android:id="@+id/expandedSecondTypeIcon"
+                            android:background="@drawable/image_border_bg"
+                            android:padding="1dp"
+                            android:layout_width="24dp"
+                            android:layout_height="24dp"/>
+
+                    </LinearLayout>
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+            </com.google.android.material.card.MaterialCardView>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/expandedDescriptionTitle"
+                app:layout_constraintTop_toBottomOf="@id/expandedPokemonImageBox"
+                app:layout_constraintStart_toStartOf="parent"
+                android:text="@string/expandedPokemonDescriptionTitle"
+                android:textStyle="bold"
+                android:textColor="@color/black"
+                android:textSize="20sp"
+                android:gravity="start"
+                android:layout_marginTop="16dp"/>
+
+            <TextView
+                android:id="@+id/expandedPokemonDescription"
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:text="@string/expandedPokemonDescription"
+                android:textIsSelectable="false"
+                android:contextClickable="false"
+                app:layout_constraintTop_toBottomOf="@id/expandedDescriptionTitle"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                android:textStyle="italic"
+                android:justificationMode="inter_word"
+                android:layout_marginTop="4dp"
+                android:textColor="@color/black"
+                android:textSize="16sp"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/expandedStatsTitle"
+                app:layout_constraintTop_toBottomOf="@id/expandedPokemonDescription"
+                app:layout_constraintStart_toStartOf="parent"
+                android:text="@string/expandedStatsTitle"
+                android:textStyle="bold"
+                android:textColor="@color/black"
+                android:textSize="20sp"
+                android:gravity="start"
+                android:layout_marginTop="16dp"/>
+
+            <LinearLayout
+                android:id="@+id/statsBox"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toBottomOf="@id/expandedStatsTitle"
+                android:layout_marginTop="8dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                android:orientation="horizontal"
+                android:gravity="center"
+                android:weightSum="2">
+
+                <TableLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="8dp"
+                    app:layout_constraintTop_toBottomOf="@id/expandedPokemonDescription"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    android:stretchColumns="*"
+                    android:padding="0.6dp"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:orientation="horizontal"
+                    android:background="@color/black">
+
+                    <TableRow>
+                        <TextView
+                            android:text="@string/HP"
+                            android:textColor="@color/black"
+                            android:textStyle="bold"
+                            android:gravity="center"
+                            android:layout_margin="0.6dp"
+                            android:padding="2dp"
+                            android:background="@color/light_grey"
+                            android:layout_height="wrap_content"
+                            android:layout_width="0dp"
+                            android:layout_weight="0.7"
+                            android:textIsSelectable="false" />
+
+                        <TextView
+                            android:id="@+id/expandedPokemonHP"
+                            android:text="@string/HP_API"
+                            android:gravity="center"
+                            android:textColor="@color/black"
+                            android:layout_weight="0.3"
+                            android:layout_margin="0.6dp"
+                            android:padding="2dp"
+                            android:background="@color/white"
+                            android:layout_height="wrap_content"
+                            android:layout_width="0dp"
+                            android:textIsSelectable="false" />
+
+                    </TableRow>
+
+                    <TableRow>
+
+                        <TextView
+                            android:text="@string/Attack"
+                            android:textColor="@color/black"
+                            android:gravity="center"
+                            android:textStyle="bold"
+                            android:layout_margin="0.6dp"
+                            android:padding="2dp"
+                            android:background="@color/light_grey"
+                            android:layout_height="wrap_content"
+                            android:layout_width="0dp"
+                            android:layout_weight="0.7"
+                            android:textIsSelectable="false" />
+
+                        <TextView
+                            android:id="@+id/expandedPokemonAttack"
+                            android:text="@string/Attack_API"
+                            android:gravity="center"
+                            android:layout_weight="0.3"
+                            android:layout_margin="0.6dp"
+                            android:padding="2dp"
+                            android:background="@color/white"
+                            android:textColor="@color/black"
+                            android:layout_height="wrap_content"
+                            android:layout_width="0dp"
+                            android:textIsSelectable="false"/>
+
+                    </TableRow>
+
+                    <TableRow>
+
+                        <TextView
+                            android:text="@string/Defense"
+                            android:textColor="@color/black"
+                            android:gravity="center"
+                            android:textStyle="bold"
+                            android:layout_margin="0.6dp"
+                            android:padding="2dp"
+                            android:background="@color/light_grey"
+                            android:layout_height="wrap_content"
+                            android:layout_width="0dp"
+                            android:layout_weight="0.7"
+                            android:textIsSelectable="false" />
+
+                        <TextView
+                            android:id="@+id/expandedPokemonDefense"
+                            android:text="@string/Defense_API"
+                            android:gravity="center"
+                            android:layout_weight="0.3"
+                            android:layout_margin="0.6dp"
+                            android:padding="2dp"
+                            android:background="@color/white"
+                            android:textColor="@color/black"
+                            android:layout_height="wrap_content"
+                            android:layout_width="0dp"
+                            android:textIsSelectable="false"/>
+
+                    </TableRow>
+
+                </TableLayout>
+
+                <TableLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    app:layout_constraintTop_toBottomOf="@id/expandedPokemonDescription"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    android:stretchColumns="*"
+                    android:padding="0.6dp"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:orientation="horizontal"
+                    android:background="@color/black"
+                    android:textAlignment="center">
+
+                    <TableRow>
+
+                        <TextView
+                            android:text="@string/SpAttack"
+                            android:textColor="@color/black"
+                            android:gravity="center"
+                            android:textStyle="bold"
+                            android:layout_margin="0.6dp"
+                            android:padding="2dp"
+                            android:background="@color/light_grey"
+                            android:layout_height="wrap_content"
+                            android:layout_width="0dp"
+                            android:layout_weight="0.7"
+                            android:textIsSelectable="false" />
+
+                        <TextView
+                            android:id="@+id/expandedPokemonSpAttack"
+                            android:text="@string/SpAttack_API"
+                            android:gravity="center"
+                            android:layout_weight="0.3"
+                            android:layout_margin="0.6dp"
+                            android:padding="2dp"
+                            android:background="@color/white"
+                            android:textColor="@color/black"
+                            android:layout_height="wrap_content"
+                            android:layout_width="0dp"
+                            android:textIsSelectable="false"/>
+
+                    </TableRow>
+
+                    <TableRow>
+
+                        <TextView
+                            android:text="@string/SpDefense"
+                            android:gravity="center"
+                            android:textColor="@color/black"
+                            android:textStyle="bold"
+                            android:layout_margin="0.6dp"
+                            android:padding="2dp"
+                            android:background="@color/light_grey"
+                            android:layout_height="wrap_content"
+                            android:layout_width="0dp"
+                            android:layout_weight="0.7"
+                            android:textIsSelectable="false" />
+
+                        <TextView
+                            android:id="@+id/expandedPokemonSpDefense"
+                            android:text="@string/SpDefense_API"
+                            android:gravity="center"
+                            android:layout_weight="0.3"
+                            android:textColor="@color/black"
+                            android:layout_margin="0.6dp"
+                            android:padding="2dp"
+                            android:background="@color/white"
+                            android:layout_height="wrap_content"
+                            android:layout_width="0dp"
+                            android:textIsSelectable="false"/>
+
+                    </TableRow>
+
+                    <TableRow>
+
+                        <TextView
+                            android:text="@string/Speed"
+                            android:gravity="center"
+                            android:textColor="@color/black"
+                            android:textStyle="bold"
+                            android:layout_margin="0.6dp"
+                            android:padding="2dp"
+                            android:background="@color/light_grey"
+                            android:layout_height="wrap_content"
+                            android:layout_width="0dp"
+                            android:layout_weight="0.7"
+                            android:textIsSelectable="false" />
+
+                        <TextView
+                            android:id="@+id/expandedPokemonSpeed"
+                            android:gravity="center"
+                            android:text="@string/Speed_API"
+                            android:layout_weight="0.3"
+                            android:layout_margin="0.6dp"
+                            android:padding="2dp"
+                            android:background="@color/white"
+                            android:textColor="@color/black"
+                            android:layout_height="wrap_content"
+                            android:layout_width="0dp"
+                            android:textIsSelectable="false"/>
+                    </TableRow>
+
+                </TableLayout>
+
+            </LinearLayout>
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/closeCardButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/closeExpandedCard"
+                android:layout_marginTop="16dp"
+                android:padding="14dp"
+                android:textSize="16sp"
+                android:textColor="@color/black"
+                android:backgroundTint="@color/expanded_card_button_bg"
+                app:cornerRadius="24dp"
+                app:strokeWidth="3dp"
+                app:strokeColor="@color/black"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/statsBox"/>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </com.google.android.material.card.MaterialCardView>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

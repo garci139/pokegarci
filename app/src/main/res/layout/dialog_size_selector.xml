@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="300dp"
+    android:layout_height="420dp"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    app:strokeColor="@color/black"
+    app:strokeWidth="3dp"
+    app:cardCornerRadius="18dp"
+    android:backgroundTint="@color/white"
+    app:cardElevation="16dp">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingHorizontal="16dp"
+        android:paddingTop="16dp">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recyclerPokemon"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scrollbars="vertical"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:clipToPadding="false"
+            android:paddingTop="58dp"
+            android:paddingBottom="16dp"/>
+
+        <View
+            android:id="@+id/searchViewTopBackground"
+            android:background="@color/white"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toTopOf="@id/searchViewSize"
+            app:layout_constraintEnd_toEndOf="@id/searchViewSize"
+            app:layout_constraintStart_toStartOf="@id/searchViewSize"
+            app:layout_constraintBottom_toTopOf="@id/searchViewBottomBackground"/>
+
+        <View
+            android:id="@+id/searchViewBottomBackground"
+            android:background="#00000000"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@id/searchViewTopBackground"
+            app:layout_constraintEnd_toEndOf="@id/searchViewSize"
+            app:layout_constraintStart_toStartOf="@id/searchViewSize"
+            app:layout_constraintBottom_toBottomOf="@id/searchViewSize"/>
+
+        <androidx.appcompat.widget.SearchView
+            android:id="@+id/searchViewSize"
+            app:queryBackground="@android:color/transparent"
+            app:searchIcon="@drawable/pokeball"
+            app:iconifiedByDefault="false"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="text"
+            style="@style/CustomSearchView"
+            android:background="@drawable/search_view_bg"
+            android:queryHint="@string/name"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"/>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</com.google.android.material.card.MaterialCardView>

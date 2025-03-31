@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="CustomSearchView" parent="Widget.AppCompat.SearchView">
+        <item name="queryBackground">@drawable/search_view_bg</item>
+        <item name="submitBackground">@null</item>
+    </style>
+    <style name="typeChangePkmnSize">
+        <item name="cornerRadius">36dp</item>
+    </style>
+</resources>

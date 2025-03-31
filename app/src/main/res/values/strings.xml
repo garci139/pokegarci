@@ -1,0 +1,57 @@
+<resources>
+    <string name="app_name">PokeGarci</string>
+    <string name="title_activity_adapter">Adapter</string>
+    <!-- Strings used for fragments for navigation -->
+    <string name="first_fragment_label">First Fragment</string>
+    <string name="second_fragment_label">Second Fragment</string>
+    <string name="next">Next</string>
+    <string name="previous">Previous</string>
+
+    <string name="hello_first_fragment">Hello first fragment</string>
+    <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
+    <string name="spanishLanguageButton">ESPAÑOL</string>
+    <string name="englishLanguageButton">INGLÉS</string>
+    <string name="pokedexMainMenuTitle">POKÉDEX</string>
+    <string name="sizeMainMenuTitle">COMPARAR</string>
+    <string name="gameMainMenuTitle">JUEGO</string>
+    <string name="settingsMainMenuTitle">AJUSTES</string>
+    <string name="testEachPokemonName">Pikachu</string>
+    <string name="textEachPokemonId">0039</string>
+    <string name="queryHintSearchView">Nombre o ID</string>
+    <string name="expandedPokemonName">Nombre</string>
+    <string name="expandedPokemonId">#000</string>
+    <string name="expandedPokemonHeight">14.5 m</string>
+    <string name="expandedPokemonWeight">32.5 kg</string>
+    <string name="expandedPokemonDescriptionTitle">Descripción</string>
+    <string name="expandedPokemonDescription">Descripcion de prueba.</string>
+    <string name="expandedStatsTitle">Estadísticas base</string>
+    <string name="HP">PS</string>
+    <string name="HP_API" translatable="false">-</string>
+    <string name="Attack">Ataque</string>
+    <string name="Attack_API" translatable="false">-</string>
+    <string name="Defense">Defensa</string>
+    <string name="Defense_API" translatable="false">-</string>
+    <string name="SpAttack">Ataque Esp.</string>
+    <string name="SpAttack_API" translatable="false">-</string>
+    <string name="SpDefense">Defensa Esp.</string>
+    <string name="SpDefense_API" translatable="false">-</string>
+    <string name="Speed">Velocidad</string>
+    <string name="Speed_API" translatable="false">-</string>
+    <string name="closeExpandedCard">Cerrar</string>
+
+    <string name="pressToEnter">¡Toca para entrar!</string>
+    <string name="developedBy">Desarrollado por:\n Pablo García Ortega</string>
+
+    <string name="sizeInstructionsText">COMPARADOR</string>
+    <string name="changePkmn1SizeButton">CAMBIAR IZQUIERDA</string>
+    <string name="changePkmn2SizeButton">CAMBIAR DERECHA</string>
+
+    <string name="name">Nombre</string>
+    <string name="resetLogoDescription">Reiniciar</string>
+    <string name="level">Nivel</string>
+    <string name="score">Puntuación</string>
+
+    <string name="losePhrase">"Te falta Calle Victoria…"</string>
+    <string name="winPhrase">"Prueba a tocar un poco el césped"</string>
+    <string name="resultsScore">PUNTUACIÓN: %d</string>
+</resources>

@@ -1,0 +1,4 @@
+<clip xmlns:android="http://schemas.android.com/apk/res/android"
+    android:drawable="@drawable/pikachu_head"
+    android:clipOrientation="horizontal|vertical"
+    android:gravity="top"/>

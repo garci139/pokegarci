@@ -1,0 +1,483 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/sizeLayout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/gradient_list"
+    android:paddingHorizontal="12dp"
+    android:paddingTop="40dp"
+    tools:context=".SizeActivity">
+
+    <!-- TITULO -->
+    <TextView
+        android:id="@+id/sizeInstructions"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="22dp"
+        android:text="@string/sizeInstructionsText"
+        android:textColor="@color/black"
+        android:textSize="32sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <!-- SIZE BOX -->
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/sizeBox"
+        android:layout_width="match_parent"
+        android:layout_height="220dp"
+        android:layout_marginTop="20dp"
+        app:cardCornerRadius="18dp"
+        app:cardElevation="16dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/sizeInstructions"
+        app:strokeColor="@color/black"
+        app:strokeWidth="5dp">
+
+        <!-- CUADRICULA -->
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@drawable/grid_bg_svg" />
+
+        <!-- IMAGENES -->
+        <LinearLayout
+            android:id="@+id/pokemonShapeLinearLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:orientation="horizontal"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <ImageView
+                android:id="@+id/pokemon1Shape"
+                android:layout_width="160dp"
+                android:layout_height="160dp"
+                android:layout_marginEnd="2dp"
+                android:adjustViewBounds="true"
+                tools:ignore="ContentDescription" />
+
+            <ImageView
+                android:id="@+id/pokemon2Shape"
+                android:layout_width="160dp"
+                android:layout_height="160dp"
+                android:layout_marginStart="2dp"
+                android:adjustViewBounds="true"
+                tools:ignore="ContentDescription" />
+
+        </LinearLayout>
+
+        <!-- BARRAS DE CARGA -->
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:orientation="horizontal"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <ProgressBar
+                android:id="@+id/progressBarSize"
+                android:layout_width="166dp"
+                android:layout_height="166dp"
+                android:layout_gravity="center"
+                android:indeterminate="true"
+                android:indeterminateTint="@color/black"
+                android:padding="50dp"
+                android:theme="@style/Widget.AppCompat.ProgressBar" />
+
+            <ProgressBar
+                android:id="@+id/progressBarSize2"
+                android:layout_width="160dp"
+                android:layout_height="160dp"
+                android:indeterminate="true"
+                android:indeterminateTint="@color/black"
+                android:padding="50dp"
+                android:theme="@style/Widget.AppCompat.ProgressBar" />
+        </LinearLayout>
+
+        <!-- RESET LOGO -->
+        <ImageView
+            android:id="@+id/resetImagesPositionSize"
+            android:layout_gravity="right"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:contentDescription="@string/resetLogoDescription"
+            android:src="@drawable/reset_logo"
+            android:layout_margin="20dp"
+            tools:ignore="RtlHardcoded" />
+
+    </com.google.android.material.card.MaterialCardView>
+
+    <!-- LOGO VERSUS -->
+    <ImageView
+        android:id="@+id/versusLogo"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:src="@drawable/versus_svg"
+        app:layout_constraintTop_toBottomOf="@id/sizeBox"
+        app:layout_constraintBottom_toTopOf="@id/pikachuHead"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        tools:ignore="ContentDescription" />
+
+    <!-- BOTÓN CAMBIAR TAMAÑO 1 -->
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/changePkmn1Size"
+        android:layout_width="160dp"
+        android:layout_height="70dp"
+        app:strokeWidth="3dp"
+        app:strokeColor="@color/black"
+        app:cardCornerRadius="36dp"
+        app:layout_constraintTop_toBottomOf="@id/sizeBox"
+        app:layout_constraintBottom_toTopOf="@id/pikachuHead"
+        app:layout_constraintStart_toStartOf="parent">
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/white"
+            android:padding="1dp"
+            android:id="@+id/typeChangePkmn1Size"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:id="@+id/changePkmn1SizeText"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:fontFamily="sans-serif-black"
+            android:layout_height="match_parent"
+            android:text="@string/changePkmn1SizeButton"
+            android:textColor="@color/black"
+            android:textSize="16sp"
+            android:padding="14dp"
+            android:textStyle="bold"/>
+
+    </com.google.android.material.card.MaterialCardView>
+
+    <!-- BOTÓN CAMBIAR TAMAÑO 2 -->
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/changePkmn2Size"
+        android:layout_width="160dp"
+        android:layout_height="70dp"
+        app:strokeWidth="3dp"
+        app:strokeColor="@color/black"
+        app:cardCornerRadius="36dp"
+        app:layout_constraintTop_toBottomOf="@id/sizeBox"
+        app:layout_constraintBottom_toTopOf="@id/pikachuHead"
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:padding="1dp"
+            android:background="@color/white"
+            android:id="@+id/typeChangePkmn2Size"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:id="@+id/changePkmn2SizeText"
+            android:fontFamily="sans-serif-black"
+            android:layout_height="match_parent"
+            android:text="@string/changePkmn2SizeButton"
+            android:textColor="@color/black"
+            android:textSize="16sp"
+            android:padding="14dp"
+            android:textStyle="bold"/>
+
+    </com.google.android.material.card.MaterialCardView>
+
+    <!-- PIKACHU HEAD -->
+    <ImageView
+        android:layout_width="wrap_content"
+        android:id="@+id/pikachuHead"
+        android:adjustViewBounds="true"
+        android:layout_height="100dp"
+        android:layout_marginBottom="-2dp"
+        app:layout_constraintBottom_toTopOf="@id/statsTableSize"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        android:src="@drawable/pikachu_head"
+        tools:ignore="ContentDescription" />
+
+    <!-- STATS TABLE -->
+    <TableLayout
+        android:id="@+id/statsTableSize"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="66dp"
+        android:background="@color/black"
+        android:padding="2dp"
+        android:weightSum="2"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
+
+        <TableRow>
+
+            <TextView
+                android:id="@+id/sizeHP1"
+                android:layout_width="0dp"
+                android:layout_gravity="center"
+                android:layout_margin="0.6dp"
+                android:layout_weight="0.6"
+                android:background="@color/white"
+                android:gravity="center"
+                android:padding="6dp"
+                android:text="@string/HP_API"
+                android:textColor="@color/black"
+                android:textSize="18sp" />
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_gravity="center"
+                android:layout_margin="0.6dp"
+                android:layout_weight="0.8"
+                android:background="@color/light_grey"
+                android:gravity="center"
+                android:padding="6dp"
+                android:text="@string/HP"
+                android:textColor="@color/black"
+                android:textSize="18sp" />
+
+            <TextView
+                android:id="@+id/sizeHP2"
+                android:layout_width="0dp"
+                android:layout_gravity="center"
+                android:layout_margin="0.6dp"
+                android:layout_weight="0.6"
+                android:background="@color/white"
+                android:gravity="center"
+                android:padding="6dp"
+                android:text="@string/HP_API"
+                android:textColor="@color/black"
+                android:textSize="18sp" />
+
+        </TableRow>
+
+        <TableRow>
+
+            <TextView
+                android:id="@+id/sizeAttack1"
+                android:layout_width="0dp"
+                android:layout_gravity="center"
+                android:layout_margin="0.6dp"
+                android:layout_weight="0.6"
+                android:background="@color/white"
+                android:gravity="center"
+                android:padding="6dp"
+                android:text="@string/Attack_API"
+                android:textColor="@color/black"
+                android:textSize="18sp" />
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_gravity="center"
+                android:layout_margin="0.6dp"
+                android:layout_weight="0.8"
+                android:background="@color/light_grey"
+                android:gravity="center"
+                android:padding="6dp"
+                android:text="@string/Attack"
+                android:textColor="@color/black"
+                android:textSize="18sp" />
+
+            <TextView
+                android:id="@+id/sizeAttack2"
+                android:layout_width="0dp"
+                android:layout_gravity="center"
+                android:layout_margin="0.6dp"
+                android:layout_weight="0.6"
+                android:background="@color/white"
+                android:gravity="center"
+                android:padding="6dp"
+                android:text="@string/Attack_API"
+                android:textColor="@color/black"
+                android:textSize="18sp" />
+
+        </TableRow>
+
+        <TableRow>
+
+            <TextView
+                android:id="@+id/sizeDefense1"
+                android:layout_width="0dp"
+                android:layout_gravity="center"
+                android:layout_margin="0.6dp"
+                android:layout_weight="0.6"
+                android:background="@color/white"
+                android:gravity="center"
+                android:padding="6dp"
+                android:text="@string/Attack_API"
+                android:textColor="@color/black"
+                android:textSize="18sp" />
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_gravity="center"
+                android:layout_margin="0.6dp"
+                android:layout_weight="0.8"
+                android:background="@color/light_grey"
+                android:gravity="center"
+                android:padding="6dp"
+                android:text="@string/Defense"
+                android:textColor="@color/black"
+                android:textSize="18sp" />
+
+            <TextView
+                android:id="@+id/sizeDefense2"
+                android:layout_width="0dp"
+                android:layout_gravity="center"
+                android:layout_margin="0.6dp"
+                android:layout_weight="0.6"
+                android:background="@color/white"
+                android:gravity="center"
+                android:padding="6dp"
+                android:text="@string/Attack_API"
+                android:textColor="@color/black"
+                android:textSize="18sp" />
+
+        </TableRow>
+
+        <TableRow>
+
+            <TextView
+                android:id="@+id/sizeSpAttack1"
+                android:layout_width="0dp"
+                android:layout_gravity="center"
+                android:layout_margin="0.6dp"
+                android:layout_weight="0.6"
+                android:background="@color/white"
+                android:gravity="center"
+                android:padding="6dp"
+                android:text="@string/SpAttack_API"
+                android:textColor="@color/black"
+                android:textSize="18sp" />
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_gravity="center"
+                android:layout_margin="0.6dp"
+                android:layout_weight="0.8"
+                android:background="@color/light_grey"
+                android:gravity="center"
+                android:padding="6dp"
+                android:text="@string/SpAttack"
+                android:textColor="@color/black"
+                android:textSize="18sp" />
+
+            <TextView
+                android:id="@+id/sizeSpAttack2"
+                android:layout_width="0dp"
+                android:layout_gravity="center"
+                android:layout_margin="0.6dp"
+                android:layout_weight="0.6"
+                android:background="@color/white"
+                android:gravity="center"
+                android:padding="6dp"
+                android:text="@string/SpAttack_API"
+                android:textColor="@color/black"
+                android:textSize="18sp" />
+
+        </TableRow>
+
+        <TableRow>
+
+            <TextView
+                android:id="@+id/sizeSpDefense1"
+                android:layout_width="0dp"
+                android:layout_gravity="center"
+                android:layout_margin="0.6dp"
+                android:layout_weight="0.6"
+                android:background="@color/white"
+                android:gravity="center"
+                android:padding="6dp"
+                android:text="@string/SpDefense_API"
+                android:textColor="@color/black"
+                android:textSize="18sp" />
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_gravity="center"
+                android:layout_margin="0.6dp"
+                android:layout_weight="0.8"
+                android:background="@color/light_grey"
+                android:gravity="center"
+                android:padding="6dp"
+                android:text="@string/SpDefense"
+                android:textColor="@color/black"
+                android:textSize="18sp" />
+
+            <TextView
+                android:id="@+id/sizeSpDefense2"
+                android:layout_width="0dp"
+                android:layout_gravity="center"
+                android:layout_margin="0.6dp"
+                android:layout_weight="0.6"
+                android:background="@color/white"
+                android:gravity="center"
+                android:padding="6dp"
+                android:text="@string/SpDefense_API"
+                android:textColor="@color/black"
+                android:textSize="18sp" />
+
+        </TableRow>
+
+        <TableRow>
+
+            <TextView
+                android:id="@+id/sizeSpeed1"
+                android:layout_width="0dp"
+                android:layout_gravity="center"
+                android:layout_margin="0.6dp"
+                android:layout_weight="0.6"
+                android:background="@color/white"
+                android:gravity="center"
+                android:padding="6dp"
+                android:text="@string/Speed_API"
+                android:textColor="@color/black"
+                android:textSize="18sp" />
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_gravity="center"
+                android:layout_margin="0.6dp"
+                android:layout_weight="0.8"
+                android:background="@color/light_grey"
+                android:gravity="center"
+                android:padding="6dp"
+                android:text="@string/Speed"
+                android:textColor="@color/black"
+                android:textSize="18sp" />
+
+            <TextView
+                android:id="@+id/sizeSpeed2"
+                android:layout_width="0dp"
+                android:layout_gravity="center"
+                android:layout_margin="0.6dp"
+                android:layout_weight="0.6"
+                android:background="@color/white"
+                android:gravity="center"
+                android:padding="6dp"
+                android:text="@string/Speed_API"
+                android:textColor="@color/black"
+                android:textSize="18sp" />
+
+        </TableRow>
+
+    </TableLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
