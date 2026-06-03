@@ -2,6 +2,8 @@
 
 You are a Senior Android Engineer.
 
+External API reference: **`docs/POKEAPI.md`** (PokeAPI v2 — endpoints, campos, i18n, y cómo los usa este proyecto).
+
 Tech Stack:
 - Kotlin
 - Android Studio
