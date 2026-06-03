@@ -66,6 +66,7 @@ class GuessActivity : BaseLocaleActivity() {
         binding.guessHint5FirstChar.visibility = View.INVISIBLE
         binding.currentScore.visibility = View.GONE
         binding.accumulatedScore.visibility = View.GONE
+        applyLobbyState()
 
         pokemonList = emptyList()
 
@@ -106,15 +107,14 @@ class GuessActivity : BaseLocaleActivity() {
                                 handler.postDelayed({
                                     fadeOut(binding.guessPikachuWinImage, fadeDuration)
                                     fadeOut(binding.guessResultsLayout, fadeDuration)
-                                    fadeIn(binding.guessPlayButton, ultraLongDuration)
                                     resetHintsAndLifes(hintsUsedBeforeCorrect)
+                                    applyLobbyState()
+                                    fadeIn(binding.guessPlayButton, ultraLongDuration)
                                     binding.guessPlayButton.isEnabled = true
                                 }, 5000)
                             } else {
                                 viewModel.currentSolution?.let { loadSolutionData(it) }
-                                binding.solutionPokemonMask.postDelayed({
-                                    moveRight(binding.solutionPokemonMask)
-                                }, 100)
+                                enterSolutionPokemonFromRight()
                             }
                         }
                     }, 1000)
@@ -170,16 +170,14 @@ class GuessActivity : BaseLocaleActivity() {
                 retryButton = binding.dataRetryButton,
                 contentViews = listOf(
                     binding.guessPokemonSearchView,
-                    binding.guessNestedScrollView,
                     binding.guessPlayButton,
-                    binding.guessScoreboards,
                 ),
             ),
             onRetry = { viewModel.retryLoad() },
             onLoaded = {
+                applyLobbyState()
                 fadeAnimation(binding.guessProgressBar, binding.guessPlayButton, fadeDuration)
                 binding.guessPlayButton.isEnabled = true
-                binding.guessBlockView.visibility = View.GONE
                 viewModel.refreshPokemonList()
             },
         )
@@ -227,6 +225,7 @@ class GuessActivity : BaseLocaleActivity() {
                     fadeOut(binding.guessResultsLayout, longerFadeDuration)
                     resetHintsAndLifes(5)
                     Handler(Looper.getMainLooper()).postDelayed({
+                        applyLobbyState()
                         fadeIn(binding.guessPlayButton, ultraLongDuration)
                         binding.guessPlayButton.isEnabled = true
                     }, 1000)
@@ -274,17 +273,36 @@ class GuessActivity : BaseLocaleActivity() {
     private fun startPlay() {
         val solution = viewModel.startGame()
         updateScoreboards()
+        binding.guessPokemonSearchView.isEnabled = true
         fadeIn(binding.guessScoreboards, fadeDuration)
+        fadeIn(binding.hintsBox, fadeDuration)
         resetLifesImages()
         fadeIn(binding.lifesLayout, fadeDuration)
 
         binding.guessPlayButton.isEnabled = false
-        fadeAnimation(binding.guessPlayButton, binding.solutionPokemonMask, fadeDuration)
         resetHintsAndLifes(0)
         loadSolutionData(solution)
+        fadeOut(binding.guessPlayButton, fadeDuration)
+        enterSolutionPokemonFromRight()
 
         binding.currentScore.visibility = View.VISIBLE
         binding.accumulatedScore.visibility = View.VISIBLE
+    }
+
+    private fun applyLobbyState() {
+        binding.guessBlockView.visibility = View.VISIBLE
+        binding.guessNestedScrollView.visibility = View.GONE
+        binding.guessRecyclerView.visibility = View.GONE
+        binding.guessPokemonSearchView.setQuery("", false)
+        binding.guessPokemonSearchView.isEnabled = false
+        binding.guessPokemonSearchView.clearFocus()
+        binding.hintsBox.visibility = View.GONE
+        binding.guessScoreboards.visibility = View.INVISIBLE
+        binding.lifesLayout.visibility = View.INVISIBLE
+        binding.solutionPokemonImage.visibility = View.GONE
+        binding.solutionPokemonMask.visibility = View.GONE
+        binding.currentScore.visibility = View.GONE
+        binding.accumulatedScore.visibility = View.GONE
     }
 
     @SuppressLint("DefaultLocale")
@@ -322,7 +340,13 @@ class GuessActivity : BaseLocaleActivity() {
         Glide.with(this)
             .load(pokemon.imageUrl)
             .into(binding.solutionPokemonMask)
-        binding.solutionPokemonMask.visibility = View.VISIBLE
+        binding.solutionPokemonMask.visibility = View.GONE
+    }
+
+    private fun enterSolutionPokemonFromRight() {
+        binding.solutionPokemonMask.postDelayed({
+            moveRight(binding.solutionPokemonMask)
+        }, 100)
     }
 
     private fun resetHintsAndLifes(tryCount: Int) {
