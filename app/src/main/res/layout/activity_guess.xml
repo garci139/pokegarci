@@ -120,6 +120,7 @@
     <!-- HINTS -->
    <TableLayout
        android:id="@+id/hintsBox"
+       android:visibility="gone"
        android:paddingHorizontal="20dp"
        android:measureWithLargestChild="true"
        android:layout_width="match_parent"
