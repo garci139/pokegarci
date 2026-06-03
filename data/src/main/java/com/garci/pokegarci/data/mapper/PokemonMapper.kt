@@ -1,6 +1,5 @@
 package com.garci.pokegarci.data.mapper
 
-import com.garci.pokegarci.data.remote.dto.AbilityResponse
 import com.garci.pokegarci.data.remote.dto.PokemonDetailsResponse
 import com.garci.pokegarci.data.remote.dto.SpeciesResponse
 import com.garci.pokegarci.domain.model.Ability
@@ -11,7 +10,6 @@ object PokemonMapper {
     fun mapToDomain(
         details: PokemonDetailsResponse,
         species: SpeciesResponse,
-        abilityResponse: AbilityResponse?,
         language: String,
     ): Pokemon {
         val firstAbilityName = details.abilities.firstOrNull()?.ability?.name ?: "unknown"
@@ -25,11 +23,6 @@ object PokemonMapper {
             ?.replace("\n", " ")
             ?.replace("\u000c", " ")
             ?: "Description unavailable"
-
-        val abilityDisplayName = abilityResponse?.names
-            ?.firstOrNull { it.language.name == language }
-            ?.name
-            ?: firstAbilityName.replaceFirstChar { it.uppercase() }
 
         return Pokemon(
             id = details.id,
@@ -48,7 +41,7 @@ object PokemonMapper {
             weight = details.weight,
             firstAbility = Ability(
                 originalName = firstAbilityName,
-                displayName = abilityDisplayName,
+                displayName = AbilityNameFormatter.format(firstAbilityName),
             ),
         )
     }
@@ -56,7 +49,6 @@ object PokemonMapper {
     fun updateLocalizedContent(
         pokemon: Pokemon,
         species: SpeciesResponse,
-        abilityResponse: AbilityResponse,
         language: String,
     ): Pokemon {
         val description = species.flavor_text_entries
@@ -66,14 +58,6 @@ object PokemonMapper {
             ?.replace("\u000c", " ")
             ?: pokemon.description
 
-        val abilityDisplayName = abilityResponse.names
-            .firstOrNull { it.language.name == language }
-            ?.name
-            ?: pokemon.firstAbility.displayName
-
-        return pokemon.copy(
-            description = description,
-            firstAbility = pokemon.firstAbility.copy(displayName = abilityDisplayName),
-        )
+        return pokemon.copy(description = description)
     }
 }

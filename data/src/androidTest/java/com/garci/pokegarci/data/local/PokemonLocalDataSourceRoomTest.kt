@@ -4,6 +4,8 @@ import android.content.Context
 import androidx.room.Room
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import com.garci.pokegarci.domain.model.Ability
+import com.garci.pokegarci.domain.model.Pokemon
 import kotlinx.coroutines.test.runTest
 import org.junit.After
 import org.junit.Assert.assertEquals
@@ -34,29 +36,22 @@ class PokemonLocalDataSourceRoomTest {
 
     @Test
     fun getCachedPokemon_returnsNullWhenDatabaseIsEmpty() = runTest {
-        assertNull(localDataSource.getCachedPokemon(minCount = 1, language = "es"))
+        assertNull(localDataSource.getCachedPokemon(language = "es"))
     }
 
     @Test
-    fun getCachedPokemon_returnsDataWhenLanguageAndCountMatch() = runTest {
+    fun getCachedPokemon_returnsDataWhenLanguageMatches() = runTest {
         val pokemon = listOf(samplePokemon(id = 1, name = "Bulbasaur"))
         localDataSource.saveAll(pokemon, language = "es")
 
-        assertEquals(pokemon, localDataSource.getCachedPokemon(minCount = 1, language = "es"))
+        assertEquals(pokemon, localDataSource.getCachedPokemon(language = "es"))
     }
 
     @Test
     fun getCachedPokemon_returnsNullWhenLanguageDiffers() = runTest {
         localDataSource.saveAll(listOf(samplePokemon()), language = "es")
 
-        assertNull(localDataSource.getCachedPokemon(minCount = 1, language = "en"))
-    }
-
-    @Test
-    fun getCachedPokemon_returnsNullWhenStoredCountIsBelowMinimum() = runTest {
-        localDataSource.saveAll(listOf(samplePokemon()), language = "es")
-
-        assertNull(localDataSource.getCachedPokemon(minCount = 251, language = "es"))
+        assertNull(localDataSource.getCachedPokemon(language = "en"))
     }
 
     @Test
@@ -64,7 +59,7 @@ class PokemonLocalDataSourceRoomTest {
         val pokemon = listOf(samplePokemon(), samplePokemon(id = 4, name = "Charmander"))
         localDataSource.saveAll(pokemon, language = "es")
 
-        assertEquals(pokemon, localDataSource.getCachedPokemonIgnoringLanguage(minCount = 2))
+        assertEquals(pokemon, localDataSource.getCachedPokemonIgnoringLanguage())
     }
 
     @Test
@@ -73,7 +68,27 @@ class PokemonLocalDataSourceRoomTest {
         val updated = listOf(samplePokemon(id = 25, name = "Pikachu"))
         localDataSource.saveAll(updated, language = "en")
 
-        assertEquals(updated, localDataSource.getCachedPokemon(minCount = 1, language = "en"))
-        assertNull(localDataSource.getCachedPokemon(minCount = 1, language = "es"))
+        assertEquals(updated, localDataSource.getCachedPokemon(language = "en"))
+        assertNull(localDataSource.getCachedPokemon(language = "es"))
+    }
+
+    private fun samplePokemon(id: Int = 25, name: String = "Pikachu"): Pokemon {
+        return Pokemon(
+            id = id,
+            name = name,
+            imageUrl = "https://example.com/$name.png",
+            type1 = "electric",
+            type2 = null,
+            description = "Description",
+            hp = 35,
+            attack = 55,
+            defense = 40,
+            specialAttack = 50,
+            specialDefense = 50,
+            speed = 90,
+            height = 4,
+            weight = 60,
+            firstAbility = Ability("static", "Static"),
+        )
     }
 }

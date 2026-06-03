@@ -3,6 +3,7 @@ package com.garci.pokegarci.data.local
 import com.garci.pokegarci.data.local.dao.PokemonDao
 import com.garci.pokegarci.data.local.entity.CacheMetadataEntity
 import com.garci.pokegarci.data.mapper.PokemonEntityMapper
+import com.garci.pokegarci.data.remote.PokeApiConstants
 import com.garci.pokegarci.domain.model.Pokemon
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -12,14 +13,17 @@ class PokemonLocalDataSource @Inject constructor(
     private val pokemonDao: PokemonDao,
 ) {
 
-    suspend fun getCachedPokemon(minCount: Int, language: String): List<Pokemon>? {
+    suspend fun getCachedPokemon(language: String): List<Pokemon>? {
         val metadata = pokemonDao.getMetadata() ?: return null
-        if (metadata.language != language || metadata.pokemonCount < minCount) return null
+        if (!isValidCatalog(metadata) || metadata.language != language) {
+            return null
+        }
         return pokemonDao.getAllOrderedById().map(PokemonEntityMapper::toDomain)
     }
 
-    suspend fun getCachedPokemonIgnoringLanguage(minCount: Int): List<Pokemon>? {
-        if (pokemonDao.getCount() < minCount) return null
+    suspend fun getCachedPokemonIgnoringLanguage(): List<Pokemon>? {
+        val metadata = pokemonDao.getMetadata() ?: return null
+        if (!isValidCatalog(metadata)) return null
         return pokemonDao.getAllOrderedById().map(PokemonEntityMapper::toDomain)
     }
 
@@ -29,7 +33,15 @@ class PokemonLocalDataSource @Inject constructor(
             metadata = CacheMetadataEntity(
                 language = language,
                 pokemonCount = pokemon.size,
+                isFullCatalog = true,
+                catalogMaxId = PokeApiConstants.POKEMON_CATALOG_MAX_ID,
             ),
         )
+    }
+
+    private fun isValidCatalog(metadata: CacheMetadataEntity): Boolean {
+        return metadata.isFullCatalog &&
+            metadata.catalogMaxId == PokeApiConstants.POKEMON_CATALOG_MAX_ID &&
+            metadata.pokemonCount > 0
     }
 }

@@ -11,43 +11,47 @@ import javax.inject.Singleton
 @Singleton
 class PokemonRemoteDataSource @Inject constructor(
     private val api: PokeApiService,
+    private val abilityTranslationService: AbilityTranslationService,
 ) {
 
-    suspend fun fetchAllPokemon(limit: Int, language: String): List<Pokemon> = coroutineScope {
-        val pokemonResponse = api.getPokemonList(limit)
-
-        pokemonResponse.results.map { pokemonInfo ->
+    suspend fun fetchAllPokemon(language: String): List<Pokemon> = coroutineScope {
+        val pokemonList = (1..PokeApiConstants.POKEMON_CATALOG_MAX_ID).map { id ->
             async {
                 runCatching {
-                    fetchPokemon(pokemonInfo.name, language)
+                    fetchPokemonBase(id, language)
                 }.getOrNull()
             }
         }.awaitAll().filterNotNull()
+
+        val abilityNames = pokemonList.map { it.firstAbility.originalName }.toSet()
+        abilityTranslationService.ensureAllCached(abilityNames)
+
+        pokemonList.map { pokemon ->
+            abilityTranslationService.applyAbilityLanguage(pokemon, language)
+        }
     }
 
     suspend fun refreshLocalizedContent(
         currentPokemon: List<Pokemon>,
         language: String,
     ): List<Pokemon> = coroutineScope {
+        val abilityNames = currentPokemon.map { it.firstAbility.originalName }.toSet()
+        abilityTranslationService.ensureAllCached(abilityNames)
+
         currentPokemon.map { pokemon ->
             async {
                 runCatching {
                     val species = api.getPokemonSpecies(pokemon.id)
-                    val ability = api.getAbilityDetails(pokemon.firstAbility.originalName.lowercase())
-                    PokemonMapper.updateLocalizedContent(pokemon, species, ability, language)
+                    val localized = PokemonMapper.updateLocalizedContent(pokemon, species, language)
+                    abilityTranslationService.applyAbilityLanguage(localized, language)
                 }.getOrDefault(pokemon)
             }
         }.awaitAll()
     }
 
-    private suspend fun fetchPokemon(name: String, language: String): Pokemon {
-        val details = api.getPokemonDetails(name)
-        val species = api.getPokemonSpecies(details.id)
-        val firstAbilityName = details.abilities.firstOrNull()?.ability?.name ?: "unknown"
-        val abilityResponse = runCatching {
-            api.getAbilityDetails(firstAbilityName.lowercase())
-        }.getOrNull()
-
-        return PokemonMapper.mapToDomain(details, species, abilityResponse, language)
+    private suspend fun fetchPokemonBase(id: Int, language: String): Pokemon {
+        val details = api.getPokemonDetails(id)
+        val species = api.getPokemonSpecies(id)
+        return PokemonMapper.mapToDomain(details, species, language)
     }
 }

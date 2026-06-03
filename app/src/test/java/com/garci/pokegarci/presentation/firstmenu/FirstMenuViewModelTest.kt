@@ -4,7 +4,6 @@ import android.content.Context
 import com.garci.pokegarci.domain.model.Pokemon
 import com.garci.pokegarci.domain.repository.PokemonRepository
 import com.garci.pokegarci.domain.usecase.LoadPokemonUseCase
-import com.garci.pokegarci.util.AppConstants
 import com.garci.pokegarci.utils.LocaleManager
 import io.mockk.coEvery
 import io.mockk.every
@@ -58,7 +57,7 @@ class FirstMenuViewModelTest {
     @Test
     fun `ensurePokemonLoaded reloads when language changed even if cache has data`() = runTest {
         every { repository.getPokemonList() } returns listOf(mockk<Pokemon>())
-        coEvery { loadPokemonUseCase(AppConstants.POKEMON_LIMIT, "es") } returns Result.success(Unit)
+        coEvery { loadPokemonUseCase("es") } returns Result.success(Unit)
 
         val viewModel = FirstMenuViewModel(loadPokemonUseCase, repository, context)
         viewModel.ensurePokemonLoaded(pendingLanguageChange = true)
@@ -70,7 +69,7 @@ class FirstMenuViewModelTest {
     @Test
     fun `ensurePokemonLoaded sets Ready after successful network load`() = runTest {
         every { repository.getPokemonList() } returns emptyList()
-        coEvery { loadPokemonUseCase(AppConstants.POKEMON_LIMIT, "es") } returns Result.success(Unit)
+        coEvery { loadPokemonUseCase("es") } returns Result.success(Unit)
 
         val viewModel = FirstMenuViewModel(loadPokemonUseCase, repository, context)
         viewModel.ensurePokemonLoaded(pendingLanguageChange = false)
@@ -82,7 +81,7 @@ class FirstMenuViewModelTest {
     @Test
     fun `ensurePokemonLoaded sets Error when load fails`() = runTest {
         every { repository.getPokemonList() } returns emptyList()
-        coEvery { loadPokemonUseCase(AppConstants.POKEMON_LIMIT, "es") } returns Result.failure(IllegalStateException("network"))
+        coEvery { loadPokemonUseCase("es") } returns Result.failure(IllegalStateException("network"))
 
         val viewModel = FirstMenuViewModel(loadPokemonUseCase, repository, context)
         viewModel.ensurePokemonLoaded(pendingLanguageChange = false)

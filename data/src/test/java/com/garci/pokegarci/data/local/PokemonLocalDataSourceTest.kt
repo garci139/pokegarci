@@ -4,6 +4,7 @@ import com.garci.pokegarci.data.local.dao.PokemonDao
 import com.garci.pokegarci.data.local.entity.CacheMetadataEntity
 import com.garci.pokegarci.data.local.entity.PokemonEntity
 import com.garci.pokegarci.data.mapper.PokemonEntityMapper
+import com.garci.pokegarci.data.remote.PokeApiConstants
 import com.garci.pokegarci.domain.model.Ability
 import com.garci.pokegarci.domain.model.Pokemon
 import io.mockk.coEvery
@@ -29,39 +30,49 @@ class PokemonLocalDataSourceTest {
     fun `getCachedPokemon returns null when metadata is missing`() = runTest {
         coEvery { pokemonDao.getMetadata() } returns null
 
-        assertNull(localDataSource.getCachedPokemon(minCount = 1, language = "es"))
+        assertNull(localDataSource.getCachedPokemon(language = "es"))
     }
 
     @Test
     fun `getCachedPokemon returns null when language does not match`() = runTest {
-        coEvery { pokemonDao.getMetadata() } returns CacheMetadataEntity(language = "es", pokemonCount = 251)
+        coEvery { pokemonDao.getMetadata() } returns validMetadata(language = "es")
 
-        assertNull(localDataSource.getCachedPokemon(minCount = 251, language = "en"))
+        assertNull(localDataSource.getCachedPokemon(language = "en"))
     }
 
     @Test
-    fun `getCachedPokemon returns null when stored count is below minimum`() = runTest {
-        coEvery { pokemonDao.getMetadata() } returns CacheMetadataEntity(language = "es", pokemonCount = 10)
+    fun `getCachedPokemon returns null when cache uses outdated catalog`() = runTest {
+        coEvery { pokemonDao.getMetadata() } returns CacheMetadataEntity(
+            language = "es",
+            pokemonCount = 251,
+            isFullCatalog = false,
+            catalogMaxId = 0,
+        )
 
-        assertNull(localDataSource.getCachedPokemon(minCount = 251, language = "es"))
+        assertNull(localDataSource.getCachedPokemon(language = "es"))
     }
 
     @Test
     fun `getCachedPokemon maps entities when cache is valid`() = runTest {
         val entity = sampleEntity()
-        coEvery { pokemonDao.getMetadata() } returns CacheMetadataEntity(language = "es", pokemonCount = 1)
+        coEvery { pokemonDao.getMetadata() } returns validMetadata(language = "es", pokemonCount = 1)
         coEvery { pokemonDao.getAllOrderedById() } returns listOf(entity)
 
-        val result = localDataSource.getCachedPokemon(minCount = 1, language = "es")
+        val result = localDataSource.getCachedPokemon(language = "es")
 
         assertEquals(listOf(PokemonEntityMapper.toDomain(entity)), result)
     }
 
     @Test
-    fun `getCachedPokemonIgnoringLanguage returns null when count is insufficient`() = runTest {
-        coEvery { pokemonDao.getCount() } returns 10
+    fun `getCachedPokemonIgnoringLanguage returns null when cache uses outdated catalog`() = runTest {
+        coEvery { pokemonDao.getMetadata() } returns CacheMetadataEntity(
+            language = "es",
+            pokemonCount = 1302,
+            isFullCatalog = true,
+            catalogMaxId = 0,
+        )
 
-        assertNull(localDataSource.getCachedPokemonIgnoringLanguage(minCount = 251))
+        assertNull(localDataSource.getCachedPokemonIgnoringLanguage())
     }
 
     @Test
@@ -73,9 +84,26 @@ class PokemonLocalDataSourceTest {
         coVerify {
             pokemonDao.replaceAll(
                 pokemon = listOf(PokemonEntityMapper.toEntity(pokemon.single())),
-                metadata = CacheMetadataEntity(language = "en", pokemonCount = 1),
+                metadata = CacheMetadataEntity(
+                    language = "en",
+                    pokemonCount = 1,
+                    isFullCatalog = true,
+                    catalogMaxId = PokeApiConstants.POKEMON_CATALOG_MAX_ID,
+                ),
             )
         }
+    }
+
+    private fun validMetadata(
+        language: String,
+        pokemonCount: Int = PokeApiConstants.POKEMON_CATALOG_MAX_ID,
+    ): CacheMetadataEntity {
+        return CacheMetadataEntity(
+            language = language,
+            pokemonCount = pokemonCount,
+            isFullCatalog = true,
+            catalogMaxId = PokeApiConstants.POKEMON_CATALOG_MAX_ID,
+        )
     }
 
     private fun sampleEntity(): PokemonEntity {
