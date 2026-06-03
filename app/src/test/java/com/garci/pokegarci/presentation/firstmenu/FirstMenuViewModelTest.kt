@@ -56,6 +56,18 @@ class FirstMenuViewModelTest {
     }
 
     @Test
+    fun `ensurePokemonLoaded reloads when language changed even if cache has data`() = runTest {
+        every { repository.getPokemonList() } returns listOf(mockk<Pokemon>())
+        coEvery { loadPokemonUseCase(AppConstants.POKEMON_LIMIT, "es") } returns Result.success(Unit)
+
+        val viewModel = FirstMenuViewModel(loadPokemonUseCase, repository, context)
+        viewModel.ensurePokemonLoaded(pendingLanguageChange = true)
+        advanceUntilIdle()
+
+        assertEquals(FirstMenuLoadState.Ready, viewModel.loadState.value)
+    }
+
+    @Test
     fun `ensurePokemonLoaded sets Ready after successful network load`() = runTest {
         every { repository.getPokemonList() } returns emptyList()
         coEvery { loadPokemonUseCase(AppConstants.POKEMON_LIMIT, "es") } returns Result.success(Unit)
