@@ -60,6 +60,32 @@
             android:shadowRadius="18.0"
             android:id="@+id/pressToPlay" />
 
+        <ProgressBar
+            android:id="@+id/firstMenuProgressBar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:indeterminateTint="@color/white"
+            android:visibility="gone" />
+
+        <TextView
+            android:id="@+id/firstMenuStatusText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:textAlignment="center"
+            android:textColor="@color/white"
+            android:textSize="16sp"
+            android:visibility="gone" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/firstMenuRetryButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:text="@string/retryLoad"
+            android:visibility="gone" />
+
     </androidx.appcompat.widget.LinearLayoutCompat>
 
     <TextView

@@ -1,14 +1,5 @@
 <resources>
     <string name="app_name">PokeGarci</string>
-    <string name="title_activity_adapter">Adapter</string>
-    <!-- Strings used for fragments for navigation -->
-    <string name="first_fragment_label">First Fragment</string>
-    <string name="second_fragment_label">Second Fragment</string>
-    <string name="next">Next</string>
-    <string name="previous">Previous</string>
-
-    <string name="hello_first_fragment">Hello first fragment</string>
-    <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
     <string name="spanishLanguageButton">ESPAÑOL</string>
     <string name="englishLanguageButton">INGLÉS</string>
     <string name="pokedexMainMenuTitle">POKÉDEX</string>
@@ -40,6 +31,9 @@
     <string name="closeExpandedCard">Cerrar</string>
 
     <string name="pressToEnter">¡Toca para entrar!</string>
+    <string name="loadingPokemon">Cargando Pokémon…</string>
+    <string name="loadError">No se pudieron cargar los datos.</string>
+    <string name="retryLoad">Reintentar</string>
     <string name="developedBy">Desarrollado por:\n Pablo García Ortega</string>
 
     <string name="sizeInstructionsText">COMPARADOR</string>

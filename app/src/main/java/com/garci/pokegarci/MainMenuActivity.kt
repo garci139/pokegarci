@@ -1,65 +1,43 @@
 package com.garci.pokegarci
 
-import android.content.Context
 import android.content.Intent
-import android.graphics.drawable.AnimationDrawable
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import androidx.cardview.widget.CardView
-import androidx.constraintlayout.widget.ConstraintLayout
-import com.garci.pokegarci.utils.LocaleManager
+import com.garci.pokegarci.databinding.ActivityMainMenuBinding
+import com.garci.pokegarci.util.BaseLocaleActivity
+import com.garci.pokegarci.util.startGradientBackgroundAnimation
 import com.garci.pokegarci.utils.vibrate
+import dagger.hilt.android.AndroidEntryPoint
 
-class MainMenuActivity : AppCompatActivity() {
+@AndroidEntryPoint
+class MainMenuActivity : BaseLocaleActivity() {
+
+    private lateinit var binding: ActivityMainMenuBinding
+
     override fun onCreate(savedInstanceState: Bundle?) {
-
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main_menu)
+        binding = ActivityMainMenuBinding.inflate(layoutInflater)
+        setContentView(binding.root)
 
-        val mainMenu = findViewById<ConstraintLayout>(R.id.mainMenu)
-        val btnFunction1 = findViewById<CardView>(R.id.function1)
-        val btnFunction2 = findViewById<CardView>(R.id.function2)
-        val btnFunction3 = findViewById<CardView>(R.id.function3)
-        val btnFunction4 = findViewById<CardView>(R.id.function4)
+        binding.mainMenu.startGradientBackgroundAnimation()
 
-        // Inicio del fondo animado
-        val gradientAnimation: AnimationDrawable = mainMenu.background as AnimationDrawable
-        gradientAnimation.setEnterFadeDuration(1500)
-        gradientAnimation.setExitFadeDuration(3000)
-        gradientAnimation.start()
-
-        // FUNCION 1: POKEDEX
-        btnFunction1.setOnClickListener {
+        binding.function1.setOnClickListener {
             vibrate()
-            val toPokedex = Intent(this,PokedexActivity::class.java)
-            startActivity(toPokedex)
+            startActivity(Intent(this, PokedexActivity::class.java))
         }
 
-        // FUNCION 2: TAMAÑO
-        btnFunction2.setOnClickListener {
+        binding.function2.setOnClickListener {
             vibrate()
-            val toSize = Intent(this,SizeActivity::class.java)
-            startActivity(toSize)
+            startActivity(Intent(this, SizeActivity::class.java))
         }
 
-        // FUNCION 3: ADIVINAR
-        btnFunction3.setOnClickListener {
+        binding.function3.setOnClickListener {
             vibrate()
-            val toGuess = Intent(this,GuessActivity::class.java)
-            startActivity(toGuess)
+            startActivity(Intent(this, GuessActivity::class.java))
         }
 
-        // FUNCION 4: AJUSTES
-        btnFunction4.setOnClickListener {
+        binding.function4.setOnClickListener {
             vibrate()
-            val toSettings = Intent(this,LanguageActivity::class.java)
-            startActivity(toSettings)
+            startActivity(Intent(this, LanguageActivity::class.java))
         }
     }
-
-    // Funcion para aplicar idioma al inicio
-    override fun attachBaseContext(newBase: Context) {
-        super.attachBaseContext(LocaleManager.applyLanguage(newBase))
-    }
-
 }
