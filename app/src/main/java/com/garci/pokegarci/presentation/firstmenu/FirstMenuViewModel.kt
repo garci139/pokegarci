@@ -34,9 +34,8 @@ class FirstMenuViewModel @Inject constructor(
     val loadState: StateFlow<FirstMenuLoadState> = _loadState.asStateFlow()
 
     fun ensurePokemonLoaded(pendingLanguageChange: Boolean = false) {
-        if (repository.getPokemonList().isNotEmpty()) {
+        if (!pendingLanguageChange && repository.getPokemonList().isNotEmpty()) {
             _loadState.value = FirstMenuLoadState.Ready
-            clearPendingLanguageChange(pendingLanguageChange)
             return
         }
 
