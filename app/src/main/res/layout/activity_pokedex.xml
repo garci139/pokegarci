@@ -6,9 +6,7 @@
     android:layout_height="match_parent"
     android:paddingTop="18dp"
     android:id="@+id/pokedexLayout"
-    android:paddingHorizontal="12dp"
-    android:background="@drawable/gradient_list"
-    tools:context=".PokedexActivity">
+    android:paddingHorizontal="12dp">
 
     <androidx.appcompat.widget.SearchView
         android:id="@+id/searchView"

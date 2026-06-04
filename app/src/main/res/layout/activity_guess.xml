@@ -5,8 +5,6 @@
     android:id="@+id/guessLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".GuessActivity"
-    android:background="@drawable/gradient_list"
     android:clipToPadding="false"
     android:paddingHorizontal="26dp"
     android:paddingTop="60dp"

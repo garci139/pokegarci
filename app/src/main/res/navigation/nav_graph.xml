@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/firstMenuFragment">
+
+    <fragment
+        android:id="@+id/firstMenuFragment"
+        android:name="com.garci.pokegarci.ui.firstmenu.FirstMenuFragment"
+        android:label="FirstMenuFragment">
+        <action
+            android:id="@+id/action_firstMenu_to_mainMenu"
+            app:destination="@id/mainMenuFragment"
+            app:enterAnim="@anim/nav_slide_in_right"
+            app:exitAnim="@anim/nav_slide_out_left"
+            app:popEnterAnim="@anim/nav_slide_in_left"
+            app:popExitAnim="@anim/nav_slide_out_right"
+            app:popUpTo="@id/firstMenuFragment"
+            app:popUpToInclusive="false" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/mainMenuFragment"
+        android:name="com.garci.pokegarci.ui.mainmenu.MainMenuFragment"
+        android:label="MainMenuFragment">
+        <action
+            android:id="@+id/action_mainMenu_to_pokedex"
+            app:destination="@id/pokedexFragment"
+            app:enterAnim="@anim/nav_slide_in_right"
+            app:exitAnim="@anim/nav_slide_out_left"
+            app:popEnterAnim="@anim/nav_slide_in_left"
+            app:popExitAnim="@anim/nav_slide_out_right" />
+        <action
+            android:id="@+id/action_mainMenu_to_size"
+            app:destination="@id/sizeFragment"
+            app:enterAnim="@anim/nav_slide_in_right"
+            app:exitAnim="@anim/nav_slide_out_left"
+            app:popEnterAnim="@anim/nav_slide_in_left"
+            app:popExitAnim="@anim/nav_slide_out_right" />
+        <action
+            android:id="@+id/action_mainMenu_to_guess"
+            app:destination="@id/guessFragment"
+            app:enterAnim="@anim/nav_slide_in_right"
+            app:exitAnim="@anim/nav_slide_out_left"
+            app:popEnterAnim="@anim/nav_slide_in_left"
+            app:popExitAnim="@anim/nav_slide_out_right" />
+        <action
+            android:id="@+id/action_mainMenu_to_language"
+            app:destination="@id/languageFragment"
+            app:enterAnim="@anim/nav_slide_in_right"
+            app:exitAnim="@anim/nav_slide_out_left"
+            app:popEnterAnim="@anim/nav_slide_in_left"
+            app:popExitAnim="@anim/nav_slide_out_right" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/pokedexFragment"
+        android:name="com.garci.pokegarci.ui.pokedex.PokedexFragment"
+        android:label="PokedexFragment" />
+
+    <fragment
+        android:id="@+id/sizeFragment"
+        android:name="com.garci.pokegarci.ui.size.SizeFragment"
+        android:label="SizeFragment" />
+
+    <fragment
+        android:id="@+id/guessFragment"
+        android:name="com.garci.pokegarci.ui.guess.GuessFragment"
+        android:label="GuessFragment" />
+
+    <fragment
+        android:id="@+id/languageFragment"
+        android:name="com.garci.pokegarci.ui.language.LanguageFragment"
+        android:label="LanguageFragment" />
+
+</navigation>

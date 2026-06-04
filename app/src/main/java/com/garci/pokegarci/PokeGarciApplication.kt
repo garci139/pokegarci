@@ -3,6 +3,7 @@ package com.garci.pokegarci
 import android.app.Activity
 import android.app.Application
 import android.os.Bundle
+import com.garci.pokegarci.ui.AmbientAnimationLifecycle
 import com.garci.pokegarci.util.AppFont
 import com.garci.pokegarci.util.ClickSound
 import dagger.hilt.android.HiltAndroidApp
@@ -12,6 +13,7 @@ class PokeGarciApplication : Application() {
 
     override fun onCreate() {
         super.onCreate()
+        AmbientAnimationLifecycle.init()
         ClickSound.init(this)
         registerActivityLifecycleCallbacks(object : ActivityLifecycleCallbacks {
             override fun onActivityResumed(activity: Activity) {
