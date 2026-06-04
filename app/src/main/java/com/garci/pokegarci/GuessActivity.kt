@@ -24,6 +24,7 @@ import com.garci.pokegarci.databinding.ActivityGuessBinding
 import com.garci.pokegarci.domain.guess.GuessOutcome
 import com.garci.pokegarci.domain.model.Pokemon
 import com.garci.pokegarci.presentation.guess.GuessViewModel
+import com.garci.pokegarci.domain.model.abilitiesDisplayText
 import com.garci.pokegarci.ui.adapter.PokemonGuessAdapter
 import com.garci.pokegarci.util.BaseLocaleActivity
 import com.garci.pokegarci.util.DataLoadingUi
@@ -325,7 +326,7 @@ class GuessActivity : BaseLocaleActivity() {
         }
         binding.guessHint2Type2.visibility = View.INVISIBLE
 
-        binding.guessHint4Ability.text = pokemon.firstAbility.displayName
+        binding.guessHint4Ability.text = pokemon.abilitiesDisplayText()
         binding.guessHint4Ability.visibility = View.INVISIBLE
         binding.guessHint3Id.text = String.format("#%03d", pokemon.id)
         binding.guessHint3Id.visibility = View.INVISIBLE

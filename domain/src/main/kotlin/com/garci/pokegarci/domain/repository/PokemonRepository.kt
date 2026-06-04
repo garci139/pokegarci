@@ -9,7 +9,7 @@ interface PokemonRepository {
 
     fun getPokemonList(): List<Pokemon>
 
-    suspend fun loadPokemon(limit: Int, language: String): Result<Unit>
+    suspend fun loadPokemon(language: String): Result<Unit>
 
     suspend fun refreshLocalizedContent(language: String): Result<Unit>
 }

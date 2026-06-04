@@ -26,24 +26,24 @@ class PokemonRepositoryImpl @Inject constructor(
 
     override fun getPokemonList(): List<Pokemon> = pokemonList.toList()
 
-    override suspend fun loadPokemon(limit: Int, language: String): Result<Unit> {
+    override     suspend fun loadPokemon(language: String): Result<Unit> {
         _loadFailed.value = false
         return runCatching {
-            localDataSource.getCachedPokemon(limit, language)?.let { cached ->
+            localDataSource.getCachedPokemon(language)?.let { cached ->
                 applyPokemonList(cached)
                 return@runCatching
             }
 
             _isDataLoaded.value = false
 
-            localDataSource.getCachedPokemonIgnoringLanguage(limit)?.let { cached ->
+            localDataSource.getCachedPokemonIgnoringLanguage()?.let { cached ->
                 val updated = remoteDataSource.refreshLocalizedContent(cached, language)
                 applyPokemonList(updated)
                 localDataSource.saveAll(updated, language)
                 return@runCatching
             }
 
-            val fetched = remoteDataSource.fetchAllPokemon(limit, language)
+            val fetched = remoteDataSource.fetchAllPokemon(language)
             applyPokemonList(fetched)
             localDataSource.saveAll(fetched, language)
         }.onFailure {

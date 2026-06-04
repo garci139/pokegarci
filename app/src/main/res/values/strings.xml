@@ -13,6 +13,7 @@
     <string name="expandedPokemonId">#000</string>
     <string name="expandedPokemonHeight">14.5 m</string>
     <string name="expandedPokemonWeight">32.5 kg</string>
+    <string name="expandedPokemonAbilities">Espesura</string>
     <string name="expandedPokemonDescriptionTitle">Descripción</string>
     <string name="expandedPokemonDescription">Descripcion de prueba.</string>
     <string name="expandedStatsTitle">Estadísticas base</string>

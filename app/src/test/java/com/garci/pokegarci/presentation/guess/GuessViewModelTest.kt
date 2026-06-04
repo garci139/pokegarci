@@ -119,7 +119,7 @@ class GuessViewModelTest {
             speed = 1,
             height = 1,
             weight = 1,
-            firstAbility = Ability("test", "Test"),
+            abilities = listOf(Ability("test", "Test")),
         )
     }
 }

@@ -42,7 +42,6 @@ class FirstMenuViewModel @Inject constructor(
         viewModelScope.launch {
             _loadState.value = FirstMenuLoadState.Loading
             val result = loadPokemonUseCase(
-                AppConstants.POKEMON_LIMIT,
                 LocaleManager.getLanguage(context),
             )
             if (result.isSuccess) {

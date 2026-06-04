@@ -1,6 +1,5 @@
 package com.garci.pokegarci.data.mapper
 
-import com.garci.pokegarci.data.remote.dto.AbilityResponse
 import com.garci.pokegarci.data.remote.dto.PokemonDetailsResponse
 import com.garci.pokegarci.data.remote.dto.SpeciesResponse
 import com.garci.pokegarci.domain.model.Ability
@@ -8,13 +7,13 @@ import com.garci.pokegarci.domain.model.Pokemon
 
 object PokemonMapper {
 
+    private const val MAX_ABILITIES = 3
+
     fun mapToDomain(
         details: PokemonDetailsResponse,
         species: SpeciesResponse,
-        abilityResponse: AbilityResponse?,
         language: String,
     ): Pokemon {
-        val firstAbilityName = details.abilities.firstOrNull()?.ability?.name ?: "unknown"
         val type1 = details.types.getOrNull(0)?.type?.name ?: "unknown"
         val type2 = details.types.getOrNull(1)?.type?.name
         val statsMap = details.stats.associate { stat -> stat.stat.name to stat.base_stat }
@@ -25,11 +24,6 @@ object PokemonMapper {
             ?.replace("\n", " ")
             ?.replace("\u000c", " ")
             ?: "Description unavailable"
-
-        val abilityDisplayName = abilityResponse?.names
-            ?.firstOrNull { it.language.name == language }
-            ?.name
-            ?: firstAbilityName.replaceFirstChar { it.uppercase() }
 
         return Pokemon(
             id = details.id,
@@ -46,17 +40,13 @@ object PokemonMapper {
             speed = statsMap["speed"] ?: 0,
             height = details.height,
             weight = details.weight,
-            firstAbility = Ability(
-                originalName = firstAbilityName,
-                displayName = abilityDisplayName,
-            ),
+            abilities = mapAbilities(details),
         )
     }
 
     fun updateLocalizedContent(
         pokemon: Pokemon,
         species: SpeciesResponse,
-        abilityResponse: AbilityResponse,
         language: String,
     ): Pokemon {
         val description = species.flavor_text_entries
@@ -66,14 +56,27 @@ object PokemonMapper {
             ?.replace("\u000c", " ")
             ?: pokemon.description
 
-        val abilityDisplayName = abilityResponse.names
-            .firstOrNull { it.language.name == language }
-            ?.name
-            ?: pokemon.firstAbility.displayName
+        return pokemon.copy(description = description)
+    }
 
-        return pokemon.copy(
-            description = description,
-            firstAbility = pokemon.firstAbility.copy(displayName = abilityDisplayName),
-        )
+    private fun mapAbilities(details: PokemonDetailsResponse): List<Ability> {
+        return details.abilities
+            .sortedBy { it.slot }
+            .take(MAX_ABILITIES)
+            .map { abilitySlot ->
+                val originalName = abilitySlot.ability.name
+                Ability(
+                    originalName = originalName,
+                    displayName = AbilityNameFormatter.format(originalName),
+                )
+            }
+            .ifEmpty {
+                listOf(
+                    Ability(
+                        originalName = "unknown",
+                        displayName = AbilityNameFormatter.format("unknown"),
+                    ),
+                )
+            }
     }
 }
