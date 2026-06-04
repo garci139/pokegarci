@@ -40,6 +40,7 @@ class GuessViewModelTest {
         Dispatchers.setMain(UnconfinedTestDispatcher())
         every { repository.isDataLoaded } returns MutableStateFlow(true)
         every { repository.loadFailed } returns MutableStateFlow(false)
+        every { repository.loadProgress } returns MutableStateFlow(0)
         every { gamePreferences.getHighscore() } returns 10
         every { gamePreferences.saveHighscoreIfRecord(any()) } answers { firstArg() }
     }

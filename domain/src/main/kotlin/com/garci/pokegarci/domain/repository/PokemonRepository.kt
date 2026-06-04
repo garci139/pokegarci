@@ -6,6 +6,7 @@ import kotlinx.coroutines.flow.StateFlow
 interface PokemonRepository {
     val isDataLoaded: StateFlow<Boolean>
     val loadFailed: StateFlow<Boolean>
+    val loadProgress: StateFlow<Int>
 
     fun getPokemonList(): List<Pokemon>
 

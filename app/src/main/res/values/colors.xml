@@ -19,4 +19,11 @@
     <color name="yellow_star">#FFEB3B</color>
 
     <color name="light_grey_semitransp">#90E9E9E9</color>
+
+    <color name="hp_bar_frame_outer">#FFF0F0F0</color>
+    <color name="hp_bar_frame_inner">#FF1A1A1A</color>
+    <color name="hp_bar_track">#FF383838</color>
+    <color name="hp_bar_fill">#FF58D068</color>
+    <color name="hp_bar_label">#FFF8F8F8</color>
+    <color name="hp_bar_text_outline">#CC000000</color>
 </resources>

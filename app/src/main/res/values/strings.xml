@@ -33,8 +33,19 @@
 
     <string name="pressToEnter">¡Toca para entrar!</string>
     <string name="loadingPokemon">Cargando Pokémon…</string>
+    <string-array name="loading_status_phrases">
+        <item>Tocando la Pokéflauta</item>
+        <item>Pescando un Magikarp</item>
+        <item>Buscando a Ditto</item>
+        <item>Entrando en la Calle Victoria</item>
+        <item>Capturando un Eevee</item>
+        <item>Comprando pociones</item>
+    </string-array>
+    <string name="loadingProgressPercent">%1$d%%</string>
+    <string name="hpLabel">PS</string>
     <string name="loadError">No se pudieron cargar los datos.</string>
     <string name="retryLoad">Reintentar</string>
+    <string name="loadingInteractionBlocked">Cargando datos</string>
     <string name="developedBy">Desarrollado por:\n Pablo García Ortega</string>
 
     <string name="sizeInstructionsText">COMPARADOR</string>
