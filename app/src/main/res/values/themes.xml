@@ -35,4 +35,10 @@
 
     <style name="Theme.PokeGarci.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 
+    <style name="Theme.PokeGarci.FilterDialog" parent="Theme.MaterialComponents.Dialog">
+        <item name="android:windowIsFloating">true</item>
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="android:backgroundDimEnabled">true</item>
+    </style>
+
 </resources>

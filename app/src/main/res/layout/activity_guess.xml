@@ -366,7 +366,7 @@
         android:inputType="text"
         android:queryHint="@string/name"
         app:iconifiedByDefault="false"
-        app:searchIcon="@drawable/pokeball"
+        app:searchIcon="@drawable/search_pokeball_icon"
         app:queryBackground="@android:color/transparent"/>
 
     <View
