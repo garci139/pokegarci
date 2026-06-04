@@ -14,6 +14,7 @@ import com.garci.pokegarci.presentation.firstmenu.FirstMenuLoadState
 import com.garci.pokegarci.presentation.firstmenu.FirstMenuViewModel
 import com.garci.pokegarci.util.AppConstants
 import com.garci.pokegarci.util.BaseLocaleActivity
+import com.garci.pokegarci.util.getAppVersionName
 import com.garci.pokegarci.util.startGradientBackgroundAnimation
 import com.garci.pokegarci.utils.vibrate
 import dagger.hilt.android.AndroidEntryPoint
@@ -41,6 +42,7 @@ class FirstMenuActivity : BaseLocaleActivity() {
         setContentView(binding.root)
 
         binding.firstMenu.startGradientBackgroundAnimation()
+        binding.appVersionText.text = getString(R.string.app_version_format, getAppVersionName())
         setupLoadingEllipsisSlot()
 
         val pendingLanguageChange = getSharedPreferences(AppConstants.PREFS_NAME, Context.MODE_PRIVATE)
