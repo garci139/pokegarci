@@ -71,6 +71,10 @@ abstract class BaseLocaleActivity : AppCompatActivity() {
     override fun onResume() {
         super.onResume()
         ambientRoot?.startAmbientAnimation()
+        window?.decorView?.let { decor ->
+            AppFont.applyTo(decor)
+            AppFont.scheduleReapply(decor)
+        }
     }
 
     private fun bindAmbientRoot(root: PokemonAmbientBackgroundLayout) {

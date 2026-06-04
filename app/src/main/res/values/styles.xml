@@ -18,5 +18,17 @@
         <item name="android:textAllCaps">true</item>
         <item name="android:maxLines">1</item>
         <item name="android:ellipsize">end</item>
+        <item name="fontFamily">@font/pokemon_emerald</item>
+        <item name="android:fontFamily">@font/pokemon_emerald</item>
+    </style>
+
+    <style name="TextAppearance.PokeGarci" parent="TextAppearance.MaterialComponents.Body1">
+        <item name="fontFamily">@font/pokemon_emerald</item>
+        <item name="android:fontFamily">@font/pokemon_emerald</item>
+    </style>
+
+    <style name="Widget.PokeGarci.Button" parent="Widget.MaterialComponents.Button">
+        <item name="fontFamily">@font/pokemon_emerald</item>
+        <item name="android:fontFamily">@font/pokemon_emerald</item>
     </style>
 </resources>

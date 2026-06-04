@@ -11,6 +11,7 @@ object SearchViewUtils {
 
     fun applyDefaultStyle(searchView: SearchView) {
         val searchEditText = searchView.findViewById<EditText>(androidx.appcompat.R.id.search_src_text)
+        searchEditText.typeface = AppFont.get(searchView.context)
         searchEditText.setTextColor(Color.BLACK)
         searchEditText.setHintTextColor(Color.GRAY)
 

@@ -7,6 +7,7 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.garci.pokegarci.R
 import com.garci.pokegarci.domain.model.Pokemon
+import com.garci.pokegarci.util.AppFont
 
 class PokemonGuessAdapter(
     private var pokemonList: List<Pokemon>,
@@ -20,6 +21,7 @@ class PokemonGuessAdapter(
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val view = LayoutInflater.from(parent.context)
             .inflate(R.layout.each_pokemon_guess, parent, false)
+        AppFont.applyTo(view)
         return ViewHolder(view)
     }
 
