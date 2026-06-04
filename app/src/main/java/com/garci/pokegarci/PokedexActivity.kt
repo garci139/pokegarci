@@ -21,6 +21,7 @@ import com.garci.pokegarci.ui.adapter.PokemonAdapter
 import com.garci.pokegarci.util.BaseLocaleActivity
 import com.garci.pokegarci.util.DataLoadingUi
 import com.garci.pokegarci.util.PokemonCryPlayer
+import com.garci.pokegarci.util.PokemonSpriteFlipAnimator
 import com.garci.pokegarci.util.SearchViewUtils
 import com.garci.pokegarci.util.TypeBackgroundProvider
 import com.garci.pokegarci.util.startGradientBackgroundAnimation
@@ -37,6 +38,8 @@ class PokedexActivity : BaseLocaleActivity() {
     private lateinit var binding: ActivityPokedexBinding
     private lateinit var adapter: PokemonAdapter
     private val cryPlayer = PokemonCryPlayer(this)
+    private var expandedCardPokemon: Pokemon? = null
+    private var showingBackSprite = false
 
     @SuppressLint("MissingInflatedId")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -73,6 +76,17 @@ class PokedexActivity : BaseLocaleActivity() {
             vibrate()
             closeExpandedCard()
         }
+
+        val spriteFlipClickListener = View.OnClickListener {
+            expandedCardPokemon?.let { pokemon ->
+                if (pokemon.backImageUrl.isNotBlank()) {
+                    vibrate()
+                    flipExpandedSprite()
+                }
+            }
+        }
+        binding.expandedSubView.setOnClickListener(spriteFlipClickListener)
+        binding.expandedPokemonImage.setOnClickListener(spriteFlipClickListener)
 
         DataLoadingUi.bind(
             lifecycleOwner = this,
@@ -122,11 +136,21 @@ class PokedexActivity : BaseLocaleActivity() {
         binding.expandedPokemonSpDefense.text = String.format(Locale.US, "%d", pokemon.specialDefense)
         binding.expandedPokemonSpeed.text = String.format(Locale.US, "%d", pokemon.speed)
 
+        expandedCardPokemon = pokemon
+        showingBackSprite = false
+        PokemonSpriteFlipAnimator.reset(binding.expandedPokemonImage)
+
         val requestOptions = RequestOptions().diskCacheStrategy(DiskCacheStrategy.ALL)
         Glide.with(this)
             .load(pokemon.imageUrl)
             .apply(requestOptions)
             .into(binding.expandedPokemonImage)
+        if (pokemon.backImageUrl.isNotBlank()) {
+            Glide.with(this)
+                .load(pokemon.backImageUrl)
+                .apply(requestOptions)
+                .preload()
+        }
 
         bindTypeIcon(binding.expandedFirstTypeIcon, pokemon.type1)
         bindTypeIcon(binding.expandedSecondTypeIcon, pokemon.type2)
@@ -143,8 +167,22 @@ class PokedexActivity : BaseLocaleActivity() {
         cryPlayer.play(pokemon.legacyCryUrl)
     }
 
+    private fun flipExpandedSprite() {
+        val pokemon = expandedCardPokemon ?: return
+        PokemonSpriteFlipAnimator.toggle(
+            imageView = binding.expandedPokemonImage,
+            showingBack = showingBackSprite,
+            frontUrl = pokemon.imageUrl,
+            backUrl = pokemon.backImageUrl,
+            onShowingBackChanged = { showingBackSprite = it },
+        )
+    }
+
     private fun closeExpandedCard() {
         cryPlayer.stop()
+        expandedCardPokemon = null
+        showingBackSprite = false
+        PokemonSpriteFlipAnimator.reset(binding.expandedPokemonImage)
         binding.pokedexBox.isEnabled = true
         binding.disableRecyclerView.visibility = View.INVISIBLE
         binding.expandedPokemonCard.visibility = View.GONE

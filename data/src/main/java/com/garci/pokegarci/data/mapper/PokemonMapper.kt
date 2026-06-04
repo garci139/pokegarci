@@ -42,7 +42,12 @@ object PokemonMapper {
             weight = details.weight,
             abilities = mapAbilities(details),
             legacyCryUrl = cryUrlFromDetails(details),
+            backImageUrl = backImageUrlFromDetails(details),
         )
+    }
+
+    fun backImageUrlFromDetails(details: PokemonDetailsResponse): String {
+        return details.sprites.back_default.orEmpty()
     }
 
     fun cryUrlFromDetails(details: PokemonDetailsResponse): String {

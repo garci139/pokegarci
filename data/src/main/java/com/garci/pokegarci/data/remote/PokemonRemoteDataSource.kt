@@ -92,17 +92,35 @@ class PokemonRemoteDataSource @Inject constructor(
     suspend fun refreshMissingCryUrls(
         pokemon: List<Pokemon>,
         onItemCompleted: ((completed: Int, total: Int) -> Unit)? = null,
+    ): List<Pokemon> = refreshMissingPokedexExtras(pokemon, onItemCompleted)
+
+    suspend fun refreshMissingPokedexExtras(
+        pokemon: List<Pokemon>,
+        onItemCompleted: ((completed: Int, total: Int) -> Unit)? = null,
     ): List<Pokemon> = coroutineScope {
         val total = pokemon.size.coerceAtLeast(1)
         val completed = AtomicInteger(0)
         pokemon.map { entry ->
             async {
-                val result = if (entry.legacyCryUrl.isNotBlank()) {
+                val needsCry = entry.legacyCryUrl.isBlank()
+                val needsBack = entry.backImageUrl.isBlank()
+                val result = if (!needsCry && !needsBack) {
                     entry
                 } else {
                     runCatching {
                         val details = api.getPokemonDetails(entry.id)
-                        entry.copy(legacyCryUrl = PokemonMapper.cryUrlFromDetails(details))
+                        entry.copy(
+                            legacyCryUrl = if (needsCry) {
+                                PokemonMapper.cryUrlFromDetails(details)
+                            } else {
+                                entry.legacyCryUrl
+                            },
+                            backImageUrl = if (needsBack) {
+                                PokemonMapper.backImageUrlFromDetails(details)
+                            } else {
+                                entry.backImageUrl
+                            },
+                        )
                     }.getOrDefault(entry)
                 }
                 onItemCompleted?.invoke(completed.incrementAndGet(), total)

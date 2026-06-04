@@ -22,4 +22,5 @@ data class Pokemon(
     val weight: Int,
     val abilities: List<Ability>,
     val legacyCryUrl: String = "",
+    val backImageUrl: String = "",
 )
