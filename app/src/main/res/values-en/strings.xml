@@ -27,8 +27,19 @@
 
     <string name="pressToEnter">Touch to enter!</string>
     <string name="loadingPokemon">Loading Pokémon…</string>
+    <string-array name="loading_status_phrases">
+        <item>Playing the Poké Flute</item>
+        <item>Fishing for a Magikarp</item>
+        <item>Looking for Ditto</item>
+        <item>Entering Victory Road</item>
+        <item>Catching an Eevee</item>
+        <item>Buying potions</item>
+    </string-array>
+    <string name="loadingProgressPercent">%1$d%%</string>
+    <string name="hpLabel">HP</string>
     <string name="loadError">Could not load data.</string>
     <string name="retryLoad">Retry</string>
+    <string name="loadingInteractionBlocked">Loading data</string>
     <string name="developedBy">Developed by:\n Pablo Garcia Ortega</string>
     <string name="sizeInstructionsText">COMPARE</string>
     <string name="changePkmn1SizeButton">Change left</string>

@@ -32,11 +32,18 @@ class PokemonCryLocalDataSource @Inject constructor(
         .takeIf(::isValidOggFile)
         ?.absolutePath
 
-    suspend fun ensureCriesCached(pokemon: List<Pokemon>): List<Pokemon> = coroutineScope {
+    suspend fun ensureCriesCached(
+        pokemon: List<Pokemon>,
+        onItemCompleted: ((completed: Int, total: Int) -> Unit)? = null,
+    ): List<Pokemon> = coroutineScope {
+        val total = pokemon.size.coerceAtLeast(1)
+        val completed = java.util.concurrent.atomic.AtomicInteger(0)
         pokemon.map { entry ->
             async(Dispatchers.IO) {
                 downloadSemaphore.withPermit {
                     ensureCryCached(entry)
+                }.also {
+                    onItemCompleted?.invoke(completed.incrementAndGet(), total)
                 }
             }
         }.awaitAll()

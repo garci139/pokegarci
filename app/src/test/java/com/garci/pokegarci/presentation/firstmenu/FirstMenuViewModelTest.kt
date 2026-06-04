@@ -36,6 +36,7 @@ class FirstMenuViewModelTest {
         mockkObject(LocaleManager)
         every { LocaleManager.getLanguage(context) } returns "es"
         every { repository.isDataLoaded } returns MutableStateFlow(false)
+        every { repository.loadProgress } returns MutableStateFlow(0)
     }
 
     @After
