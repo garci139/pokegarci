@@ -1,0 +1,19 @@
+---
+description: Referencia PokeAPI y convenciones de red para PokeGarci
+globs: data/**/*
+alwaysApply: false
+---
+
+# PokeAPI en PokeGarci
+
+Antes de modificar red, DTOs, mappers o caché de Pokémon, lee **`docs/POKEAPI.md`**.
+
+Resumen operativo:
+
+- Base: `https://pokeapi.co/api/v2/` — solo GET, sin auth.
+- Servicio: `PokeApiService` — `pokemon`, `pokemon-species`, `ability`.
+- Límite actual: `POKEMON_LIMIT = 251` (lista sin `offset`).
+- i18n: filtrar `flavor_text_entries` y `ability.names` por `language.name` (`es` / `en`).
+- Unidades: altura en dm, peso en hg; stats con guiones (`special-attack`).
+- No exponer DTOs fuera de `data`; ver `.cursor/rules/networking.md`.
+- Ejemplos JSON de respuestas: `docs/POKEAPI.md` §10.

@@ -8,11 +8,14 @@
     <string name="settingsMainMenuTitle">AJUSTES</string>
     <string name="testEachPokemonName">Pikachu</string>
     <string name="textEachPokemonId">0039</string>
+    <string name="pokedex_title" translatable="false">PokéDex</string>
     <string name="queryHintSearchView">Nombre o ID</string>
     <string name="expandedPokemonName">Nombre</string>
     <string name="expandedPokemonId">#000</string>
     <string name="expandedPokemonHeight">14.5 m</string>
     <string name="expandedPokemonWeight">32.5 kg</string>
+    <string name="expandedPokemonAbilities">Espesura</string>
+    <string name="expandedPokemonShinyToggle">Alternar sprite shiny</string>
     <string name="expandedPokemonDescriptionTitle">Descripción</string>
     <string name="expandedPokemonDescription">Descripcion de prueba.</string>
     <string name="expandedStatsTitle">Estadísticas base</string>
@@ -30,17 +33,79 @@
     <string name="Speed_API" translatable="false">-</string>
     <string name="closeExpandedCard">Cerrar</string>
 
+    <string name="pokedex_filter_region">Región</string>
+    <string name="pokedex_filter_type">Tipo</string>
+    <string name="pokedex_filter_stats">Stats</string>
+    <string name="pokedex_filter_clear">Borrar</string>
+    <string name="pokedex_filter_apply">Aplicar</string>
+    <string name="pokedex_filter_region_title">Región</string>
+    <string name="pokedex_filter_type_title">Tipo</string>
+    <string name="pokedex_filter_stats_title">Estadísticas base</string>
+    <string name="pokedex_filter_region_hint">Ninguna o todas las regiones muestran la Pokédex completa</string>
+    <string name="pokedex_expanded_prev">Pokémon anterior</string>
+    <string name="pokedex_expanded_next">Pokémon siguiente</string>
+    <string name="pokedex_filter_type_hint">Selecciona al menos un tipo o Monotipo</string>
+    <string name="pokedex_filter_stats_hint">Introduce mínimos o máximos opcionales</string>
+    <string name="pokedex_filter_monotype">Monotipo</string>
+    <string name="pokedex_filter_all_types">Todos</string>
+    <string name="pokedex_stat_min_hint">Mín</string>
+    <string name="pokedex_stat_max_hint">Máx</string>
+    <string name="pokedex_filter_cleared">Filtro eliminado</string>
+
+    <string name="pokedex_region_gen_i">Gen I (Kanto)</string>
+    <string name="pokedex_region_gen_ii">Gen II (Johto)</string>
+    <string name="pokedex_region_gen_iii">Gen III (Hoenn)</string>
+    <string name="pokedex_region_gen_iv">Gen IV (Sinnoh)</string>
+    <string name="pokedex_region_gen_v">Gen V (Teselia)</string>
+    <string name="pokedex_region_gen_vi">Gen VI (Kalos)</string>
+    <string name="pokedex_region_gen_vii">Gen VII (Alola)</string>
+    <string name="pokedex_region_gen_viii">Gen VIII (Galar/Hisui)</string>
+    <string name="pokedex_region_gen_ix">Gen IX (Paldea)</string>
+
+    <string name="type_normal">Normal</string>
+    <string name="type_fire">Fuego</string>
+    <string name="type_water">Agua</string>
+    <string name="type_grass">Planta</string>
+    <string name="type_electric">Eléctrico</string>
+    <string name="type_ice">Hielo</string>
+    <string name="type_fighting">Lucha</string>
+    <string name="type_poison">Veneno</string>
+    <string name="type_ground">Tierra</string>
+    <string name="type_flying">Volador</string>
+    <string name="type_psychic">Psíquico</string>
+    <string name="type_bug">Bicho</string>
+    <string name="type_rock">Roca</string>
+    <string name="type_ghost">Fantasma</string>
+    <string name="type_dragon">Dragón</string>
+    <string name="type_dark">Siniestro</string>
+    <string name="type_steel">Acero</string>
+    <string name="type_fairy">Hada</string>
+
     <string name="pressToEnter">¡Toca para entrar!</string>
     <string name="loadingPokemon">Cargando Pokémon…</string>
+    <string-array name="loading_status_phrases">
+        <item>Tocando la Pokéflauta</item>
+        <item>Pescando un Magikarp</item>
+        <item>Buscando a Ditto</item>
+        <item>Entrando en la Calle Victoria</item>
+        <item>Capturando un Eevee</item>
+        <item>Comprando pociones</item>
+    </string-array>
+    <string name="loadingProgressPercent">%1$d%%</string>
+    <string name="hpLabel">PS</string>
     <string name="loadError">No se pudieron cargar los datos.</string>
     <string name="retryLoad">Reintentar</string>
-    <string name="developedBy">Desarrollado por:\n Pablo García Ortega</string>
+    <string name="loadingInteractionBlocked">Cargando datos</string>
+    <string name="developedBy">Desarrollado por:\n garci139</string>
+    <string name="app_version_format">Ver %1$s</string>
 
     <string name="sizeInstructionsText">COMPARADOR</string>
     <string name="changePkmn1SizeButton">CAMBIAR IZQUIERDA</string>
     <string name="changePkmn2SizeButton">CAMBIAR DERECHA</string>
 
     <string name="name">Nombre</string>
+    <string name="guess_gen_label" translatable="false">Gen %1$s</string>
+    <string name="guess_gen_filter_total">TOTAL: %1$d</string>
     <string name="resetLogoDescription">Reiniciar</string>
     <string name="level">Nivel</string>
     <string name="score">Puntuación</string>

@@ -33,17 +33,21 @@ class FirstMenuViewModel @Inject constructor(
     private val _loadState = MutableStateFlow<FirstMenuLoadState>(FirstMenuLoadState.Idle)
     val loadState: StateFlow<FirstMenuLoadState> = _loadState.asStateFlow()
 
+    val loadProgress: StateFlow<Int> = repository.loadProgress.stateIn(
+        scope = viewModelScope,
+        started = SharingStarted.WhileSubscribed(5_000),
+        initialValue = 0,
+    )
+
     fun ensurePokemonLoaded(pendingLanguageChange: Boolean = false) {
-        if (repository.getPokemonList().isNotEmpty()) {
+        if (!pendingLanguageChange && repository.getPokemonList().isNotEmpty()) {
             _loadState.value = FirstMenuLoadState.Ready
-            clearPendingLanguageChange(pendingLanguageChange)
             return
         }
 
         viewModelScope.launch {
             _loadState.value = FirstMenuLoadState.Loading
             val result = loadPokemonUseCase(
-                AppConstants.POKEMON_LIMIT,
                 LocaleManager.getLanguage(context),
             )
             if (result.isSuccess) {

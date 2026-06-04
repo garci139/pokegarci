@@ -24,10 +24,15 @@ class PokemonEntityMapperTest {
             speed = 90,
             height = 4,
             weight = 60,
-            firstAbility = Ability(
-                originalName = "static",
-                displayName = "Elec. Estática",
+            abilities = listOf(
+                Ability(
+                    originalName = "static",
+                    displayName = "Elec. Estática",
+                ),
             ),
+            legacyCryUrl = "https://example.com/cries/25.ogg",
+            backImageUrl = "https://example.com/back/25.png", frontShinyImageUrl = "https://example.com/shiny/25.png",
+            backShinyImageUrl = "https://example.com/back/shiny/25.png"
         )
 
         val roundTrip = PokemonEntityMapper.toDomain(PokemonEntityMapper.toEntity(pokemon))

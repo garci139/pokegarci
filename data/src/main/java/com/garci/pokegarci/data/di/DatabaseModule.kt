@@ -2,7 +2,15 @@ package com.garci.pokegarci.data.di
 
 import android.content.Context
 import androidx.room.Room
+import com.garci.pokegarci.data.local.MIGRATION_1_2
+import com.garci.pokegarci.data.local.MIGRATION_2_3
+import com.garci.pokegarci.data.local.MIGRATION_3_4
+import com.garci.pokegarci.data.local.MIGRATION_4_5
+import com.garci.pokegarci.data.local.MIGRATION_5_6
+import com.garci.pokegarci.data.local.MIGRATION_6_7
+import com.garci.pokegarci.data.local.MIGRATION_7_8
 import com.garci.pokegarci.data.local.PokeGarciDatabase
+import com.garci.pokegarci.data.local.dao.AbilityDao
 import com.garci.pokegarci.data.local.dao.PokemonDao
 import dagger.Module
 import dagger.Provides
@@ -22,11 +30,24 @@ object DatabaseModule {
             context,
             PokeGarciDatabase::class.java,
             "pokegarci.db",
+        ).addMigrations(
+            MIGRATION_1_2,
+            MIGRATION_2_3,
+            MIGRATION_3_4,
+            MIGRATION_4_5,
+            MIGRATION_5_6,
+            MIGRATION_6_7,
+            MIGRATION_7_8,
         ).build()
     }
 
     @Provides
     fun providePokemonDao(database: PokeGarciDatabase): PokemonDao {
         return database.pokemonDao()
+    }
+
+    @Provides
+    fun provideAbilityDao(database: PokeGarciDatabase): AbilityDao {
+        return database.abilityDao()
     }
 }

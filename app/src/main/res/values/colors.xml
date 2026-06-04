@@ -12,11 +12,27 @@
     <color name="expanded_card_bg">#FFF8BF</color>
     <color name="expanded_card_button_bg">#FFF596</color>
     <color name="light_grey">#DBDBDB</color>
+    <color name="pokedex_header_scrim">#920000</color>
+    <color name="pokedex_title_accent_line">#490B0B</color>
 
     <color name="red_badStat">#B84141</color>
     <color name="green_goodStat">#74C865</color>
 
     <color name="yellow_star">#FFEB3B</color>
 
+    <color name="shiny_toggle_bg_off">#FFFFFFFF</color>
+    <color name="shiny_toggle_bg_on">#FFFFF3B0</color>
+    <color name="shiny_toggle_icon_off">#FF9E9E9E</color>
+    <color name="shiny_toggle_icon_on">#FFE6A800</color>
+
     <color name="light_grey_semitransp">#90E9E9E9</color>
+
+    <color name="hp_bar_frame_outer">#FFF0F0F0</color>
+    <color name="hp_bar_frame_inner">#FF1A1A1A</color>
+    <color name="hp_bar_track">#FF383838</color>
+    <color name="hp_bar_fill">#FF58D068</color>
+    <color name="hp_bar_label">#FFF8F8F8</color>
+    <color name="hp_bar_text_outline">#CC000000</color>
+
+    <color name="guess_gen_filter_indicator">#FF3D3D3D</color>
 </resources>

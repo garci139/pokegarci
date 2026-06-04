@@ -5,7 +5,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.garci.pokegarci.domain.repository.PokemonRepository
 import com.garci.pokegarci.domain.usecase.LoadPokemonUseCase
-import com.garci.pokegarci.util.AppConstants
 import com.garci.pokegarci.utils.LocaleManager
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.flow.SharingStarted
@@ -37,7 +36,7 @@ abstract class PokemonDataViewModel(
 
     fun retryLoad() {
         viewModelScope.launch {
-            loadPokemonUseCase(AppConstants.POKEMON_LIMIT, LocaleManager.getLanguage(context))
+            loadPokemonUseCase(LocaleManager.getLanguage(context))
         }
     }
 }

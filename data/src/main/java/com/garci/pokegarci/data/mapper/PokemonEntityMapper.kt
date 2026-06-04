@@ -1,7 +1,6 @@
 package com.garci.pokegarci.data.mapper
 
 import com.garci.pokegarci.data.local.entity.PokemonEntity
-import com.garci.pokegarci.domain.model.Ability
 import com.garci.pokegarci.domain.model.Pokemon
 
 object PokemonEntityMapper {
@@ -22,10 +21,11 @@ object PokemonEntityMapper {
             speed = entity.speed,
             height = entity.height,
             weight = entity.weight,
-            firstAbility = Ability(
-                originalName = entity.abilityOriginalName,
-                displayName = entity.abilityDisplayName,
-            ),
+            abilities = AbilityJsonCodec.decode(entity.abilitiesJson),
+            legacyCryUrl = entity.legacyCryUrl,
+            backImageUrl = entity.backImageUrl,
+            frontShinyImageUrl = entity.frontShinyImageUrl,
+            backShinyImageUrl = entity.backShinyImageUrl
         )
     }
 
@@ -45,8 +45,11 @@ object PokemonEntityMapper {
             speed = pokemon.speed,
             height = pokemon.height,
             weight = pokemon.weight,
-            abilityOriginalName = pokemon.firstAbility.originalName,
-            abilityDisplayName = pokemon.firstAbility.displayName,
+            abilitiesJson = AbilityJsonCodec.encode(pokemon.abilities),
+            legacyCryUrl = pokemon.legacyCryUrl,
+            backImageUrl = pokemon.backImageUrl,
+            frontShinyImageUrl = pokemon.frontShinyImageUrl,
+            backShinyImageUrl = pokemon.backShinyImageUrl
         )
     }
 }

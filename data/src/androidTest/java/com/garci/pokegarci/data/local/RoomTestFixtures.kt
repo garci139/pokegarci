@@ -2,6 +2,7 @@ package com.garci.pokegarci.data.local
 
 import com.garci.pokegarci.data.local.entity.CacheMetadataEntity
 import com.garci.pokegarci.data.local.entity.PokemonEntity
+import com.garci.pokegarci.data.mapper.AbilityJsonCodec
 import com.garci.pokegarci.domain.model.Ability
 import com.garci.pokegarci.domain.model.Pokemon
 
@@ -9,6 +10,7 @@ internal fun samplePokemonEntity(
     id: Int = 25,
     name: String = "Pikachu",
     description: String = "Mouse Pokemon.",
+    abilities: List<Ability> = listOf(Ability("static", "Static")),
 ): PokemonEntity {
     return PokemonEntity(
         id = id,
@@ -25,8 +27,11 @@ internal fun samplePokemonEntity(
         speed = 90,
         height = 4,
         weight = 60,
-        abilityOriginalName = "static",
-        abilityDisplayName = "Static",
+        abilitiesJson = AbilityJsonCodec.encode(abilities),
+        legacyCryUrl = "https://example.com/cries/$id.ogg",
+        backImageUrl = "https://example.com/back/$id.png",
+        frontShinyImageUrl = "https://example.com/shiny/$id.png",
+        backShinyImageUrl = "https://example.com/back/shiny/$id.png"
     )
 }
 
@@ -34,6 +39,7 @@ internal fun samplePokemon(
     id: Int = 25,
     name: String = "Pikachu",
     description: String = "Mouse Pokemon.",
+    abilities: List<Ability> = listOf(Ability("static", "Static")),
 ): Pokemon {
     return Pokemon(
         id = id,
@@ -50,10 +56,7 @@ internal fun samplePokemon(
         speed = 90,
         height = 4,
         weight = 60,
-        firstAbility = Ability(
-            originalName = "static",
-            displayName = "Static",
-        ),
+        abilities = abilities,
     )
 }
 

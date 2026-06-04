@@ -8,6 +8,7 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.garci.pokegarci.R
 import com.garci.pokegarci.domain.model.Pokemon
+import com.garci.pokegarci.util.AppFont
 import com.garci.pokegarci.util.TypeBackgroundProvider
 import java.util.Locale
 
@@ -24,6 +25,7 @@ class PokemonDialogAdapter(
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val view = LayoutInflater.from(parent.context)
             .inflate(R.layout.size_each_pokemon_selector, parent, false)
+        AppFont.applyTo(view)
         return ViewHolder(view)
     }
 

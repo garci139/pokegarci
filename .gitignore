@@ -31,3 +31,5 @@ desktop.ini
 
 # Editor backups
 *~
+/.kotlin/errors
+/.kotlin/sessions

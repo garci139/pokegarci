@@ -1,5 +1,6 @@
 package com.garci.pokegarci.data.repository
 
+import com.garci.pokegarci.data.local.PokemonCryLocalDataSource
 import com.garci.pokegarci.data.local.PokemonLocalDataSource
 import com.garci.pokegarci.data.remote.PokemonRemoteDataSource
 import com.garci.pokegarci.domain.model.Ability
@@ -18,66 +19,69 @@ class PokemonRepositoryImplTest {
 
     private val remoteDataSource = mockk<PokemonRemoteDataSource>()
     private val localDataSource = mockk<PokemonLocalDataSource>(relaxed = true)
+    private val cryLocalDataSource = mockk<PokemonCryLocalDataSource>()
     private lateinit var repository: PokemonRepositoryImpl
 
     @Before
     fun setUp() {
-        repository = PokemonRepositoryImpl(remoteDataSource, localDataSource)
+        coEvery { cryLocalDataSource.ensureCriesCached(any()) } answers { firstArg() }
+        coEvery { remoteDataSource.refreshMissingCryUrls(any()) } answers { firstArg() }
+        repository = PokemonRepositoryImpl(remoteDataSource, localDataSource, cryLocalDataSource)
     }
 
     @Test
     fun `loadPokemon uses cache when language matches`() = runTest {
         val cached = listOf(samplePokemon())
-        coEvery { localDataSource.getCachedPokemon(251, "es") } returns cached
+        coEvery { localDataSource.getCachedPokemon("es") } returns cached
 
-        val result = repository.loadPokemon(251, "es")
+        val result = repository.loadPokemon("es")
 
         assertTrue(result.isSuccess)
         assertEquals(cached, repository.getPokemonList())
         assertTrue(repository.isDataLoaded.value)
-        coVerify(exactly = 0) { remoteDataSource.fetchAllPokemon(any(), any()) }
+        coVerify(exactly = 0) { remoteDataSource.fetchAllPokemon(any()) }
     }
 
     @Test
     fun `loadPokemon refreshes localization when cache language differs`() = runTest {
         val cached = listOf(samplePokemon())
         val localized = listOf(samplePokemon(description = "Localized"))
-        coEvery { localDataSource.getCachedPokemon(251, "en") } returns null
-        coEvery { localDataSource.getCachedPokemonIgnoringLanguage(251) } returns cached
+        coEvery { localDataSource.getCachedPokemon("en") } returns null
+        coEvery { localDataSource.getCachedPokemonIgnoringLanguage() } returns cached
         coEvery { remoteDataSource.refreshLocalizedContent(cached, "en") } returns localized
         coEvery { localDataSource.saveAll(localized, "en") } returns Unit
 
-        val result = repository.loadPokemon(251, "en")
+        val result = repository.loadPokemon("en")
 
         assertTrue(result.isSuccess)
         assertEquals(localized, repository.getPokemonList())
-        coVerify(exactly = 0) { remoteDataSource.fetchAllPokemon(any(), any()) }
+        coVerify(exactly = 0) { remoteDataSource.fetchAllPokemon(any()) }
         coVerify(exactly = 1) { localDataSource.saveAll(localized, "en") }
     }
 
     @Test
     fun `loadPokemon fetches from network when cache is empty`() = runTest {
         val fetched = listOf(samplePokemon())
-        coEvery { localDataSource.getCachedPokemon(251, "es") } returns null
-        coEvery { localDataSource.getCachedPokemonIgnoringLanguage(251) } returns null
-        coEvery { remoteDataSource.fetchAllPokemon(251, "es") } returns fetched
+        coEvery { localDataSource.getCachedPokemon("es") } returns null
+        coEvery { localDataSource.getCachedPokemonIgnoringLanguage() } returns null
+        coEvery { remoteDataSource.fetchAllPokemon("es") } returns fetched
         coEvery { localDataSource.saveAll(fetched, "es") } returns Unit
 
-        val result = repository.loadPokemon(251, "es")
+        val result = repository.loadPokemon("es")
 
         assertTrue(result.isSuccess)
         assertEquals(fetched, repository.getPokemonList())
         assertFalse(repository.loadFailed.value)
-        coVerify(exactly = 1) { remoteDataSource.fetchAllPokemon(251, "es") }
+        coVerify(exactly = 1) { remoteDataSource.fetchAllPokemon("es") }
     }
 
     @Test
     fun `loadPokemon sets loadFailed when network fails`() = runTest {
-        coEvery { localDataSource.getCachedPokemon(251, "es") } returns null
-        coEvery { localDataSource.getCachedPokemonIgnoringLanguage(251) } returns null
-        coEvery { remoteDataSource.fetchAllPokemon(251, "es") } throws IllegalStateException("offline")
+        coEvery { localDataSource.getCachedPokemon("es") } returns null
+        coEvery { localDataSource.getCachedPokemonIgnoringLanguage() } returns null
+        coEvery { remoteDataSource.fetchAllPokemon("es") } throws IllegalStateException("offline")
 
-        val result = repository.loadPokemon(251, "es")
+        val result = repository.loadPokemon("es")
 
         assertTrue(result.isFailure)
         assertTrue(repository.loadFailed.value)
@@ -100,7 +104,7 @@ class PokemonRepositoryImplTest {
             speed = 90,
             height = 4,
             weight = 60,
-            firstAbility = Ability("static", "Static"),
+            abilities = listOf(Ability("static", "Static")),
         )
     }
 }

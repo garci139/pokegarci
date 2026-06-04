@@ -2,6 +2,7 @@ package com.garci.pokegarci.presentation.guess
 
 import android.content.Context
 import com.garci.pokegarci.domain.guess.GuessOutcome
+import com.garci.pokegarci.domain.guess.PokemonGeneration
 import com.garci.pokegarci.domain.model.Ability
 import com.garci.pokegarci.domain.model.Pokemon
 import com.garci.pokegarci.domain.repository.PokemonRepository
@@ -19,6 +20,7 @@ import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.setMain
 import org.junit.After
 import org.junit.Assert.assertEquals
+import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Test
@@ -40,6 +42,7 @@ class GuessViewModelTest {
         Dispatchers.setMain(UnconfinedTestDispatcher())
         every { repository.isDataLoaded } returns MutableStateFlow(true)
         every { repository.loadFailed } returns MutableStateFlow(false)
+        every { repository.loadProgress } returns MutableStateFlow(0)
         every { gamePreferences.getHighscore() } returns 10
         every { gamePreferences.saveHighscoreIfRecord(any()) } answers { firstArg() }
     }
@@ -75,6 +78,30 @@ class GuessViewModelTest {
         assertEquals(6, viewModel.score)
         assertEquals(1, viewModel.guessedCount)
         verify { gamePreferences.saveHighscoreIfRecord(6) }
+    }
+
+    @Test
+    fun `refreshPokemonList filters by selected generations`() {
+        every { getPokemonListUseCase() } returns listOf(pikachu, bulbasaur)
+
+        val viewModel = createViewModel()
+        PokemonGeneration.entries.forEach { generation ->
+            viewModel.setGenerationSelected(generation, selected = false)
+        }
+        viewModel.setGenerationSelected(PokemonGeneration.GEN_I, selected = true)
+        viewModel.refreshPokemonList()
+
+        assertEquals(listOf(bulbasaur), viewModel.pokemonList.value)
+    }
+
+    @Test
+    fun `canStartGame is false when no generation is selected`() {
+        val viewModel = createViewModel()
+        PokemonGeneration.entries.forEach { generation ->
+            viewModel.setGenerationSelected(generation, selected = false)
+        }
+
+        assertFalse(viewModel.canStartGame.value)
     }
 
     @Test
@@ -119,7 +146,7 @@ class GuessViewModelTest {
             speed = 1,
             height = 1,
             weight = 1,
-            firstAbility = Ability("test", "Test"),
+            abilities = listOf(Ability("test", "Test")),
         )
     }
 }

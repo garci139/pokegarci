@@ -1,14 +1,5 @@
 package com.garci.pokegarci.data.remote.dto
 
-data class PokemonListResponse(
-    val results: List<PokemonInfo>,
-)
-
-data class PokemonInfo(
-    val name: String,
-    val url: String,
-)
-
 data class PokemonDetailsResponse(
     val id: Int,
     val name: String,
@@ -18,10 +9,18 @@ data class PokemonDetailsResponse(
     val height: Int,
     val weight: Int,
     val abilities: List<AbilityBasicDetails>,
+    val cries: CriesResponse? = null,
+)
+
+data class CriesResponse(
+    val latest: String?,
+    val legacy: String?,
 )
 
 data class AbilityBasicDetails(
     val ability: AbilitySimpleName,
+    val slot: Int,
+    val is_hidden: Boolean,
 )
 
 data class AbilitySimpleName(
@@ -29,7 +28,10 @@ data class AbilitySimpleName(
 )
 
 data class SpriteResponse(
-    val front_default: String?,
+    val front_default: String? = null,
+    val back_default: String? = null,
+    val front_shiny: String? = null,
+    val back_shiny: String? = null
 )
 
 data class TypeSlot(

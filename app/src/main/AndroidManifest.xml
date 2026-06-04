@@ -18,33 +18,10 @@
         tools:targetApi="35">
 
         <activity
-            android:name=".GuessActivity"
-            android:exported="false" />
-
-        <activity
-            android:name=".SizeActivity"
-            android:exported="false" />
-
-        <activity
-            android:name=".LanguageActivity"
+            android:name=".MainActivity"
             android:configChanges="locale"
-            android:exported="false" />
-
-        <activity
-            android:name=".PokedexActivity"
-            android:configChanges="locale"
-            android:exported="false"
-            android:windowSoftInputMode="adjustPan" />
-
-        <activity
-            android:name=".MainMenuActivity"
-            android:configChanges="locale"
-            android:exported="false" />
-
-        <activity
-            android:name=".FirstMenuActivity"
-            android:configChanges="locale"
-            android:exported="true">
+            android:exported="true"
+            android:windowSoftInputMode="adjustPan">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />

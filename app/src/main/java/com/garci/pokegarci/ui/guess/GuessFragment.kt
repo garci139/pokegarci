@@ -1,61 +1,92 @@
-package com.garci.pokegarci
+﻿package com.garci.pokegarci.ui.guess
 
 import android.animation.ObjectAnimator
 import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.Color
+import android.graphics.PorterDuff
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
-import android.view.MotionEvent
+import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
 import android.widget.ImageView
-import androidx.activity.viewModels
 import androidx.appcompat.widget.SearchView
 import androidx.core.animation.doOnEnd
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
+import com.garci.pokegarci.R
 import com.garci.pokegarci.databinding.ActivityGuessBinding
+import com.garci.pokegarci.databinding.ItemGuessGenFilterBinding
 import com.garci.pokegarci.domain.guess.GuessOutcome
+import com.garci.pokegarci.domain.guess.PokemonGeneration
 import com.garci.pokegarci.domain.model.Pokemon
+import com.garci.pokegarci.domain.model.abilitiesDisplayText
 import com.garci.pokegarci.presentation.guess.GuessViewModel
 import com.garci.pokegarci.ui.adapter.PokemonGuessAdapter
-import com.garci.pokegarci.util.BaseLocaleActivity
 import com.garci.pokegarci.util.DataLoadingUi
 import com.garci.pokegarci.util.SearchViewUtils
-import com.garci.pokegarci.util.startGradientBackgroundAnimation
+import com.garci.pokegarci.util.playClickEmeraldSound
 import com.garci.pokegarci.util.typeIconMap
 import com.garci.pokegarci.utils.vibrate
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
-class GuessActivity : BaseLocaleActivity() {
+class GuessFragment : Fragment() {
 
     private val viewModel: GuessViewModel by viewModels()
-    private lateinit var binding: ActivityGuessBinding
+    private var _binding: ActivityGuessBinding? = null
+    private val binding get() = _binding!!
 
     private val handler = Handler(Looper.getMainLooper())
 
     private lateinit var pokemonList: List<Pokemon>
     private lateinit var adapter: PokemonGuessAdapter
 
+    private val genFilterSlots: List<GenFilterSlot> by lazy {
+        with(binding.guessGenFilterInclude) {
+            listOf(
+                GenFilterSlot(PokemonGeneration.GEN_I, genFilter1),
+                GenFilterSlot(PokemonGeneration.GEN_II, genFilter2),
+                GenFilterSlot(PokemonGeneration.GEN_III, genFilter3),
+                GenFilterSlot(PokemonGeneration.GEN_IV, genFilter4),
+                GenFilterSlot(PokemonGeneration.GEN_V, genFilter5),
+                GenFilterSlot(PokemonGeneration.GEN_VI, genFilter6),
+                GenFilterSlot(PokemonGeneration.GEN_VII, genFilter7),
+                GenFilterSlot(PokemonGeneration.GEN_VIII, genFilter8),
+                GenFilterSlot(PokemonGeneration.GEN_IX, genFilter9),
+            )
+        }
+    }
+
+    private var syncingGenFilters = false
+    private var gameInProgress = false
+
     private val fadeDuration: Long = 400
     private val longerFadeDuration: Long = 800
     private val ultraLongDuration: Long = 1200
 
-    @SuppressLint("SetTextI18n")
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        binding = ActivityGuessBinding.inflate(layoutInflater)
-        setContentView(binding.root)
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?,
+    ): View {
+        _binding = ActivityGuessBinding.inflate(inflater, container, false)
+        return binding.root
+    }
 
-        binding.guessBlockView.visibility = View.VISIBLE
+    @SuppressLint("SetTextI18n")
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
 
         binding.solutionPokemonImage.visibility = View.GONE
         binding.solutionPokemonMask.visibility = View.GONE
@@ -66,26 +97,28 @@ class GuessActivity : BaseLocaleActivity() {
         binding.guessHint5FirstChar.visibility = View.INVISIBLE
         binding.currentScore.visibility = View.GONE
         binding.accumulatedScore.visibility = View.GONE
+        applyLobbyState()
 
         pokemonList = emptyList()
 
         adapter = PokemonGuessAdapter(pokemonList) { selectedPokemon ->
             binding.guessPokemonSearchView.setQuery("", false)
-            val inputMethodManager = getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
+            val inputMethodManager =
+                requireContext().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
             inputMethodManager.hideSoftInputFromWindow(binding.guessRecyclerView.windowToken, 0)
 
             when (val outcome = viewModel.submitGuess(selectedPokemon)) {
                 is GuessOutcome.Wrong -> {
-                    vibrate(false)
+                    requireContext().vibrate(false)
                     showHint(outcome.wrongName, outcome.hintLevel)
                 }
                 is GuessOutcome.Defeated -> {
-                    vibrate(false)
+                    requireContext().vibrate(false)
                     changeHeart(binding.heart6)
                     gameOver()
                 }
                 is GuessOutcome.Correct -> {
-                    vibrate()
+                    requireContext().vibrate()
                     binding.guessBlockView.visibility = View.VISIBLE
                     updateScoreboards()
                     fadeAnimation(binding.solutionPokemonMask, binding.solutionPokemonImage, fadeDuration)
@@ -106,25 +139,23 @@ class GuessActivity : BaseLocaleActivity() {
                                 handler.postDelayed({
                                     fadeOut(binding.guessPikachuWinImage, fadeDuration)
                                     fadeOut(binding.guessResultsLayout, fadeDuration)
-                                    fadeIn(binding.guessPlayButton, ultraLongDuration)
                                     resetHintsAndLifes(hintsUsedBeforeCorrect)
-                                    binding.guessPlayButton.isEnabled = true
+                                    applyLobbyState()
+                                    fadeIn(binding.guessPlayButton, ultraLongDuration)
+                                    updatePlayButtonState()
                                 }, 5000)
                             } else {
                                 viewModel.currentSolution?.let { loadSolutionData(it) }
-                                binding.solutionPokemonMask.postDelayed({
-                                    moveRight(binding.solutionPokemonMask)
-                                }, 100)
+                                enterSolutionPokemonFromRight()
                             }
                         }
                     }, 1000)
                 }
             }
         }
-        binding.guessRecyclerView.layoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
+        binding.guessRecyclerView.layoutManager =
+            LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
         binding.guessRecyclerView.adapter = adapter
-
-        binding.guessLayout.startGradientBackgroundAnimation()
 
         binding.guessPokemonSearchView.queryHint = getString(R.string.name)
         SearchViewUtils.applyDefaultStyle(binding.guessPokemonSearchView)
@@ -132,37 +163,34 @@ class GuessActivity : BaseLocaleActivity() {
             override fun onQueryTextSubmit(query: String?): Boolean = false
 
             override fun onQueryTextChange(newText: String?): Boolean {
-                val query = newText.orEmpty().lowercase()
-                if (query == "") {
-                    binding.guessNestedScrollView.visibility = View.GONE
-                    binding.guessRecyclerView.visibility = View.GONE
-                } else {
-                    val filteredList = pokemonList.filter { it.name.lowercase().startsWith(query) }
-                    adapter.updateList(filteredList)
-                    binding.guessNestedScrollView.visibility = View.VISIBLE
-                    binding.guessRecyclerView.visibility = View.VISIBLE
-                    binding.guessNestedScrollView.requestLayout()
-                }
+                if (!gameInProgress) return false
+                updateSearchResults()
                 return true
             }
         })
 
         val guessCloseButton = binding.guessPokemonSearchView.findViewById<ImageView>(androidx.appcompat.R.id.search_close_btn)
         guessCloseButton.setOnClickListener {
+            if (!gameInProgress) return@setOnClickListener
             binding.guessPokemonSearchView.setQuery("", false)
-            binding.guessNestedScrollView.visibility = View.GONE
-            val inputMethodManager = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+            hideSearchResults()
+            val inputMethodManager =
+                requireContext().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
             inputMethodManager.hideSoftInputFromWindow(binding.guessPokemonSearchView.windowToken, 0)
         }
 
+        setupGenFilters()
+
         binding.guessPlayButton.setOnClickListener {
-            vibrate()
+            if (!viewModel.canStartGame.value) return@setOnClickListener
+            requireContext().vibrate()
+            requireContext().playClickEmeraldSound()
             binding.guessBlockView.visibility = View.GONE
             startPlay()
         }
 
         DataLoadingUi.bind(
-            lifecycleOwner = this,
+            lifecycleOwner = viewLifecycleOwner,
             dataUiState = viewModel.dataUiState,
             views = DataLoadingUi.Views(
                 progressBar = binding.guessProgressBar,
@@ -170,30 +198,36 @@ class GuessActivity : BaseLocaleActivity() {
                 retryButton = binding.dataRetryButton,
                 contentViews = listOf(
                     binding.guessPokemonSearchView,
-                    binding.guessNestedScrollView,
-                    binding.guessPlayButton,
-                    binding.guessScoreboards,
-                ),
+                    binding.guessGenFilterInclude.root,
+                    binding.guessPlayButton
+                )
             ),
             onRetry = { viewModel.retryLoad() },
             onLoaded = {
+                applyLobbyState()
                 fadeAnimation(binding.guessProgressBar, binding.guessPlayButton, fadeDuration)
-                binding.guessPlayButton.isEnabled = true
-                binding.guessBlockView.visibility = View.GONE
                 viewModel.refreshPokemonList()
-            },
+                updatePlayButtonState()
+            }
         )
 
         observeViewModel()
     }
 
+    override fun onDestroyView() {
+        handler.removeCallbacksAndMessages(null)
+        super.onDestroyView()
+        _binding = null
+    }
+
     private fun observeViewModel() {
-        lifecycleScope.launch {
-            repeatOnLifecycle(Lifecycle.State.STARTED) {
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 launch {
                     viewModel.pokemonList.collect { loadedPokemon ->
                         pokemonList = loadedPokemon
-                        adapter.updateList(loadedPokemon)
+                        updateGenFilterTotal(loadedPokemon.size)
+                        updateSearchResults()
                     }
                 }
                 launch {
@@ -201,7 +235,83 @@ class GuessActivity : BaseLocaleActivity() {
                         binding.guessHighscore.text = highscore.toString()
                     }
                 }
+                launch {
+                    viewModel.selectedGenerations.collect { selected ->
+                        syncGenFilterButtons(selected)
+                    }
+                }
+                launch {
+                    viewModel.canStartGame.collect {
+                        updatePlayButtonState()
+                    }
+                }
             }
+        }
+    }
+
+    private fun setupGenFilters() {
+        genFilterSlots.forEach { slot ->
+            slot.binding.genFilterLabel.text =
+                getString(R.string.guess_gen_label, slot.generation.romanNumeral)
+            slot.binding.root.setOnClickListener {
+                if (syncingGenFilters) return@setOnClickListener
+                val isCurrentlySelected = slot.generation in viewModel.selectedGenerations.value
+                viewModel.setGenerationSelected(slot.generation, !isCurrentlySelected)
+            }
+        }
+        syncGenFilterButtons(viewModel.selectedGenerations.value)
+    }
+
+    private fun syncGenFilterButtons(selected: Set<PokemonGeneration>) {
+        syncingGenFilters = true
+        genFilterSlots.forEach { slot ->
+            slot.binding.genFilterIndicator.visibility =
+                if (slot.generation in selected) View.VISIBLE else View.INVISIBLE
+        }
+        syncingGenFilters = false
+    }
+
+    private fun updateGenFilterTotal(count: Int) {
+        binding.guessGenFilterInclude.guessGenFilterTotal.text =
+            getString(R.string.guess_gen_filter_total, count)
+    }
+
+    private fun updateSearchResults() {
+        if (!gameInProgress) {
+            hideSearchResults()
+            return
+        }
+        val query = binding.guessPokemonSearchView.query?.toString().orEmpty().trim()
+        if (query.isEmpty()) {
+            adapter.updateList(pokemonList)
+            hideSearchResults()
+            return
+        }
+        val filteredList = pokemonList.filter { it.name.lowercase().startsWith(query.lowercase()) }
+        adapter.updateList(filteredList)
+        if (filteredList.isEmpty()) {
+            hideSearchResults()
+            return
+        }
+        binding.guessNestedScrollView.visibility = View.VISIBLE
+        binding.guessRecyclerView.visibility = View.VISIBLE
+        binding.guessNestedScrollView.requestLayout()
+    }
+
+    private fun hideSearchResults() {
+        binding.guessNestedScrollView.visibility = View.GONE
+        binding.guessRecyclerView.visibility = View.GONE
+    }
+
+    private fun updatePlayButtonState() {
+        val enabled = viewModel.canStartGame.value
+        binding.guessPlayButton.isEnabled = enabled
+        if (enabled) {
+            binding.guessPlayButton.clearColorFilter()
+            binding.guessPlayButton.imageAlpha = 255
+        } else {
+            binding.guessPlayButton.setColorFilter(Color.GRAY, PorterDuff.Mode.MULTIPLY)
+            binding.guessPlayButton.imageAlpha = 160
         }
     }
 
@@ -227,8 +337,9 @@ class GuessActivity : BaseLocaleActivity() {
                     fadeOut(binding.guessResultsLayout, longerFadeDuration)
                     resetHintsAndLifes(5)
                     Handler(Looper.getMainLooper()).postDelayed({
+                        applyLobbyState()
                         fadeIn(binding.guessPlayButton, ultraLongDuration)
-                        binding.guessPlayButton.isEnabled = true
+                        updatePlayButtonState()
                     }, 1000)
                 }, 5000)
             }
@@ -272,19 +383,42 @@ class GuessActivity : BaseLocaleActivity() {
 
     @SuppressLint("SetTextI18n")
     private fun startPlay() {
+        gameInProgress = true
         val solution = viewModel.startGame()
         updateScoreboards()
+        setSearchInteractionEnabled(true)
         fadeIn(binding.guessScoreboards, fadeDuration)
+        fadeIn(binding.hintsBox, fadeDuration)
         resetLifesImages()
         fadeIn(binding.lifesLayout, fadeDuration)
 
         binding.guessPlayButton.isEnabled = false
-        fadeAnimation(binding.guessPlayButton, binding.solutionPokemonMask, fadeDuration)
         resetHintsAndLifes(0)
         loadSolutionData(solution)
+        fadeOut(binding.guessPlayButton, fadeDuration)
+        fadeOut(binding.guessGenFilterInclude.root, fadeDuration)
+        enterSolutionPokemonFromRight()
 
         binding.currentScore.visibility = View.VISIBLE
         binding.accumulatedScore.visibility = View.VISIBLE
+    }
+
+    private fun applyLobbyState() {
+        gameInProgress = false
+        binding.guessBlockView.visibility = View.GONE
+        hideSearchResults()
+        binding.guessPokemonSearchView.setQuery("", false)
+        setSearchInteractionEnabled(false)
+        binding.guessPokemonSearchView.clearFocus()
+        binding.hintsBox.visibility = View.GONE
+        binding.guessScoreboards.visibility = View.INVISIBLE
+        binding.lifesLayout.visibility = View.INVISIBLE
+        binding.solutionPokemonImage.visibility = View.GONE
+        binding.solutionPokemonMask.visibility = View.GONE
+        binding.currentScore.visibility = View.GONE
+        binding.accumulatedScore.visibility = View.GONE
+        binding.guessGenFilterInclude.root.visibility = View.VISIBLE
+        binding.guessGenFilterInclude.root.alpha = 1f
     }
 
     @SuppressLint("DefaultLocale")
@@ -307,7 +441,7 @@ class GuessActivity : BaseLocaleActivity() {
         }
         binding.guessHint2Type2.visibility = View.INVISIBLE
 
-        binding.guessHint4Ability.text = pokemon.firstAbility.displayName
+        binding.guessHint4Ability.text = pokemon.abilitiesDisplayText()
         binding.guessHint4Ability.visibility = View.INVISIBLE
         binding.guessHint3Id.text = String.format("#%03d", pokemon.id)
         binding.guessHint3Id.visibility = View.INVISIBLE
@@ -322,7 +456,13 @@ class GuessActivity : BaseLocaleActivity() {
         Glide.with(this)
             .load(pokemon.imageUrl)
             .into(binding.solutionPokemonMask)
-        binding.solutionPokemonMask.visibility = View.VISIBLE
+        binding.solutionPokemonMask.visibility = View.GONE
+    }
+
+    private fun enterSolutionPokemonFromRight() {
+        binding.solutionPokemonMask.postDelayed({
+            moveRight(binding.solutionPokemonMask)
+        }, 100)
     }
 
     private fun resetHintsAndLifes(tryCount: Int) {
@@ -415,26 +555,27 @@ class GuessActivity : BaseLocaleActivity() {
         binding.guessBlockView.visibility = View.GONE
     }
 
-    override fun dispatchTouchEvent(event: MotionEvent?): Boolean {
-        if (event?.action == MotionEvent.ACTION_DOWN) {
-            val view = currentFocus
-            if (view !is SearchView && view !is EditText) {
-                val inputMethodManager = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-                inputMethodManager.hideSoftInputFromWindow(currentFocus?.windowToken, 0)
-                view?.clearFocus()
-            }
-        }
-        return super.dispatchTouchEvent(event)
-    }
-
     private fun changeHeart(heart: ImageView, changeToFullHeart: Boolean = false) {
         fadeOut(heart, fadeDuration)
-        if (!changeToFullHeart) {
+        if (!changeToFullHeart)
             heart.setImageResource(R.drawable.empty_heart)
-        } else {
+        else
             heart.setImageResource(R.drawable.full_heart)
-        }
         fadeIn(heart, fadeDuration)
+    }
+
+    private fun setSearchInteractionEnabled(enabled: Boolean) {
+        binding.guessPokemonSearchView.isEnabled = enabled
+        binding.guessPokemonSearchView.isFocusable = enabled
+        binding.guessPokemonSearchView.isFocusableInTouchMode = enabled
+        binding.guessPokemonSearchView.isClickable = enabled
+        val searchEditText =
+            binding.guessPokemonSearchView.findViewById<EditText>(androidx.appcompat.R.id.search_src_text)
+        searchEditText?.isEnabled = enabled
+        searchEditText?.isFocusable = enabled
+        searchEditText?.isFocusableInTouchMode = enabled
+        searchEditText?.isClickable = enabled
+        binding.guessSearchBlockOverlay.visibility = if (enabled) View.GONE else View.VISIBLE
     }
 
     private fun resetLifesImages() {
@@ -445,4 +586,9 @@ class GuessActivity : BaseLocaleActivity() {
         binding.heart5.setImageResource(R.drawable.full_heart)
         binding.heart6.setImageResource(R.drawable.full_heart)
     }
+
+    private data class GenFilterSlot(
+        val generation: PokemonGeneration,
+        val binding: ItemGuessGenFilterBinding,
+    )
 }

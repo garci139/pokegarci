@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:state_selected="true">
+        <shape android:shape="rectangle">
+            <solid android:color="@color/expanded_card_button_bg" />
+            <corners android:radius="16dp" />
+            <stroke
+                android:width="3dp"
+                android:color="@color/black" />
+        </shape>
+    </item>
+    <item android:drawable="@drawable/guess_gen_filter_button_bg" />
+</selector>

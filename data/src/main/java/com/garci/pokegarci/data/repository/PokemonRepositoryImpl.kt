@@ -1,5 +1,6 @@
 package com.garci.pokegarci.data.repository
 
+import com.garci.pokegarci.data.local.PokemonCryLocalDataSource
 import com.garci.pokegarci.data.local.PokemonLocalDataSource
 import com.garci.pokegarci.data.remote.PokemonRemoteDataSource
 import com.garci.pokegarci.domain.model.Pokemon
@@ -14,6 +15,7 @@ import javax.inject.Singleton
 class PokemonRepositoryImpl @Inject constructor(
     private val remoteDataSource: PokemonRemoteDataSource,
     private val localDataSource: PokemonLocalDataSource,
+    private val cryLocalDataSource: PokemonCryLocalDataSource,
 ) : PokemonRepository {
 
     private val _isDataLoaded = MutableStateFlow(false)
@@ -22,30 +24,42 @@ class PokemonRepositoryImpl @Inject constructor(
     private val _loadFailed = MutableStateFlow(false)
     override val loadFailed: StateFlow<Boolean> = _loadFailed.asStateFlow()
 
+    private val _loadProgress = MutableStateFlow(0)
+    override val loadProgress: StateFlow<Int> = _loadProgress.asStateFlow()
+
     private val pokemonList = mutableListOf<Pokemon>()
 
     override fun getPokemonList(): List<Pokemon> = pokemonList.toList()
 
-    override suspend fun loadPokemon(limit: Int, language: String): Result<Unit> {
+    override suspend fun loadPokemon(language: String): Result<Unit> {
         _loadFailed.value = false
+        reportProgress(0)
         return runCatching {
-            localDataSource.getCachedPokemon(limit, language)?.let { cached ->
-                applyPokemonList(cached)
+            localDataSource.getCachedPokemon(language)?.let { cached ->
+                applyPokemonList(persistCriesIfNeeded(cached, language, ::reportProgress))
+                reportProgress(100)
                 return@runCatching
             }
 
             _isDataLoaded.value = false
 
-            localDataSource.getCachedPokemonIgnoringLanguage(limit)?.let { cached ->
-                val updated = remoteDataSource.refreshLocalizedContent(cached, language)
-                applyPokemonList(updated)
-                localDataSource.saveAll(updated, language)
+            localDataSource.getCachedPokemonIgnoringLanguage()?.let { cached ->
+                val updated = remoteDataSource.refreshLocalizedContent(cached, language) { progress ->
+                    reportProgress((progress * 85) / 100)
+                }
+                applyPokemonList(
+                    persistCriesIfNeeded(updated, language) { progress ->
+                        reportProgress(85 + ((progress - 5).coerceAtLeast(0) * 15 / 95))
+                    },
+                )
+                reportProgress(100)
                 return@runCatching
             }
 
-            val fetched = remoteDataSource.fetchAllPokemon(limit, language)
+            val fetched = remoteDataSource.fetchAllPokemon(language, ::reportProgress)
             applyPokemonList(fetched)
             localDataSource.saveAll(fetched, language)
+            reportProgress(100)
         }.onFailure {
             _loadFailed.value = true
         }
@@ -53,12 +67,13 @@ class PokemonRepositoryImpl @Inject constructor(
 
     override suspend fun refreshLocalizedContent(language: String): Result<Unit> {
         _loadFailed.value = false
+        reportProgress(0)
         return runCatching {
             if (pokemonList.isEmpty()) return@runCatching
             _isDataLoaded.value = false
-            val updated = remoteDataSource.refreshLocalizedContent(pokemonList, language)
-            applyPokemonList(updated)
-            localDataSource.saveAll(updated, language)
+            val updated = remoteDataSource.refreshLocalizedContent(pokemonList, language, ::reportProgress)
+            applyPokemonList(persistCriesIfNeeded(updated, language, ::reportProgress))
+            reportProgress(100)
         }.onFailure {
             _loadFailed.value = true
         }
@@ -68,5 +83,36 @@ class PokemonRepositoryImpl @Inject constructor(
         pokemonList.clear()
         pokemonList.addAll(list)
         _isDataLoaded.value = list.isNotEmpty()
+    }
+
+    private fun reportProgress(percent: Int) {
+        _loadProgress.value = percent.coerceIn(0, 100)
+    }
+
+    private suspend fun persistCriesIfNeeded(
+        pokemon: List<Pokemon>,
+        language: String,
+        onProgress: (Int) -> Unit,
+    ): List<Pokemon> {
+        val withPokedexExtras = remoteDataSource.refreshMissingPokedexExtras(pokemon) { completed, total ->
+            onProgress(mapSegmentProgress(completed, total, start = 5, end = 45))
+        }
+        val withLocalCries = cryLocalDataSource.ensureCriesCached(withPokedexExtras) { completed, total ->
+            onProgress(mapSegmentProgress(completed, total, start = 45, end = 100))
+        }
+        if (withLocalCries != pokemon || withPokedexExtras != pokemon)
+            localDataSource.saveAll(withLocalCries, language)
+        return withLocalCries
+    }
+
+    private fun mapSegmentProgress(
+        completed: Int,
+        total: Int,
+        start: Int,
+        end: Int,
+    ): Int {
+        if (total <= 0) return end
+        val fraction = completed.toFloat() / total.toFloat()
+        return start + ((end - start) * fraction).toInt()
     }
 }

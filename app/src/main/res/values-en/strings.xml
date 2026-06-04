@@ -13,6 +13,8 @@
     <string name="expandedPokemonId">#000</string>
     <string name="expandedPokemonHeight">14.5 m</string>
     <string name="expandedPokemonWeight">32.5 kg</string>
+    <string name="expandedPokemonAbilities">Overgrow</string>
+    <string name="expandedPokemonShinyToggle">Switch shiny sprite</string>
     <string name="expandedPokemonDescriptionTitle">Description</string>
     <string name="expandedPokemonDescription">Description test.</string>
     <string name="expandedStatsTitle">Base stats</string>
@@ -24,16 +26,77 @@
     <string name="Speed">Speed</string>
     <string name="closeExpandedCard">Close</string>
 
+    <string name="pokedex_filter_region">Region</string>
+    <string name="pokedex_filter_type">Type</string>
+    <string name="pokedex_filter_stats">Stats</string>
+    <string name="pokedex_filter_clear">Clear</string>
+    <string name="pokedex_filter_apply">Apply</string>
+    <string name="pokedex_filter_region_title">Region</string>
+    <string name="pokedex_filter_type_title">Type</string>
+    <string name="pokedex_filter_stats_title">Base stats</string>
+    <string name="pokedex_filter_region_hint">No selection or all regions shows the full Pokédex</string>
+    <string name="pokedex_expanded_prev">Previous Pokémon</string>
+    <string name="pokedex_expanded_next">Next Pokémon</string>
+    <string name="pokedex_filter_type_hint">Select at least one type or Monotype</string>
+    <string name="pokedex_filter_stats_hint">Optional minimum or maximum values</string>
+    <string name="pokedex_filter_monotype">Monotype</string>
+    <string name="pokedex_filter_all_types">All</string>
+    <string name="pokedex_stat_min_hint">Min</string>
+    <string name="pokedex_stat_max_hint">Max</string>
+    <string name="pokedex_filter_cleared">Filter cleared</string>
+
+    <string name="pokedex_region_gen_i">Gen I (Kanto)</string>
+    <string name="pokedex_region_gen_ii">Gen II (Johto)</string>
+    <string name="pokedex_region_gen_iii">Gen III (Hoenn)</string>
+    <string name="pokedex_region_gen_iv">Gen IV (Sinnoh)</string>
+    <string name="pokedex_region_gen_v">Gen V (Unova)</string>
+    <string name="pokedex_region_gen_vi">Gen VI (Kalos)</string>
+    <string name="pokedex_region_gen_vii">Gen VII (Alola)</string>
+    <string name="pokedex_region_gen_viii">Gen VIII (Galar/Hisui)</string>
+    <string name="pokedex_region_gen_ix">Gen IX (Paldea)</string>
+
+    <string name="type_normal">Normal</string>
+    <string name="type_fire">Fire</string>
+    <string name="type_water">Water</string>
+    <string name="type_grass">Grass</string>
+    <string name="type_electric">Electric</string>
+    <string name="type_ice">Ice</string>
+    <string name="type_fighting">Fighting</string>
+    <string name="type_poison">Poison</string>
+    <string name="type_ground">Ground</string>
+    <string name="type_flying">Flying</string>
+    <string name="type_psychic">Psychic</string>
+    <string name="type_bug">Bug</string>
+    <string name="type_rock">Rock</string>
+    <string name="type_ghost">Ghost</string>
+    <string name="type_dragon">Dragon</string>
+    <string name="type_dark">Dark</string>
+    <string name="type_steel">Steel</string>
+    <string name="type_fairy">Fairy</string>
+
     <string name="pressToEnter">Touch to enter!</string>
     <string name="loadingPokemon">Loading Pokémon…</string>
+    <string-array name="loading_status_phrases">
+        <item>Playing the Poké Flute</item>
+        <item>Fishing for a Magikarp</item>
+        <item>Looking for Ditto</item>
+        <item>Entering Victory Road</item>
+        <item>Catching an Eevee</item>
+        <item>Buying potions</item>
+    </string-array>
+    <string name="loadingProgressPercent">%1$d%%</string>
+    <string name="hpLabel">HP</string>
     <string name="loadError">Could not load data.</string>
     <string name="retryLoad">Retry</string>
-    <string name="developedBy">Developed by:\n Pablo Garcia Ortega</string>
+    <string name="loadingInteractionBlocked">Loading data</string>
+    <string name="developedBy">Developed by:\n garci139</string>
+    <string name="app_version_format">Ver %1$s</string>
     <string name="sizeInstructionsText">COMPARE</string>
     <string name="changePkmn1SizeButton">Change left</string>
     <string name="changePkmn2SizeButton">Change right</string>
 
     <string name="name">Name</string>
+    <string name="guess_gen_filter_total">TOTAL: %1$d</string>
     <string name="resetLogoDescription">Reset</string>
     <string name="level">Level</string>
     <string name="score">Score</string>

@@ -19,6 +19,9 @@ data class PokemonEntity(
     val speed: Int,
     val height: Int,
     val weight: Int,
-    val abilityOriginalName: String,
-    val abilityDisplayName: String,
+    val abilitiesJson: String,
+    val legacyCryUrl: String,
+    val backImageUrl: String,
+    val frontShinyImageUrl: String,
+    val backShinyImageUrl: String
 )
