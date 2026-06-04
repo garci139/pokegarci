@@ -14,6 +14,16 @@
         <item name="android:statusBarColor">@color/black</item>
         <item name="android:windowTranslucentStatus">true</item>
         <item name="android:windowTranslucentNavigation">true</item>
+        <item name="fontFamily">@font/pokemon_emerald</item>
+        <item name="android:fontFamily">@font/pokemon_emerald</item>
+        <item name="textAppearanceBody1">@style/TextAppearance.PokeGarci</item>
+        <item name="textAppearanceBody2">@style/TextAppearance.PokeGarci</item>
+        <item name="textAppearanceButton">@style/TextAppearance.PokeGarci</item>
+        <item name="textAppearanceHeadline6">@style/TextAppearance.PokeGarci</item>
+        <item name="textAppearanceSubtitle1">@style/TextAppearance.PokeGarci</item>
+        <item name="textAppearanceSubtitle2">@style/TextAppearance.PokeGarci</item>
+        <item name="textAppearanceCaption">@style/TextAppearance.PokeGarci</item>
+        <item name="materialButtonStyle">@style/Widget.PokeGarci.Button</item>
     </style>
 
     <style name="Theme.PokeGarci.NoActionBar">
@@ -24,5 +34,11 @@
     <style name="Theme.PokeGarci.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
 
     <style name="Theme.PokeGarci.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+
+    <style name="Theme.PokeGarci.FilterDialog" parent="Theme.MaterialComponents.Dialog">
+        <item name="android:windowIsFloating">true</item>
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="android:backgroundDimEnabled">true</item>
+    </style>
 
 </resources>

@@ -127,3 +127,14 @@ val MIGRATION_6_7 = object : Migration(6, 7) {
         )
     }
 }
+
+val MIGRATION_7_8 = object : Migration(7, 8) {
+    override fun migrate(db: SupportSQLiteDatabase) {
+        db.execSQL(
+            "ALTER TABLE pokemon ADD COLUMN frontShinyImageUrl TEXT NOT NULL DEFAULT ''",
+        )
+        db.execSQL(
+            "ALTER TABLE pokemon ADD COLUMN backShinyImageUrl TEXT NOT NULL DEFAULT ''",
+        )
+    }
+}

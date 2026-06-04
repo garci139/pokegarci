@@ -5,7 +5,11 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
+import android.view.ViewTreeObserver
 import android.widget.ImageView
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
 import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -20,6 +24,8 @@ import com.garci.pokegarci.R
 import com.garci.pokegarci.databinding.ActivityPokedexBinding
 import com.garci.pokegarci.domain.model.Pokemon
 import com.garci.pokegarci.domain.model.abilitiesDisplayText
+import com.garci.pokegarci.domain.model.hasShinySprites
+import com.garci.pokegarci.domain.model.spriteUrl
 import com.garci.pokegarci.presentation.pokedex.PokedexViewModel
 import com.garci.pokegarci.ui.adapter.PokemonAdapter
 import com.garci.pokegarci.util.DataLoadingUi
@@ -44,6 +50,11 @@ class PokedexFragment : Fragment() {
     private lateinit var cryPlayer: PokemonCryPlayer
     private var expandedCardPokemon: Pokemon? = null
     private var showingBackSprite = false
+    private var showingShinySprites = false
+    private lateinit var filterUi: PokedexFilterUi
+    private var pendingScrollPokedexToTop = false
+    private var displayedPokemon: List<Pokemon> = emptyList()
+    private var expandedCardSlideInProgress = false
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -71,6 +82,15 @@ class PokedexFragment : Fragment() {
         binding.pokedexBox.adapter = adapter
         binding.pokedexBox.isNestedScrollingEnabled = false
 
+        filterUi = PokedexFilterUi(
+            fragment = this,
+            binding = binding,
+            viewModel = viewModel,
+            onFiltersCleared = ::requestPokedexScrollToTop,
+        )
+        filterUi.setup()
+        setupPokedexHeaderInsets()
+
         binding.searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String?): Boolean {
                 viewModel.updateSearchQuery(query.orEmpty())
@@ -84,12 +104,23 @@ class PokedexFragment : Fragment() {
         })
 
         binding.closeCardButton.setOnClickListener {
+            if (expandedCardSlideInProgress) return@setOnClickListener
             requireContext().vibrate()
             requireContext().playClickEmeraldSound()
             closeExpandedCard()
         }
 
+        binding.expandedCardPrevButton.setOnClickListener {
+            navigateExpandedCard(-1)
+        }
+        binding.expandedCardNextButton.setOnClickListener {
+            navigateExpandedCard(1)
+        }
+
+        setupExpandedCardSwipe()
+
         val spriteFlipClickListener = View.OnClickListener {
+            if (expandedCardSlideInProgress) return@OnClickListener
             expandedCardPokemon?.let { pokemon ->
                 if (pokemon.backImageUrl.isNotBlank() && flipExpandedSprite()) {
                     requireContext().vibrate()
@@ -100,6 +131,18 @@ class PokedexFragment : Fragment() {
         binding.expandedSubView.setOnClickListener(spriteFlipClickListener)
         binding.expandedPokemonImage.setOnClickListener(spriteFlipClickListener)
 
+        binding.expandedShinyToggleButton.setOnClickListener {
+            if (expandedCardSlideInProgress) return@setOnClickListener
+            val pokemon = expandedCardPokemon ?: return@setOnClickListener
+            if (!pokemon.hasShinySprites()) return@setOnClickListener
+            if (PokemonSpriteFlipAnimator.isFlipInProgress(binding.expandedPokemonImage)) return@setOnClickListener
+            requireContext().vibrate()
+            requireContext().playClickEmeraldSound()
+            showingShinySprites = !showingShinySprites
+            loadExpandedSpriteImage()
+            updateShinyToggleUi()
+        }
+
         DataLoadingUi.bind(
             lifecycleOwner = viewLifecycleOwner,
             dataUiState = viewModel.dataUiState,
@@ -107,7 +150,10 @@ class PokedexFragment : Fragment() {
                 progressBar = binding.progressBar,
                 errorText = binding.dataErrorText,
                 retryButton = binding.dataRetryButton,
-                contentViews = listOf(binding.searchView, binding.pokedexBox)
+                contentViews = listOf(
+                    binding.pokedexHeader,
+                    binding.pokedexBox,
+                )
             ),
             onRetry = { viewModel.retryLoad() },
             onLoaded = { viewModel.refreshPokemonList() }
@@ -126,15 +172,82 @@ class PokedexFragment : Fragment() {
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.filteredPokemon.collect { pokemon ->
-                    adapter.submitList(pokemon)
-                    binding.pokedexBox.scrollToPosition(0)
+                    displayedPokemon = pokemon
+                    adapter.submitList(pokemon) {
+                        if (pendingScrollPokedexToTop) {
+                            pendingScrollPokedexToTop = false
+                            scrollPokedexListToTop()
+                        }
+                    }
+                    if (pendingScrollPokedexToTop) {
+                        binding.pokedexBox.post {
+                            if (pendingScrollPokedexToTop) {
+                                pendingScrollPokedexToTop = false
+                                scrollPokedexListToTop()
+                            }
+                        }
+                    }
                 }
             }
         }
     }
 
+    private fun setupPokedexHeaderInsets() {
+        val extraTopInset = resources.getDimensionPixelSize(R.dimen.pokedex_content_top_inset)
+        ViewCompat.setOnApplyWindowInsetsListener(binding.pokedexLayout) { _, insets ->
+            val statusBarTop = insets.getInsets(WindowInsetsCompat.Type.statusBars()).top
+            binding.pokedexHeader.setPadding(0, statusBarTop + extraTopInset, 0, 0)
+            binding.pokedexLayout.post { applyPokedexListInsets() }
+            insets
+        }
+        ViewCompat.requestApplyInsets(binding.pokedexLayout)
+        binding.pokedexLayout.viewTreeObserver.addOnGlobalLayoutListener(
+            object : ViewTreeObserver.OnGlobalLayoutListener {
+                override fun onGlobalLayout() {
+                    binding.pokedexLayout.viewTreeObserver.removeOnGlobalLayoutListener(this)
+                    applyPokedexListInsets()
+                }
+            },
+        )
+    }
+
+    private fun applyPokedexListInsets() {
+        val topInset = binding.pokedexListTopAnchor.bottom - binding.pokedexBox.top
+        if (topInset > 0 && binding.pokedexBox.paddingTop != topInset) {
+            binding.pokedexBox.setPadding(0, topInset, 0, 0)
+        }
+    }
+
+    private fun requestPokedexScrollToTop() {
+        pendingScrollPokedexToTop = true
+    }
+
+    private fun scrollPokedexListToTop() {
+        val recycler = binding.pokedexBox
+        recycler.stopScroll()
+        val layoutManager = recycler.layoutManager as? GridLayoutManager ?: return
+        layoutManager.scrollToPositionWithOffset(0, recycler.paddingTop)
+    }
+
     @SuppressLint("DefaultLocale")
     private fun showExpandedCard(pokemon: Pokemon) {
+        binding.expandedPokemonCard.translationX = 0f
+        bindExpandedCardContent(pokemon)
+        updateExpandedNavButtons()
+
+        binding.pokedexBox.isEnabled = false
+        val inputMethodManager =
+            requireContext().getSystemService(android.content.Context.INPUT_METHOD_SERVICE)
+                as android.view.inputmethod.InputMethodManager
+        inputMethodManager.hideSoftInputFromWindow(binding.pokedexBox.windowToken, 0)
+
+        binding.disableRecyclerView.visibility = View.VISIBLE
+        binding.expandedPokemonCard.visibility = View.VISIBLE
+        binding.expandedPokemonCard.bringToFront()
+    }
+
+    @SuppressLint("DefaultLocale")
+    private fun bindExpandedCardContent(pokemon: Pokemon) {
         binding.expandedPokemonName.text = pokemon.name
         binding.expandedPokemonId.text = String.format("#%03d", pokemon.id)
         binding.expandedPokemonDescription.text = pokemon.description
@@ -151,53 +264,154 @@ class PokedexFragment : Fragment() {
 
         expandedCardPokemon = pokemon
         showingBackSprite = false
+        showingShinySprites = false
         PokemonSpriteFlipAnimator.reset(binding.expandedPokemonImage)
 
-        val requestOptions = RequestOptions().diskCacheStrategy(DiskCacheStrategy.ALL)
-        Glide.with(this)
-            .load(pokemon.imageUrl)
-            .apply(requestOptions)
-            .into(binding.expandedPokemonImage)
-        if (pokemon.backImageUrl.isNotBlank()) {
-            Glide.with(this)
-                .load(pokemon.backImageUrl)
-                .apply(requestOptions)
-                .preload()
-        }
+        loadExpandedSpriteImage()
+        preloadExpandedSpriteVariants(pokemon)
+        updateShinyToggleUi()
 
         bindTypeIcon(binding.expandedFirstTypeIcon, pokemon.type1)
         bindTypeIcon(binding.expandedSecondTypeIcon, pokemon.type2)
 
         binding.expandedSubView.background = TypeBackgroundProvider.createBackground(pokemon.type1, pokemon.type2)
 
-        binding.pokedexBox.isEnabled = false
-        val inputMethodManager =
-            requireContext().getSystemService(android.content.Context.INPUT_METHOD_SERVICE)
-                as android.view.inputmethod.InputMethodManager
-        inputMethodManager.hideSoftInputFromWindow(binding.pokedexBox.windowToken, 0)
-
-        binding.disableRecyclerView.visibility = View.VISIBLE
-        binding.expandedPokemonCard.visibility = View.VISIBLE
-
         cryPlayer.play(pokemon.legacyCryUrl)
     }
 
-    private fun flipExpandedSprite(): Boolean {
-        val pokemon = expandedCardPokemon ?: return false
-        return PokemonSpriteFlipAnimator.toggle(
-            imageView = binding.expandedPokemonImage,
-            showingBack = showingBackSprite,
-            frontUrl = pokemon.imageUrl,
-            backUrl = pokemon.backImageUrl,
-            onComplete = { showingBackSprite = it }
+    private fun setupExpandedCardSwipe() {
+        binding.expandedPokemonCard.onSwipe = { direction -> navigateExpandedCard(direction) }
+        binding.expandedPokemonCard.swipeEnabled = {
+            binding.expandedPokemonCard.visibility == View.VISIBLE && !expandedCardSlideInProgress
+        }
+    }
+
+    private fun navigateExpandedCard(direction: Int) {
+        if (expandedCardSlideInProgress) return
+        val current = expandedCardPokemon ?: return
+        val list = displayedPokemon
+        val index = list.indexOfFirst { it.id == current.id }
+        if (index < 0) return
+        val targetIndex = index + direction
+        if (targetIndex !in list.indices) return
+
+        requireContext().vibrate()
+        requireContext().playClickEmeraldSound()
+
+        expandedCardSlideInProgress = true
+        setExpandedCardInteractionEnabled(false)
+
+        val targetPokemon = list[targetIndex]
+        PokedexExpandedCardSlideAnimator.slide(
+            card = binding.expandedPokemonCard,
+            direction = direction,
+            onSwapContent = { bindExpandedCardContent(targetPokemon) },
+            onComplete = {
+                expandedCardSlideInProgress = false
+                updateExpandedNavButtons()
+                setExpandedCardInteractionEnabled(true)
+            },
         )
     }
 
+    private fun updateExpandedNavButtons() {
+        val current = expandedCardPokemon
+        if (current == null) {
+            binding.expandedCardPrevButton.visibility = View.GONE
+            binding.expandedCardNextButton.visibility = View.GONE
+            binding.expandedCardNavDividerStart.visibility = View.GONE
+            binding.expandedCardNavDividerEnd.visibility = View.GONE
+            return
+        }
+        val index = displayedPokemon.indexOfFirst { it.id == current.id }
+        val showPrev = index > 0
+        val showNext = index >= 0 && index < displayedPokemon.lastIndex
+        binding.expandedCardPrevButton.visibility = if (showPrev) View.VISIBLE else View.GONE
+        binding.expandedCardNextButton.visibility = if (showNext) View.VISIBLE else View.GONE
+        binding.expandedCardNavDividerStart.visibility = if (showPrev) View.VISIBLE else View.GONE
+        binding.expandedCardNavDividerEnd.visibility = if (showNext) View.VISIBLE else View.GONE
+    }
+
+    private fun setExpandedCardInteractionEnabled(enabled: Boolean) {
+        val blockDuringSlide = !enabled || expandedCardSlideInProgress
+        binding.closeCardButton.isEnabled = !blockDuringSlide
+        binding.closeCardButton.isClickable = !blockDuringSlide
+        binding.expandedCardPrevButton.isEnabled = !blockDuringSlide
+        binding.expandedCardNextButton.isEnabled = !blockDuringSlide
+        binding.expandedSubView.isEnabled = !blockDuringSlide
+        binding.expandedPokemonImage.isEnabled = !blockDuringSlide
+        if (blockDuringSlide) {
+            binding.expandedShinyToggleButton.isEnabled = false
+        } else {
+            updateShinyToggleUi()
+        }
+    }
+
+    private fun flipExpandedSprite(): Boolean {
+        if (expandedCardSlideInProgress) return false
+        val pokemon = expandedCardPokemon ?: return false
+        val started = PokemonSpriteFlipAnimator.toggle(
+            imageView = binding.expandedPokemonImage,
+            showingBack = showingBackSprite,
+            frontUrl = pokemon.spriteUrl(showingBack = false, shiny = showingShinySprites),
+            backUrl = pokemon.spriteUrl(showingBack = true, shiny = showingShinySprites),
+            onComplete = {
+                showingBackSprite = it
+                updateShinyToggleUi()
+            }
+        )
+        if (started) updateShinyToggleUi()
+        return started
+    }
+
+    private fun loadExpandedSpriteImage() {
+        val pokemon = expandedCardPokemon ?: return
+        val requestOptions = RequestOptions().diskCacheStrategy(DiskCacheStrategy.ALL)
+        Glide.with(this)
+            .load(pokemon.spriteUrl(showingBack = showingBackSprite, shiny = showingShinySprites))
+            .apply(requestOptions)
+            .into(binding.expandedPokemonImage)
+    }
+
+    private fun preloadExpandedSpriteVariants(pokemon: Pokemon) {
+        val requestOptions = RequestOptions().diskCacheStrategy(DiskCacheStrategy.ALL)
+        listOf(
+            pokemon.spriteUrl(showingBack = false, shiny = false),
+            pokemon.spriteUrl(showingBack = true, shiny = false),
+            pokemon.spriteUrl(showingBack = false, shiny = true),
+            pokemon.spriteUrl(showingBack = true, shiny = true),
+        )
+            .filter { it.isNotBlank() }
+            .distinct()
+            .forEach { url ->
+                Glide.with(this).load(url).apply(requestOptions).preload()
+            }
+    }
+
+    private fun updateShinyToggleUi() {
+        val pokemon = expandedCardPokemon
+        val hasShiny = pokemon?.hasShinySprites() == true
+        val flipInProgress = PokemonSpriteFlipAnimator.isFlipInProgress(binding.expandedPokemonImage)
+
+        binding.expandedShinyToggleDisabledStrike.visibility =
+            if (hasShiny) View.GONE else View.VISIBLE
+        binding.expandedShinyToggleButton.isEnabled = hasShiny && !flipInProgress
+        binding.expandedShinyToggleButton.isSelected = hasShiny && showingShinySprites
+        binding.expandedShinyToggleButton.refreshDrawableState()
+        binding.expandedShinyToggleButton.alpha = if (hasShiny) 1f else 0.55f
+    }
+
     private fun closeExpandedCard() {
+        binding.expandedPokemonCard.animate().cancel()
+        binding.expandedPokemonCard.translationX = 0f
         cryPlayer.stop()
         expandedCardPokemon = null
+        expandedCardSlideInProgress = false
         showingBackSprite = false
+        showingShinySprites = false
         PokemonSpriteFlipAnimator.reset(binding.expandedPokemonImage)
+        updateShinyToggleUi()
+        updateExpandedNavButtons()
         binding.pokedexBox.isEnabled = true
         binding.disableRecyclerView.visibility = View.INVISIBLE
         binding.expandedPokemonCard.visibility = View.GONE

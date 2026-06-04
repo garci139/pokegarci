@@ -22,4 +22,6 @@ data class PokemonEntity(
     val abilitiesJson: String,
     val legacyCryUrl: String,
     val backImageUrl: String,
+    val frontShinyImageUrl: String,
+    val backShinyImageUrl: String
 )

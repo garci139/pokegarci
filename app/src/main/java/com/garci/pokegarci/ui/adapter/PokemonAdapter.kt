@@ -14,6 +14,7 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.request.RequestOptions
 import com.garci.pokegarci.R
 import com.garci.pokegarci.domain.model.Pokemon
+import com.garci.pokegarci.util.AppFont
 import com.garci.pokegarci.util.TypeBackgroundProvider
 import com.garci.pokegarci.util.typeIconMap
 
@@ -24,6 +25,7 @@ class PokemonAdapter(
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PokemonViewHolder {
         val view = LayoutInflater.from(parent.context)
             .inflate(R.layout.each_pokemon, parent, false)
+        AppFont.applyTo(view)
         return PokemonViewHolder(view)
     }
 
@@ -31,11 +33,10 @@ class PokemonAdapter(
         val pokemon = getItem(position)
 
         holder.textPokemonName.text = pokemon.name.ifEmpty { "???" }
-        holder.textPokemonId.text = if (pokemon.id > 0) {
+        holder.textPokemonId.text = if (pokemon.id > 0)
             String.format("#%03d", pokemon.id)
-        } else {
+        else
             "#???"
-        }
         holder.textPokemonId.visibility = View.VISIBLE
 
         val requestOptions = RequestOptions().diskCacheStrategy(DiskCacheStrategy.ALL)

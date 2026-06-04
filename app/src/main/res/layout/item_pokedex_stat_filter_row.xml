@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:gravity="center_vertical"
+    android:orientation="horizontal"
+    android:paddingVertical="4dp">
+
+    <TextView
+        android:id="@+id/pokedexStatFilterLabel"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:textColor="@color/black"
+        android:textSize="14sp"
+        android:textStyle="bold"
+        tools:text="PS" />
+
+    <EditText
+        android:id="@+id/pokedexStatFilterMin"
+        android:layout_width="56dp"
+        android:layout_height="wrap_content"
+        android:background="@drawable/custom_stats_gridlayout"
+        android:gravity="center"
+        android:hint="@string/pokedex_stat_min_hint"
+        android:importantForAutofill="no"
+        android:inputType="number"
+        android:maxLength="3"
+        android:padding="6dp"
+        android:textColor="@color/black"
+        android:textSize="13sp" />
+
+    <EditText
+        android:id="@+id/pokedexStatFilterMax"
+        android:layout_width="56dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:background="@drawable/custom_stats_gridlayout"
+        android:gravity="center"
+        android:hint="@string/pokedex_stat_max_hint"
+        android:importantForAutofill="no"
+        android:inputType="number"
+        android:maxLength="3"
+        android:padding="6dp"
+        android:textColor="@color/black"
+        android:textSize="13sp" />
+
+</LinearLayout>

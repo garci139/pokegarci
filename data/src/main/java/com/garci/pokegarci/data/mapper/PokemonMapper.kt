@@ -9,6 +9,11 @@ object PokemonMapper {
 
     private const val MAX_ABILITIES = 3
 
+    data class ShinySpriteUrls(
+        val front: String,
+        val back: String
+    )
+
     fun mapToDomain(
         details: PokemonDetailsResponse,
         species: SpeciesResponse,
@@ -24,6 +29,8 @@ object PokemonMapper {
             ?.replace("\n", " ")
             ?.replace("\u000c", " ")
             ?: "Description unavailable"
+
+        val shinySprites = shinySpriteUrlsFromDetails(details)
 
         return Pokemon(
             id = details.id,
@@ -43,11 +50,21 @@ object PokemonMapper {
             abilities = mapAbilities(details),
             legacyCryUrl = cryUrlFromDetails(details),
             backImageUrl = backImageUrlFromDetails(details),
+            frontShinyImageUrl = shinySprites.front,
+            backShinyImageUrl = shinySprites.back
         )
     }
 
     fun backImageUrlFromDetails(details: PokemonDetailsResponse): String {
         return details.sprites.back_default.orEmpty()
+    }
+
+    fun shinySpriteUrlsFromDetails(details: PokemonDetailsResponse): ShinySpriteUrls {
+        val front = details.sprites.front_shiny
+        val back = details.sprites.back_shiny
+        if (front.isNullOrBlank() || back.isNullOrBlank())
+            return ShinySpriteUrls(front = "", back = "")
+        return ShinySpriteUrls(front = front, back = back)
     }
 
     fun cryUrlFromDetails(details: PokemonDetailsResponse): String {

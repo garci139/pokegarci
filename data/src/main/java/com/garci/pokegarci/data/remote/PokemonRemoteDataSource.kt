@@ -104,22 +104,34 @@ class PokemonRemoteDataSource @Inject constructor(
             async {
                 val needsCry = entry.legacyCryUrl.isBlank()
                 val needsBack = entry.backImageUrl.isBlank()
-                val result = if (!needsCry && !needsBack) {
+                val needsShiny = entry.frontShinyImageUrl.isBlank() && entry.backShinyImageUrl.isBlank()
+                val result = if (!needsCry && !needsBack && !needsShiny) {
                     entry
                 } else {
                     runCatching {
                         val details = api.getPokemonDetails(entry.id)
+                        val shinySprites = PokemonMapper.shinySpriteUrlsFromDetails(details)
                         entry.copy(
-                            legacyCryUrl = if (needsCry) {
+                            legacyCryUrl = if (needsCry)
                                 PokemonMapper.cryUrlFromDetails(details)
-                            } else {
+                            else
                                 entry.legacyCryUrl
-                            },
-                            backImageUrl = if (needsBack) {
+                            ,
+                            backImageUrl = if (needsBack)
                                 PokemonMapper.backImageUrlFromDetails(details)
-                            } else {
+                            else
                                 entry.backImageUrl
-                            },
+                            ,
+                            frontShinyImageUrl = if (needsShiny)
+                                shinySprites.front
+                            else
+                                entry.frontShinyImageUrl
+                            ,
+                            backShinyImageUrl = if (needsShiny)
+                                shinySprites.back
+                            else
+                                entry.backShinyImageUrl
+                            ,
                         )
                     }.getOrDefault(entry)
                 }
