@@ -94,10 +94,10 @@ class PokemonRepositoryImpl @Inject constructor(
         language: String,
         onProgress: (Int) -> Unit,
     ): List<Pokemon> {
-        val withCryUrls = remoteDataSource.refreshMissingCryUrls(pokemon) { completed, total ->
+        val withPokedexExtras = remoteDataSource.refreshMissingPokedexExtras(pokemon) { completed, total ->
             onProgress(mapSegmentProgress(completed, total, start = 5, end = 45))
         }
-        val withLocalCries = cryLocalDataSource.ensureCriesCached(withCryUrls) { completed, total ->
+        val withLocalCries = cryLocalDataSource.ensureCriesCached(withPokedexExtras) { completed, total ->
             onProgress(mapSegmentProgress(completed, total, start = 45, end = 100))
         }
         if (withLocalCries != pokemon) {

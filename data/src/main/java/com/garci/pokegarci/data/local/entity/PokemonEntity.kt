@@ -21,4 +21,5 @@ data class PokemonEntity(
     val weight: Int,
     val abilitiesJson: String,
     val legacyCryUrl: String,
+    val backImageUrl: String,
 )

@@ -29,6 +29,7 @@ internal fun samplePokemonEntity(
         weight = 60,
         abilitiesJson = AbilityJsonCodec.encode(abilities),
         legacyCryUrl = "https://example.com/cries/$id.ogg",
+        backImageUrl = "https://example.com/back/$id.png",
     )
 }
 

@@ -46,6 +46,7 @@ class PokemonRemoteDataSourceCryTest {
         val pokemon = samplePokemon(
             id = 731,
             legacyCryUrl = "https://example.com/existing.ogg",
+            backImageUrl = "https://example.com/back.png",
         )
 
         val result = remoteDataSource.refreshMissingCryUrls(listOf(pokemon)).single()
@@ -54,11 +55,30 @@ class PokemonRemoteDataSourceCryTest {
         coVerify(exactly = 0) { api.getPokemonDetails(any()) }
     }
 
+    @Test
+    fun `refreshMissingPokedexExtras fetches back sprite when missing`() = runTest {
+        val pokemon = samplePokemon(
+            id = 731,
+            legacyCryUrl = "https://example.com/existing.ogg",
+            backImageUrl = "",
+        )
+        coEvery { api.getPokemonDetails(731) } returns sampleDetails()
+
+        val result = remoteDataSource.refreshMissingPokedexExtras(listOf(pokemon)).single()
+
+        assertEquals("https://example.com/back/731.png", result.backImageUrl)
+        assertEquals("https://example.com/existing.ogg", result.legacyCryUrl)
+        coVerify(exactly = 1) { api.getPokemonDetails(731) }
+    }
+
     private fun sampleDetails(): PokemonDetailsResponse {
         return PokemonDetailsResponse(
             id = 731,
             name = "pikipek",
-            sprites = SpriteResponse(front_default = "https://example.com/sprite.png"),
+            sprites = SpriteResponse(
+                front_default = "https://example.com/sprite.png",
+                back_default = "https://example.com/back/731.png",
+            ),
             types = listOf(TypeSlot(1, TypeInfo("normal"))),
             stats = listOf(Stats(35, StatInfo("hp"))),
             height = 3,
@@ -77,7 +97,11 @@ class PokemonRemoteDataSourceCryTest {
         )
     }
 
-    private fun samplePokemon(id: Int, legacyCryUrl: String): Pokemon {
+    private fun samplePokemon(
+        id: Int,
+        legacyCryUrl: String,
+        backImageUrl: String = "https://example.com/back.png",
+    ): Pokemon {
         return Pokemon(
             id = id,
             name = "Pikipek",
@@ -95,6 +119,7 @@ class PokemonRemoteDataSourceCryTest {
             weight = 12,
             abilities = listOf(Ability("keen-eye", "Keen Eye")),
             legacyCryUrl = legacyCryUrl,
+            backImageUrl = backImageUrl,
         )
     }
 }

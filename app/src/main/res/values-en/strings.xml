@@ -47,6 +47,7 @@
     <string name="changePkmn2SizeButton">Change right</string>
 
     <string name="name">Name</string>
+    <string name="guess_gen_filter_total">TOTAL: %1$d</string>
     <string name="resetLogoDescription">Reset</string>
     <string name="level">Level</string>
     <string name="score">Score</string>

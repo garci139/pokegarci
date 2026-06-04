@@ -1,33 +1,38 @@
-package com.garci.pokegarci
+package com.garci.pokegarci.ui.firstmenu
 
 import android.content.Context
-import android.content.Intent
 import android.os.Bundle
 import android.view.Gravity
+import android.view.LayoutInflater
 import android.view.View
-import androidx.activity.viewModels
+import android.view.ViewGroup
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import androidx.navigation.fragment.findNavController
+import com.garci.pokegarci.R
 import com.garci.pokegarci.databinding.ActivityFirstMenuBinding
 import com.garci.pokegarci.presentation.firstmenu.FirstMenuLoadState
 import com.garci.pokegarci.presentation.firstmenu.FirstMenuViewModel
 import com.garci.pokegarci.util.AppConstants
-import com.garci.pokegarci.util.BaseLocaleActivity
 import com.garci.pokegarci.util.getAppVersionName
-import com.garci.pokegarci.util.startGradientBackgroundAnimation
+import com.garci.pokegarci.util.playClickEmeraldSound
 import com.garci.pokegarci.utils.vibrate
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
+import kotlin.time.Duration.Companion.milliseconds
 
 @AndroidEntryPoint
-class FirstMenuActivity : BaseLocaleActivity() {
+class FirstMenuFragment : Fragment() {
 
     private val viewModel: FirstMenuViewModel by viewModels()
-    private lateinit var binding: ActivityFirstMenuBinding
+    private var _binding: ActivityFirstMenuBinding? = null
+    private val binding get() = _binding!!
     private var loadingStatusAnimationJob: Job? = null
     private var loadingPhraseIndex = 0
     private var loadingEllipsisCount = 1
@@ -36,34 +41,38 @@ class FirstMenuActivity : BaseLocaleActivity() {
         resources.getStringArray(R.array.loading_status_phrases)
     }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        binding = ActivityFirstMenuBinding.inflate(layoutInflater)
-        setContentView(binding.root)
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?,
+    ): View {
+        _binding = ActivityFirstMenuBinding.inflate(inflater, container, false)
+        return binding.root
+    }
 
-        binding.firstMenu.startGradientBackgroundAnimation()
-        binding.appVersionText.text = getString(R.string.app_version_format, getAppVersionName())
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        binding.appVersionText.text = getString(R.string.app_version_format, requireContext().getAppVersionName())
         setupLoadingEllipsisSlot()
 
-        val pendingLanguageChange = getSharedPreferences(AppConstants.PREFS_NAME, Context.MODE_PRIVATE)
+        val pendingLanguageChange = requireContext()
+            .getSharedPreferences(AppConstants.PREFS_NAME, Context.MODE_PRIVATE)
             .getString(AppConstants.OLD_LANGUAGE_KEY, null) != null
 
         binding.btnPlay.setOnClickListener {
-            vibrate()
-            startActivity(
-                Intent(this, MainMenuActivity::class.java).apply {
-                    flags = Intent.FLAG_ACTIVITY_CLEAR_TOP
-                },
-            )
+            requireContext().vibrate()
+            requireContext().playClickEmeraldSound()
+            findNavController().navigate(R.id.action_firstMenu_to_mainMenu)
         }
 
         binding.firstMenuRetryButton.setOnClickListener {
-            vibrate()
+            requireContext().vibrate()
             viewModel.retryLoad(pendingLanguageChange)
         }
 
-        lifecycleScope.launch {
-            repeatOnLifecycle(Lifecycle.State.STARTED) {
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 launch {
                     viewModel.loadState.collect { state ->
                         when (state) {
@@ -115,6 +124,12 @@ class FirstMenuActivity : BaseLocaleActivity() {
         viewModel.ensurePokemonLoaded(pendingLanguageChange)
     }
 
+    override fun onDestroyView() {
+        stopLoadingStatusAnimation()
+        super.onDestroyView()
+        _binding = null
+    }
+
     private fun startLoadingStatusAnimation() {
         stopLoadingStatusAnimation()
         if (loadingPhrases.isEmpty()) return
@@ -123,16 +138,16 @@ class FirstMenuActivity : BaseLocaleActivity() {
         loadingEllipsisCount = 1
         updateLoadingStatusText()
 
-        loadingStatusAnimationJob = lifecycleScope.launch {
+        loadingStatusAnimationJob = viewLifecycleOwner.lifecycleScope.launch {
             launch {
                 while (isActive) {
-                    delay(LOADING_PHRASE_INTERVAL_MS)
+                    delay(LOADING_PHRASE_INTERVAL_MS.milliseconds)
                     loadingPhraseIndex = (loadingPhraseIndex + 1) % loadingPhrases.size
                     updateLoadingStatusText()
                 }
             }
             while (isActive) {
-                delay(LOADING_ELLIPSIS_INTERVAL_MS)
+                delay(LOADING_ELLIPSIS_INTERVAL_MS.milliseconds)
                 loadingEllipsisCount = if (loadingEllipsisCount >= 3) 1 else loadingEllipsisCount + 1
                 updateLoadingStatusText()
             }

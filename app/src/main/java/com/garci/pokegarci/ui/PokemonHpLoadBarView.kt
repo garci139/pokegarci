@@ -4,11 +4,11 @@ import android.content.Context
 import android.graphics.Canvas
 import android.graphics.Paint
 import android.graphics.RectF
-import android.graphics.Typeface
 import android.util.AttributeSet
 import android.view.View
 import androidx.core.content.ContextCompat
 import com.garci.pokegarci.R
+import com.garci.pokegarci.util.AppFont
 import kotlin.math.max
 
 /**
@@ -92,7 +92,7 @@ class PokemonHpLoadBarView @JvmOverloads constructor(
         fillColor: Int,
         strokeColor: Int,
     ): Paint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
-        typeface = Typeface.create(Typeface.DEFAULT, Typeface.BOLD)
+        typeface = AppFont.get(context)
         textSize = textSizeSp * resources.displayMetrics.scaledDensity
         color = ContextCompat.getColor(context, fillColor)
         style = Paint.Style.FILL

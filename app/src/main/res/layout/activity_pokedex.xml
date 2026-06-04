@@ -6,9 +6,7 @@
     android:layout_height="match_parent"
     android:paddingTop="18dp"
     android:id="@+id/pokedexLayout"
-    android:paddingHorizontal="12dp"
-    android:background="@drawable/gradient_list"
-    tools:context=".PokedexActivity">
+    android:paddingHorizontal="12dp">
 
     <androidx.appcompat.widget.SearchView
         android:id="@+id/searchView"
@@ -152,7 +150,9 @@
                 <View
                     android:id="@+id/expandedSubView"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"/>
+                    android:layout_height="match_parent"
+                    android:clickable="true"
+                    android:focusable="true" />
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
@@ -164,6 +164,8 @@
                         android:layout_height="150dp"
                         android:scaleType="fitCenter"
                         android:layout_gravity="center"
+                        android:clickable="true"
+                        android:focusable="true"
                         app:layout_constraintTop_toTopOf="parent"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"

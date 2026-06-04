@@ -5,9 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:id="@+id/firstMenu"
-    android:fitsSystemWindows="true"
-    android:background="@drawable/gradient_list"
-    tools:context=".FirstMenuActivity">
+    android:fitsSystemWindows="true">
 
     <Button
         android:id="@+id/btnPlay"
@@ -52,7 +50,6 @@
             android:id="@+id/pressToPlay"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:fontFamily="sans-serif-black"
             android:shadowColor="#2B000000"
             android:shadowDx="0.0"
             android:shadowDy="0.0"
@@ -78,7 +75,6 @@
                 android:id="@+id/firstMenuStatusPhrase"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:fontFamily="sans-serif-black"
                 android:maxLines="1"
                 android:textColor="@color/white"
                 android:textSize="16sp"
@@ -93,7 +89,6 @@
                 android:id="@+id/firstMenuStatusEllipsis"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:fontFamily="sans-serif-black"
                 android:includeFontPadding="false"
                 android:maxLines="1"
                 android:textColor="@color/white"
@@ -110,7 +105,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="24dp"
-            android:fontFamily="sans-serif-black"
             android:gravity="center"
             android:textAlignment="center"
             android:textColor="@color/white"

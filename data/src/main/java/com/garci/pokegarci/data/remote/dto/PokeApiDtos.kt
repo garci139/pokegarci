@@ -28,7 +28,8 @@ data class AbilitySimpleName(
 )
 
 data class SpriteResponse(
-    val front_default: String?,
+    val front_default: String? = null,
+    val back_default: String? = null,
 )
 
 data class TypeSlot(

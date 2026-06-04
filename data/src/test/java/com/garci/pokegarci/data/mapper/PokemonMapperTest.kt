@@ -49,6 +49,34 @@ class PokemonMapperTest {
     }
 
     @Test
+    fun `mapToDomain maps back sprite url`() {
+        val pokemon = mapPokemon(
+            sprites = SpriteResponse(
+                front_default = "https://example.com/front.png",
+                back_default = "https://example.com/back.png",
+            ),
+        )
+
+        assertEquals("https://example.com/back.png", pokemon.backImageUrl)
+    }
+
+    @Test
+    fun `backImageUrlFromDetails uses empty when back sprite is null`() {
+        val details = PokemonDetailsResponse(
+            id = 25,
+            name = "pikachu",
+            sprites = SpriteResponse(front_default = "https://example.com/front.png"),
+            types = emptyList(),
+            stats = emptyList(),
+            height = 0,
+            weight = 0,
+            abilities = emptyList(),
+        )
+
+        assertEquals("", PokemonMapper.backImageUrlFromDetails(details))
+    }
+
+    @Test
     fun `cryUrlFromDetails falls back to latest when gson legacy is null`() {
         val json = """
             {
@@ -72,12 +100,15 @@ class PokemonMapperTest {
         assertEquals("https://example.com/latest/731.ogg", PokemonMapper.cryUrlFromDetails(details))
     }
 
-    private fun mapPokemon(cries: CriesResponse?): Pokemon {
+    private fun mapPokemon(
+        cries: CriesResponse? = null,
+        sprites: SpriteResponse = SpriteResponse(front_default = "https://example.com/sprite.png"),
+    ): Pokemon {
         return PokemonMapper.mapToDomain(
             details = PokemonDetailsResponse(
                 id = 25,
                 name = "pikachu",
-                sprites = SpriteResponse(front_default = "https://example.com/sprite.png"),
+                sprites = sprites,
                 types = listOf(TypeSlot(1, TypeInfo("electric"))),
                 stats = listOf(Stats(35, StatInfo("hp"))),
                 height = 4,

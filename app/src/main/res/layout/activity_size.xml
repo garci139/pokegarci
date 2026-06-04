@@ -5,10 +5,8 @@
     android:id="@+id/sizeLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/gradient_list"
     android:paddingHorizontal="12dp"
-    android:paddingTop="40dp"
-    tools:context=".SizeActivity">
+    android:paddingTop="40dp">
 
     <!-- TITULO -->
     <TextView
@@ -156,7 +154,6 @@
             android:id="@+id/changePkmn1SizeText"
             android:layout_gravity="center"
             android:gravity="center"
-            android:fontFamily="sans-serif-black"
             android:layout_height="match_parent"
             android:text="@string/changePkmn1SizeButton"
             android:textColor="@color/black"
@@ -190,7 +187,6 @@
             android:layout_gravity="center"
             android:gravity="center"
             android:id="@+id/changePkmn2SizeText"
-            android:fontFamily="sans-serif-black"
             android:layout_height="match_parent"
             android:text="@string/changePkmn2SizeButton"
             android:textColor="@color/black"

@@ -1,43 +1,46 @@
-package com.garci.pokegarci
+package com.garci.pokegarci.ui.size
 
 import android.annotation.SuppressLint
 import android.app.Dialog
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
+import android.view.LayoutInflater
 import android.view.MotionEvent
 import android.view.View
+import android.view.ViewGroup
 import android.view.Window
-import android.widget.EditText
 import android.widget.ImageView
 import android.widget.TextView
-import androidx.activity.viewModels
 import androidx.appcompat.widget.SearchView
 import androidx.core.content.ContextCompat
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
+import com.garci.pokegarci.R
 import com.garci.pokegarci.databinding.ActivitySizeBinding
 import com.garci.pokegarci.domain.model.Pokemon
 import com.garci.pokegarci.presentation.size.SizeViewModel
 import com.garci.pokegarci.ui.adapter.PokemonDialogAdapter
-import com.garci.pokegarci.util.BaseLocaleActivity
 import com.garci.pokegarci.util.DataLoadingUi
 import com.garci.pokegarci.util.SearchViewUtils
 import com.garci.pokegarci.util.TypeBackgroundProvider
-import com.garci.pokegarci.util.startGradientBackgroundAnimation
+import com.garci.pokegarci.util.playClickEmeraldSound
 import com.garci.pokegarci.utils.vibrate
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import java.util.Locale
 
 @AndroidEntryPoint
-class SizeActivity : BaseLocaleActivity() {
+class SizeFragment : Fragment() {
 
     private val viewModel: SizeViewModel by viewModels()
-    private lateinit var binding: ActivitySizeBinding
+    private var _binding: ActivitySizeBinding? = null
+    private val binding get() = _binding!!
 
     private lateinit var pokemonList: List<Pokemon>
     private lateinit var firstSelectedPokemon: Pokemon
@@ -53,12 +56,17 @@ class SizeActivity : BaseLocaleActivity() {
     private var lastSelectedPosition1: Int = 0
     private var lastSelectedPosition2: Int = 0
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        binding = ActivitySizeBinding.inflate(layoutInflater)
-        setContentView(binding.root)
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
+        _binding = ActivitySizeBinding.inflate(inflater, container, false)
+        return binding.root
+    }
 
-        binding.sizeLayout.startGradientBackgroundAnimation()
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
 
         binding.changePkmn1Size.isEnabled = false
         binding.changePkmn2Size.isEnabled = false
@@ -79,16 +87,15 @@ class SizeActivity : BaseLocaleActivity() {
             binding.pokemon1Shape.animate().x(originalX1).y(originalY1).setDuration(200).start()
             binding.pokemon2Shape.animate().x(originalX2).y(originalY2).setDuration(200).start()
 
-            val tallestPokemon = if (binding.pokemon1Shape.height > binding.pokemon2Shape.height) {
+            val tallestPokemon = if (binding.pokemon1Shape.height > binding.pokemon2Shape.height)
                 binding.pokemon1Shape
-            } else {
+            else
                 binding.pokemon2Shape
-            }
-            val shortestPokemon = if (binding.pokemon1Shape.height > binding.pokemon2Shape.height) {
+
+            val shortestPokemon = if (binding.pokemon1Shape.height > binding.pokemon2Shape.height)
                 binding.pokemon2Shape
-            } else {
+            else
                 binding.pokemon1Shape
-            }
 
             val tallestOriginalY = if (tallestPokemon == binding.pokemon1Shape) originalY1 else originalY2
             val tallestHeight = tallestPokemon.height
@@ -99,7 +106,7 @@ class SizeActivity : BaseLocaleActivity() {
         }
 
         DataLoadingUi.bind(
-            lifecycleOwner = this,
+            lifecycleOwner = viewLifecycleOwner,
             dataUiState = viewModel.dataUiState,
             views = DataLoadingUi.Views(
                 progressBar = binding.progressBarSize,
@@ -109,57 +116,59 @@ class SizeActivity : BaseLocaleActivity() {
                     binding.sizeInstructions,
                     binding.sizeBox,
                     binding.changePkmn1Size,
-                    binding.changePkmn2Size,
+                    binding.changePkmn2Size
                 ),
-                extraProgressBars = listOf(binding.progressBarSize2),
+                extraProgressBars = listOf(binding.progressBarSize2)
             ),
             onRetry = { viewModel.retryLoad() },
             onLoaded = {
                 binding.changePkmn1Size.isEnabled = true
                 binding.changePkmn2Size.isEnabled = true
                 viewModel.refreshPokemonList()
-            },
+            }
         )
 
         pokemonList = emptyList()
         observeViewModel()
 
         binding.changePkmn1Size.setOnClickListener {
-            vibrate()
+            requireContext().vibrate()
+            requireContext().playClickEmeraldSound()
             showPokemonSelectorDialog(true) { selectedPokemon ->
                 firstSelectedPokemon = selectedPokemon
-                if (::secondSelectedPokemon.isInitialized) {
-                    updateSizeComparison()
-                }
+                if (::secondSelectedPokemon.isInitialized) updateSizeComparison()
             }
         }
 
         binding.changePkmn2Size.setOnClickListener {
-            vibrate()
+            requireContext().vibrate()
+            requireContext().playClickEmeraldSound()
             showPokemonSelectorDialog(false) { selectedPokemon ->
                 secondSelectedPokemon = selectedPokemon
-                if (::firstSelectedPokemon.isInitialized) {
-                    updateSizeComparison()
-                }
+                if (::firstSelectedPokemon.isInitialized) updateSizeComparison()
             }
         }
     }
 
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+    }
+
     private fun observeViewModel() {
-        lifecycleScope.launch {
-            repeatOnLifecycle(Lifecycle.State.STARTED) {
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.pokemonList.collect { loadedPokemon ->
                     pokemonList = loadedPokemon
-                    if (loadedPokemon.isNotEmpty() && !::firstSelectedPokemon.isInitialized) {
+                    if (loadedPokemon.isNotEmpty() && !::firstSelectedPokemon.isInitialized)
                         initializeDefaultPokemon(loadedPokemon)
-                    }
                 }
             }
         }
     }
 
     private fun showPokemonSelectorDialog(isFirstButton: Boolean, onPokemonSelected: (Pokemon) -> Unit) {
-        val dialog = Dialog(this)
+        val dialog = Dialog(requireContext())
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
         dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
         dialog.setContentView(R.layout.dialog_size_selector)
@@ -171,7 +180,7 @@ class SizeActivity : BaseLocaleActivity() {
         SearchViewUtils.hideCursorOnFocus(searchViewSize)
 
         val adapter = PokemonDialogAdapter(pokemonList) { selectedPokemon ->
-            vibrate()
+            requireContext().vibrate()
             if (isFirstButton) {
                 lastSelectedPosition1 = pokemonList.indexOf(selectedPokemon)
                 if (lastSelectedPosition1 > 2) lastSelectedPosition1 += 2
@@ -183,7 +192,7 @@ class SizeActivity : BaseLocaleActivity() {
             dialog.dismiss()
         }
 
-        recyclerPokemon.layoutManager = LinearLayoutManager(this)
+        recyclerPokemon.layoutManager = LinearLayoutManager(requireContext())
         recyclerPokemon.adapter = adapter
 
         val scrollToPosition = if (isFirstButton) lastSelectedPosition1 else lastSelectedPosition2
