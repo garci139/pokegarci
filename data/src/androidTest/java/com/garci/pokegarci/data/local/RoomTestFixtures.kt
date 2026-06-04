@@ -28,6 +28,7 @@ internal fun samplePokemonEntity(
         height = 4,
         weight = 60,
         abilitiesJson = AbilityJsonCodec.encode(abilities),
+        legacyCryUrl = "https://example.com/cries/$id.ogg",
     )
 }
 

@@ -9,6 +9,12 @@ data class PokemonDetailsResponse(
     val height: Int,
     val weight: Int,
     val abilities: List<AbilityBasicDetails>,
+    val cries: CriesResponse? = null,
+)
+
+data class CriesResponse(
+    val latest: String?,
+    val legacy: String?,
 )
 
 data class AbilityBasicDetails(

@@ -30,6 +30,7 @@ class PokemonEntityMapperTest {
                     displayName = "Elec. Estática",
                 ),
             ),
+            legacyCryUrl = "https://example.com/cries/25.ogg",
         )
 
         val roundTrip = PokemonEntityMapper.toDomain(PokemonEntityMapper.toEntity(pokemon))

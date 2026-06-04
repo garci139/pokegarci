@@ -1,5 +1,6 @@
 package com.garci.pokegarci.data.repository
 
+import com.garci.pokegarci.data.local.PokemonCryLocalDataSource
 import com.garci.pokegarci.data.local.PokemonLocalDataSource
 import com.garci.pokegarci.data.remote.PokemonRemoteDataSource
 import com.garci.pokegarci.domain.model.Ability
@@ -18,11 +19,14 @@ class PokemonRepositoryImplTest {
 
     private val remoteDataSource = mockk<PokemonRemoteDataSource>()
     private val localDataSource = mockk<PokemonLocalDataSource>(relaxed = true)
+    private val cryLocalDataSource = mockk<PokemonCryLocalDataSource>()
     private lateinit var repository: PokemonRepositoryImpl
 
     @Before
     fun setUp() {
-        repository = PokemonRepositoryImpl(remoteDataSource, localDataSource)
+        coEvery { cryLocalDataSource.ensureCriesCached(any()) } answers { firstArg() }
+        coEvery { remoteDataSource.refreshMissingCryUrls(any()) } answers { firstArg() }
+        repository = PokemonRepositoryImpl(remoteDataSource, localDataSource, cryLocalDataSource)
     }
 
     @Test

@@ -41,7 +41,15 @@ object PokemonMapper {
             height = details.height,
             weight = details.weight,
             abilities = mapAbilities(details),
+            legacyCryUrl = cryUrlFromDetails(details),
         )
+    }
+
+    fun cryUrlFromDetails(details: PokemonDetailsResponse): String {
+        val cries = details.cries ?: return ""
+        return cries.legacy?.takeIf { url -> url.isNotBlank() }
+            ?: cries.latest?.takeIf { url -> url.isNotBlank() }
+            .orEmpty()
     }
 
     fun updateLocalizedContent(

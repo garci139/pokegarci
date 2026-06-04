@@ -20,6 +20,7 @@ import com.garci.pokegarci.presentation.pokedex.PokedexViewModel
 import com.garci.pokegarci.ui.adapter.PokemonAdapter
 import com.garci.pokegarci.util.BaseLocaleActivity
 import com.garci.pokegarci.util.DataLoadingUi
+import com.garci.pokegarci.util.PokemonCryPlayer
 import com.garci.pokegarci.util.SearchViewUtils
 import com.garci.pokegarci.util.TypeBackgroundProvider
 import com.garci.pokegarci.util.startGradientBackgroundAnimation
@@ -35,6 +36,7 @@ class PokedexActivity : BaseLocaleActivity() {
     private val viewModel: PokedexViewModel by viewModels()
     private lateinit var binding: ActivityPokedexBinding
     private lateinit var adapter: PokemonAdapter
+    private val cryPlayer = PokemonCryPlayer(this)
 
     @SuppressLint("MissingInflatedId")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -69,9 +71,7 @@ class PokedexActivity : BaseLocaleActivity() {
 
         binding.closeCardButton.setOnClickListener {
             vibrate()
-            binding.pokedexBox.isEnabled = true
-            binding.disableRecyclerView.visibility = View.INVISIBLE
-            binding.expandedPokemonCard.visibility = View.GONE
+            closeExpandedCard()
         }
 
         DataLoadingUi.bind(
@@ -88,6 +88,11 @@ class PokedexActivity : BaseLocaleActivity() {
         )
 
         observeViewModel()
+    }
+
+    override fun onDestroy() {
+        cryPlayer.stop()
+        super.onDestroy()
     }
 
     private fun observeViewModel() {
@@ -134,6 +139,15 @@ class PokedexActivity : BaseLocaleActivity() {
 
         binding.disableRecyclerView.visibility = View.VISIBLE
         binding.expandedPokemonCard.visibility = View.VISIBLE
+
+        cryPlayer.play(pokemon.legacyCryUrl)
+    }
+
+    private fun closeExpandedCard() {
+        cryPlayer.stop()
+        binding.pokedexBox.isEnabled = true
+        binding.disableRecyclerView.visibility = View.INVISIBLE
+        binding.expandedPokemonCard.visibility = View.GONE
     }
 
     private fun bindTypeIcon(imageView: ImageView, type: String?) {
