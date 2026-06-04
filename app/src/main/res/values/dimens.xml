@@ -1,3 +1,12 @@
 <resources>
     <dimen name="fab_margin">16dp</dimen>
+    <dimen name="guess_gen_filter_grid_margin_top">88dp</dimen>
+    <dimen name="guess_gen_filter_item_margin_horizontal">14dp</dimen>
+    <dimen name="guess_gen_filter_total_margin_top">10dp</dimen>
+    <dimen name="guess_gen_filter_button_min_height">34dp</dimen>
+    <dimen name="search_view_stroke_width">3dp</dimen>
+    <dimen name="guess_try_text_corner_radius">48dp</dimen>
+    <dimen name="guess_hints_margin_top">16dp</dimen>
+    <dimen name="guess_hints_margin_bottom">24dp</dimen>
+    <dimen name="guess_hints_row_min_height">44dp</dimen>
 </resources>

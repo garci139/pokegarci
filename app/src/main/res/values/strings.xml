@@ -54,6 +54,8 @@
     <string name="changePkmn2SizeButton">CAMBIAR DERECHA</string>
 
     <string name="name">Nombre</string>
+    <string name="guess_gen_label" translatable="false">Gen %1$s</string>
+    <string name="guess_gen_filter_total">TOTAL: %1$d</string>
     <string name="resetLogoDescription">Reiniciar</string>
     <string name="level">Nivel</string>
     <string name="score">Puntuación</string>

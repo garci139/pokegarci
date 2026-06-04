@@ -26,4 +26,6 @@
     <color name="hp_bar_fill">#FF58D068</color>
     <color name="hp_bar_label">#FFF8F8F8</color>
     <color name="hp_bar_text_outline">#CC000000</color>
+
+    <color name="guess_gen_filter_indicator">#FF3D3D3D</color>
 </resources>

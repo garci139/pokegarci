@@ -15,7 +15,7 @@ sealed interface GuessOutcome {
 class GuessGameSession {
 
     private var tryCount = 0
-    private var solutionIndex = 0
+    private var solutionIndex = 1
     private var possiblePoints = MAX_LIVES
     private var accumulatedScore = 0
     private var randomList: List<Pokemon> = emptyList()
@@ -29,7 +29,7 @@ class GuessGameSession {
 
     fun start(allPokemon: List<Pokemon>) {
         tryCount = 0
-        solutionIndex = 0
+        solutionIndex = 1
         possiblePoints = MAX_LIVES
         accumulatedScore = 0
         randomList = allPokemon.shuffled()
@@ -51,7 +51,7 @@ class GuessGameSession {
         val hintsUsedBeforeCorrect = tryCount
         accumulatedScore += pointsEarned
         solutionIndex++
-        val completedAll = solutionIndex >= randomList.size
+        val completedAll = solutionIndex >= randomList.size+1
         tryCount = 0
         possiblePoints = MAX_LIVES
         return GuessOutcome.Correct(
