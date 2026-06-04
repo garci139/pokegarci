@@ -22,6 +22,7 @@ object PokemonEntityMapper {
             height = entity.height,
             weight = entity.weight,
             abilities = AbilityJsonCodec.decode(entity.abilitiesJson),
+            legacyCryUrl = entity.legacyCryUrl,
         )
     }
 
@@ -42,6 +43,7 @@ object PokemonEntityMapper {
             height = pokemon.height,
             weight = pokemon.weight,
             abilitiesJson = AbilityJsonCodec.encode(pokemon.abilities),
+            legacyCryUrl = pokemon.legacyCryUrl,
         )
     }
 }

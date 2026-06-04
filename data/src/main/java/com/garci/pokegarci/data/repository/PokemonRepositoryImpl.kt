@@ -1,5 +1,6 @@
 package com.garci.pokegarci.data.repository
 
+import com.garci.pokegarci.data.local.PokemonCryLocalDataSource
 import com.garci.pokegarci.data.local.PokemonLocalDataSource
 import com.garci.pokegarci.data.remote.PokemonRemoteDataSource
 import com.garci.pokegarci.domain.model.Pokemon
@@ -14,6 +15,7 @@ import javax.inject.Singleton
 class PokemonRepositoryImpl @Inject constructor(
     private val remoteDataSource: PokemonRemoteDataSource,
     private val localDataSource: PokemonLocalDataSource,
+    private val cryLocalDataSource: PokemonCryLocalDataSource,
 ) : PokemonRepository {
 
     private val _isDataLoaded = MutableStateFlow(false)
@@ -30,7 +32,7 @@ class PokemonRepositoryImpl @Inject constructor(
         _loadFailed.value = false
         return runCatching {
             localDataSource.getCachedPokemon(language)?.let { cached ->
-                applyPokemonList(cached)
+                applyPokemonList(persistCriesIfNeeded(cached, language))
                 return@runCatching
             }
 
@@ -38,8 +40,7 @@ class PokemonRepositoryImpl @Inject constructor(
 
             localDataSource.getCachedPokemonIgnoringLanguage()?.let { cached ->
                 val updated = remoteDataSource.refreshLocalizedContent(cached, language)
-                applyPokemonList(updated)
-                localDataSource.saveAll(updated, language)
+                applyPokemonList(persistCriesIfNeeded(updated, language))
                 return@runCatching
             }
 
@@ -57,8 +58,7 @@ class PokemonRepositoryImpl @Inject constructor(
             if (pokemonList.isEmpty()) return@runCatching
             _isDataLoaded.value = false
             val updated = remoteDataSource.refreshLocalizedContent(pokemonList, language)
-            applyPokemonList(updated)
-            localDataSource.saveAll(updated, language)
+            applyPokemonList(persistCriesIfNeeded(updated, language))
         }.onFailure {
             _loadFailed.value = true
         }
@@ -68,5 +68,17 @@ class PokemonRepositoryImpl @Inject constructor(
         pokemonList.clear()
         pokemonList.addAll(list)
         _isDataLoaded.value = list.isNotEmpty()
+    }
+
+    private suspend fun persistCriesIfNeeded(
+        pokemon: List<Pokemon>,
+        language: String,
+    ): List<Pokemon> {
+        val withCryUrls = remoteDataSource.refreshMissingCryUrls(pokemon)
+        val withLocalCries = cryLocalDataSource.ensureCriesCached(withCryUrls)
+        if (withLocalCries != pokemon) {
+            localDataSource.saveAll(withLocalCries, language)
+        }
+        return withLocalCries
     }
 }

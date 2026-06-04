@@ -126,6 +126,7 @@ class PokemonLocalDataSourceTest {
             abilitiesJson = AbilityJsonCodec.encode(
                 listOf(Ability("static", "Static")),
             ),
+            legacyCryUrl = "https://example.com/cries/25.ogg",
         )
     }
 

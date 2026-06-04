@@ -12,6 +12,7 @@ import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import java.io.File
+import javax.inject.Named
 import javax.inject.Singleton
 
 @Module
@@ -45,5 +46,12 @@ object NetworkModule {
     @Singleton
     fun providePokeApiService(retrofit: Retrofit): PokeApiService {
         return retrofit.create(PokeApiService::class.java)
+    }
+
+    @Provides
+    @Singleton
+    @Named("cries")
+    fun provideCriesOkHttpClient(): OkHttpClient {
+        return OkHttpClient.Builder().build()
     }
 }
