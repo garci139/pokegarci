@@ -100,9 +100,8 @@ class PokemonRepositoryImpl @Inject constructor(
         val withLocalCries = cryLocalDataSource.ensureCriesCached(withPokedexExtras) { completed, total ->
             onProgress(mapSegmentProgress(completed, total, start = 45, end = 100))
         }
-        if (withLocalCries != pokemon) {
+        if (withLocalCries != pokemon || withPokedexExtras != pokemon)
             localDataSource.saveAll(withLocalCries, language)
-        }
         return withLocalCries
     }
 

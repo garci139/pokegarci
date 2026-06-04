@@ -61,6 +61,45 @@ class PokemonMapperTest {
     }
 
     @Test
+    fun `mapToDomain maps shiny sprites when both are present`() {
+        val pokemon = mapPokemon(
+            sprites = SpriteResponse(
+                front_default = "https://example.com/front.png",
+                back_default = "https://example.com/back.png",
+                front_shiny = "https://example.com/front-shiny.png",
+                back_shiny = "https://example.com/back-shiny.png",
+            ),
+        )
+
+        assertEquals("https://example.com/front-shiny.png", pokemon.frontShinyImageUrl)
+        assertEquals("https://example.com/back-shiny.png", pokemon.backShinyImageUrl)
+    }
+
+    @Test
+    fun `shinySpriteUrlsFromDetails clears both when either shiny url is missing`() {
+        val details = PokemonDetailsResponse(
+            id = 132,
+            name = "ditto",
+            sprites = SpriteResponse(
+                front_default = "https://example.com/front.png",
+                back_default = "https://example.com/back.png",
+                front_shiny = "https://example.com/front-shiny.png",
+                back_shiny = null,
+            ),
+            types = emptyList(),
+            stats = emptyList(),
+            height = 0,
+            weight = 0,
+            abilities = emptyList(),
+        )
+
+        val shiny = PokemonMapper.shinySpriteUrlsFromDetails(details)
+
+        assertEquals("", shiny.front)
+        assertEquals("", shiny.back)
+    }
+
+    @Test
     fun `backImageUrlFromDetails uses empty when back sprite is null`() {
         val details = PokemonDetailsResponse(
             id = 25,

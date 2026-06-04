@@ -54,7 +54,7 @@ object PokemonSpriteFlipAnimator {
         setFlipInProgress(imageView, false)
     }
 
-    private fun isFlipInProgress(imageView: ImageView): Boolean {
+    fun isFlipInProgress(imageView: ImageView): Boolean {
         return imageView.getTag(FLIP_IN_PROGRESS_KEY) == true
     }
 

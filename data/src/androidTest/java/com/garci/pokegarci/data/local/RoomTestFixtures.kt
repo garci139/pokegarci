@@ -30,6 +30,8 @@ internal fun samplePokemonEntity(
         abilitiesJson = AbilityJsonCodec.encode(abilities),
         legacyCryUrl = "https://example.com/cries/$id.ogg",
         backImageUrl = "https://example.com/back/$id.png",
+        frontShinyImageUrl = "https://example.com/shiny/$id.png",
+        backShinyImageUrl = "https://example.com/back/shiny/$id.png"
     )
 }
 

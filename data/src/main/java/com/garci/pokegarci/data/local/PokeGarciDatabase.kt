@@ -14,8 +14,8 @@ import com.garci.pokegarci.data.local.entity.PokemonEntity
         CacheMetadataEntity::class,
         AbilityNameEntity::class,
     ],
-    version = 7,
-    exportSchema = true,
+    version = 8,
+    exportSchema = true
 )
 abstract class PokeGarciDatabase : RoomDatabase() {
     abstract fun pokemonDao(): PokemonDao

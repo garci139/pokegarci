@@ -20,6 +20,8 @@ import com.garci.pokegarci.R
 import com.garci.pokegarci.databinding.ActivityPokedexBinding
 import com.garci.pokegarci.domain.model.Pokemon
 import com.garci.pokegarci.domain.model.abilitiesDisplayText
+import com.garci.pokegarci.domain.model.hasShinySprites
+import com.garci.pokegarci.domain.model.spriteUrl
 import com.garci.pokegarci.presentation.pokedex.PokedexViewModel
 import com.garci.pokegarci.ui.adapter.PokemonAdapter
 import com.garci.pokegarci.util.DataLoadingUi
@@ -44,6 +46,7 @@ class PokedexFragment : Fragment() {
     private lateinit var cryPlayer: PokemonCryPlayer
     private var expandedCardPokemon: Pokemon? = null
     private var showingBackSprite = false
+    private var showingShinySprites = false
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -100,6 +103,17 @@ class PokedexFragment : Fragment() {
         binding.expandedSubView.setOnClickListener(spriteFlipClickListener)
         binding.expandedPokemonImage.setOnClickListener(spriteFlipClickListener)
 
+        binding.expandedShinyToggleButton.setOnClickListener {
+            val pokemon = expandedCardPokemon ?: return@setOnClickListener
+            if (!pokemon.hasShinySprites()) return@setOnClickListener
+            if (PokemonSpriteFlipAnimator.isFlipInProgress(binding.expandedPokemonImage)) return@setOnClickListener
+            requireContext().vibrate()
+            requireContext().playClickEmeraldSound()
+            showingShinySprites = !showingShinySprites
+            loadExpandedSpriteImage()
+            updateShinyToggleUi()
+        }
+
         DataLoadingUi.bind(
             lifecycleOwner = viewLifecycleOwner,
             dataUiState = viewModel.dataUiState,
@@ -151,19 +165,12 @@ class PokedexFragment : Fragment() {
 
         expandedCardPokemon = pokemon
         showingBackSprite = false
+        showingShinySprites = false
         PokemonSpriteFlipAnimator.reset(binding.expandedPokemonImage)
 
-        val requestOptions = RequestOptions().diskCacheStrategy(DiskCacheStrategy.ALL)
-        Glide.with(this)
-            .load(pokemon.imageUrl)
-            .apply(requestOptions)
-            .into(binding.expandedPokemonImage)
-        if (pokemon.backImageUrl.isNotBlank()) {
-            Glide.with(this)
-                .load(pokemon.backImageUrl)
-                .apply(requestOptions)
-                .preload()
-        }
+        loadExpandedSpriteImage()
+        preloadExpandedSpriteVariants(pokemon)
+        updateShinyToggleUi()
 
         bindTypeIcon(binding.expandedFirstTypeIcon, pokemon.type1)
         bindTypeIcon(binding.expandedSecondTypeIcon, pokemon.type2)
@@ -184,20 +191,64 @@ class PokedexFragment : Fragment() {
 
     private fun flipExpandedSprite(): Boolean {
         val pokemon = expandedCardPokemon ?: return false
-        return PokemonSpriteFlipAnimator.toggle(
+        val started = PokemonSpriteFlipAnimator.toggle(
             imageView = binding.expandedPokemonImage,
             showingBack = showingBackSprite,
-            frontUrl = pokemon.imageUrl,
-            backUrl = pokemon.backImageUrl,
-            onComplete = { showingBackSprite = it }
+            frontUrl = pokemon.spriteUrl(showingBack = false, shiny = showingShinySprites),
+            backUrl = pokemon.spriteUrl(showingBack = true, shiny = showingShinySprites),
+            onComplete = {
+                showingBackSprite = it
+                updateShinyToggleUi()
+            }
         )
+        if (started) updateShinyToggleUi()
+        return started
+    }
+
+    private fun loadExpandedSpriteImage() {
+        val pokemon = expandedCardPokemon ?: return
+        val requestOptions = RequestOptions().diskCacheStrategy(DiskCacheStrategy.ALL)
+        Glide.with(this)
+            .load(pokemon.spriteUrl(showingBack = showingBackSprite, shiny = showingShinySprites))
+            .apply(requestOptions)
+            .into(binding.expandedPokemonImage)
+    }
+
+    private fun preloadExpandedSpriteVariants(pokemon: Pokemon) {
+        val requestOptions = RequestOptions().diskCacheStrategy(DiskCacheStrategy.ALL)
+        listOf(
+            pokemon.spriteUrl(showingBack = false, shiny = false),
+            pokemon.spriteUrl(showingBack = true, shiny = false),
+            pokemon.spriteUrl(showingBack = false, shiny = true),
+            pokemon.spriteUrl(showingBack = true, shiny = true),
+        )
+            .filter { it.isNotBlank() }
+            .distinct()
+            .forEach { url ->
+                Glide.with(this).load(url).apply(requestOptions).preload()
+            }
+    }
+
+    private fun updateShinyToggleUi() {
+        val pokemon = expandedCardPokemon
+        val hasShiny = pokemon?.hasShinySprites() == true
+        val flipInProgress = PokemonSpriteFlipAnimator.isFlipInProgress(binding.expandedPokemonImage)
+
+        binding.expandedShinyToggleDisabledStrike.visibility =
+            if (hasShiny) View.GONE else View.VISIBLE
+        binding.expandedShinyToggleButton.isEnabled = hasShiny && !flipInProgress
+        binding.expandedShinyToggleButton.isSelected = hasShiny && showingShinySprites
+        binding.expandedShinyToggleButton.refreshDrawableState()
+        binding.expandedShinyToggleButton.alpha = if (hasShiny) 1f else 0.55f
     }
 
     private fun closeExpandedCard() {
         cryPlayer.stop()
         expandedCardPokemon = null
         showingBackSprite = false
+        showingShinySprites = false
         PokemonSpriteFlipAnimator.reset(binding.expandedPokemonImage)
+        updateShinyToggleUi()
         binding.pokedexBox.isEnabled = true
         binding.disableRecyclerView.visibility = View.INVISIBLE
         binding.expandedPokemonCard.visibility = View.GONE

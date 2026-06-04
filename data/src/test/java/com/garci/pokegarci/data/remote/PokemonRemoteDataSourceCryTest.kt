@@ -47,6 +47,8 @@ class PokemonRemoteDataSourceCryTest {
             id = 731,
             legacyCryUrl = "https://example.com/existing.ogg",
             backImageUrl = "https://example.com/back.png",
+            frontShinyImageUrl = "https://example.com/front-shiny.png",
+            backShinyImageUrl = "https://example.com/back-shiny.png"
         )
 
         val result = remoteDataSource.refreshMissingCryUrls(listOf(pokemon)).single()
@@ -71,13 +73,39 @@ class PokemonRemoteDataSourceCryTest {
         coVerify(exactly = 1) { api.getPokemonDetails(731) }
     }
 
-    private fun sampleDetails(): PokemonDetailsResponse {
+    @Test
+    fun `refreshMissingPokedexExtras fetches shiny sprites when missing`() = runTest {
+        val pokemon = samplePokemon(
+            id = 731,
+            legacyCryUrl = "https://example.com/existing.ogg",
+            backImageUrl = "https://example.com/back.png",
+            frontShinyImageUrl = "",
+            backShinyImageUrl = ""
+        )
+        coEvery { api.getPokemonDetails(731) } returns sampleDetails(
+            frontShiny = "https://example.com/front-shiny/731.png",
+            backShiny = "https://example.com/back-shiny/731.png"
+        )
+
+        val result = remoteDataSource.refreshMissingPokedexExtras(listOf(pokemon)).single()
+
+        assertEquals("https://example.com/front-shiny/731.png", result.frontShinyImageUrl)
+        assertEquals("https://example.com/back-shiny/731.png", result.backShinyImageUrl)
+        coVerify(exactly = 1) { api.getPokemonDetails(731) }
+    }
+
+    private fun sampleDetails(
+        frontShiny: String? = null,
+        backShiny: String? = null
+    ): PokemonDetailsResponse {
         return PokemonDetailsResponse(
             id = 731,
             name = "pikipek",
             sprites = SpriteResponse(
                 front_default = "https://example.com/sprite.png",
                 back_default = "https://example.com/back/731.png",
+                front_shiny = frontShiny,
+                back_shiny = backShiny
             ),
             types = listOf(TypeSlot(1, TypeInfo("normal"))),
             stats = listOf(Stats(35, StatInfo("hp"))),
@@ -101,6 +129,8 @@ class PokemonRemoteDataSourceCryTest {
         id: Int,
         legacyCryUrl: String,
         backImageUrl: String = "https://example.com/back.png",
+        frontShinyImageUrl: String = "",
+        backShinyImageUrl: String = ""
     ): Pokemon {
         return Pokemon(
             id = id,
@@ -120,6 +150,8 @@ class PokemonRemoteDataSourceCryTest {
             abilities = listOf(Ability("keen-eye", "Keen Eye")),
             legacyCryUrl = legacyCryUrl,
             backImageUrl = backImageUrl,
+            frontShinyImageUrl = frontShinyImageUrl,
+            backShinyImageUrl = backShinyImageUrl
         )
     }
 }

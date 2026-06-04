@@ -95,6 +95,7 @@
         app:strokeColor="@color/black"
         app:cardBackgroundColor="@color/expanded_card_bg"
         android:visibility="gone"
+        tools:visibility="visible"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -186,6 +187,35 @@
                         android:textSize="12sp"
                         android:textColor="@color/black"
                         android:background="@drawable/custom_stats_gridlayout"/>
+
+                    <FrameLayout
+                        android:id="@+id/expandedShinyToggleContainer"
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:layout_marginStart="12dp"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/expandedPokemonAbilities"
+                        app:layout_constraintBottom_toTopOf="@id/expandedPokemonHeight">
+
+                        <ImageButton
+                            android:id="@+id/expandedShinyToggleButton"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:background="@drawable/shiny_toggle_background"
+                            android:contentDescription="@string/expandedPokemonShinyToggle"
+                            android:padding="3dp"
+                            android:scaleType="fitCenter"
+                            android:src="@drawable/ic_shiny_toggle"
+                            app:tint="@color/shiny_toggle_icon_tint" />
+
+                        <ImageView
+                            android:id="@+id/expandedShinyToggleDisabledStrike"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:importantForAccessibility="no"
+                            android:src="@drawable/shiny_toggle_disabled_strike"
+                            android:visibility="gone" />
+                    </FrameLayout>
 
                     <TextView
                         android:id="@+id/expandedPokemonHeight"
@@ -425,6 +455,35 @@
                     <TableRow>
 
                         <TextView
+                            android:text="@string/Speed"
+                            android:gravity="center"
+                            android:textColor="@color/black"
+                            android:textStyle="bold"
+                            android:layout_margin="0.6dp"
+                            android:padding="2dp"
+                            android:background="@color/light_grey"
+                            android:layout_height="wrap_content"
+                            android:layout_width="0dp"
+                            android:layout_weight="0.7"
+                            android:textIsSelectable="false" />
+
+                        <TextView
+                            android:id="@+id/expandedPokemonSpeed"
+                            android:gravity="center"
+                            android:text="@string/Speed_API"
+                            android:layout_weight="0.3"
+                            android:layout_margin="0.6dp"
+                            android:padding="2dp"
+                            android:background="@color/white"
+                            android:textColor="@color/black"
+                            android:layout_height="wrap_content"
+                            android:layout_width="0dp"
+                            android:textIsSelectable="false"/>
+                    </TableRow>
+
+                    <TableRow>
+
+                        <TextView
                             android:text="@string/SpAttack"
                             android:textColor="@color/black"
                             android:gravity="center"
@@ -480,35 +539,6 @@
                             android:layout_width="0dp"
                             android:textIsSelectable="false"/>
 
-                    </TableRow>
-
-                    <TableRow>
-
-                        <TextView
-                            android:text="@string/Speed"
-                            android:gravity="center"
-                            android:textColor="@color/black"
-                            android:textStyle="bold"
-                            android:layout_margin="0.6dp"
-                            android:padding="2dp"
-                            android:background="@color/light_grey"
-                            android:layout_height="wrap_content"
-                            android:layout_width="0dp"
-                            android:layout_weight="0.7"
-                            android:textIsSelectable="false" />
-
-                        <TextView
-                            android:id="@+id/expandedPokemonSpeed"
-                            android:gravity="center"
-                            android:text="@string/Speed_API"
-                            android:layout_weight="0.3"
-                            android:layout_margin="0.6dp"
-                            android:padding="2dp"
-                            android:background="@color/white"
-                            android:textColor="@color/black"
-                            android:layout_height="wrap_content"
-                            android:layout_width="0dp"
-                            android:textIsSelectable="false"/>
                     </TableRow>
 
                 </TableLayout>

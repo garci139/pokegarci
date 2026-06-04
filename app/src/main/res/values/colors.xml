@@ -18,6 +18,11 @@
 
     <color name="yellow_star">#FFEB3B</color>
 
+    <color name="shiny_toggle_bg_off">#FFFFFFFF</color>
+    <color name="shiny_toggle_bg_on">#FFFFF3B0</color>
+    <color name="shiny_toggle_icon_off">#FF9E9E9E</color>
+    <color name="shiny_toggle_icon_on">#FFE6A800</color>
+
     <color name="light_grey_semitransp">#90E9E9E9</color>
 
     <color name="hp_bar_frame_outer">#FFF0F0F0</color>

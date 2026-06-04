@@ -24,6 +24,8 @@ object PokemonEntityMapper {
             abilities = AbilityJsonCodec.decode(entity.abilitiesJson),
             legacyCryUrl = entity.legacyCryUrl,
             backImageUrl = entity.backImageUrl,
+            frontShinyImageUrl = entity.frontShinyImageUrl,
+            backShinyImageUrl = entity.backShinyImageUrl
         )
     }
 
@@ -46,6 +48,8 @@ object PokemonEntityMapper {
             abilitiesJson = AbilityJsonCodec.encode(pokemon.abilities),
             legacyCryUrl = pokemon.legacyCryUrl,
             backImageUrl = pokemon.backImageUrl,
+            frontShinyImageUrl = pokemon.frontShinyImageUrl,
+            backShinyImageUrl = pokemon.backShinyImageUrl
         )
     }
 }

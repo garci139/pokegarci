@@ -2,7 +2,7 @@ package com.garci.pokegarci.domain.model
 
 data class Ability(
     val originalName: String,
-    val displayName: String,
+    val displayName: String
 )
 
 data class Pokemon(
@@ -23,4 +23,6 @@ data class Pokemon(
     val abilities: List<Ability>,
     val legacyCryUrl: String = "",
     val backImageUrl: String = "",
+    val frontShinyImageUrl: String = "",
+    val backShinyImageUrl: String = ""
 )
