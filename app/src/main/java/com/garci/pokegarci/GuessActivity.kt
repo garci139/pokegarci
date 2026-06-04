@@ -32,6 +32,7 @@ import com.garci.pokegarci.ui.adapter.PokemonGuessAdapter
 import com.garci.pokegarci.util.BaseLocaleActivity
 import com.garci.pokegarci.util.DataLoadingUi
 import com.garci.pokegarci.util.SearchViewUtils
+import com.garci.pokegarci.util.playClickEmeraldSound
 import com.garci.pokegarci.util.startGradientBackgroundAnimation
 import com.garci.pokegarci.util.typeIconMap
 import com.garci.pokegarci.utils.vibrate
@@ -173,6 +174,7 @@ class GuessActivity : BaseLocaleActivity() {
         binding.guessPlayButton.setOnClickListener {
             if (!viewModel.canStartGame.value) return@setOnClickListener
             vibrate()
+            playClickEmeraldSound()
             binding.guessBlockView.visibility = View.GONE
             startPlay()
         }

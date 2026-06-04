@@ -127,6 +127,7 @@ class PokemonLocalDataSourceTest {
                 listOf(Ability("static", "Static")),
             ),
             legacyCryUrl = "https://example.com/cries/25.ogg",
+            backImageUrl = "https://example.com/back/25.png"
         )
     }
 

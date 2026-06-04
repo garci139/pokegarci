@@ -21,6 +21,7 @@ import com.garci.pokegarci.ui.adapter.PokemonAdapter
 import com.garci.pokegarci.util.BaseLocaleActivity
 import com.garci.pokegarci.util.DataLoadingUi
 import com.garci.pokegarci.util.PokemonCryPlayer
+import com.garci.pokegarci.util.playClickEmeraldSound
 import com.garci.pokegarci.util.PokemonSpriteFlipAnimator
 import com.garci.pokegarci.util.SearchViewUtils
 import com.garci.pokegarci.util.TypeBackgroundProvider
@@ -74,14 +75,15 @@ class PokedexActivity : BaseLocaleActivity() {
 
         binding.closeCardButton.setOnClickListener {
             vibrate()
+            playClickEmeraldSound()
             closeExpandedCard()
         }
 
         val spriteFlipClickListener = View.OnClickListener {
             expandedCardPokemon?.let { pokemon ->
-                if (pokemon.backImageUrl.isNotBlank()) {
+                if (pokemon.backImageUrl.isNotBlank() && flipExpandedSprite()) {
                     vibrate()
-                    flipExpandedSprite()
+                    playClickEmeraldSound()
                 }
             }
         }
@@ -167,14 +169,14 @@ class PokedexActivity : BaseLocaleActivity() {
         cryPlayer.play(pokemon.legacyCryUrl)
     }
 
-    private fun flipExpandedSprite() {
-        val pokemon = expandedCardPokemon ?: return
-        PokemonSpriteFlipAnimator.toggle(
+    private fun flipExpandedSprite(): Boolean {
+        val pokemon = expandedCardPokemon ?: return false
+        return PokemonSpriteFlipAnimator.toggle(
             imageView = binding.expandedPokemonImage,
             showingBack = showingBackSprite,
             frontUrl = pokemon.imageUrl,
             backUrl = pokemon.backImageUrl,
-            onShowingBackChanged = { showingBackSprite = it },
+            onComplete = { showingBackSprite = it }
         )
     }
 

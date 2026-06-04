@@ -4,6 +4,7 @@ import android.app.Activity
 import android.app.Application
 import android.os.Bundle
 import com.garci.pokegarci.util.AppFont
+import com.garci.pokegarci.util.ClickSound
 import dagger.hilt.android.HiltAndroidApp
 
 @HiltAndroidApp
@@ -11,6 +12,7 @@ class PokeGarciApplication : Application() {
 
     override fun onCreate() {
         super.onCreate()
+        ClickSound.init(this)
         registerActivityLifecycleCallbacks(object : ActivityLifecycleCallbacks {
             override fun onActivityResumed(activity: Activity) {
                 activity.window?.decorView?.let { AppFont.applyTo(it) }

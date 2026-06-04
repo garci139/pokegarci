@@ -6,6 +6,7 @@ import android.os.Bundle
 import com.garci.pokegarci.databinding.ActivityLanguageBinding
 import com.garci.pokegarci.util.AppConstants
 import com.garci.pokegarci.util.BaseLocaleActivity
+import com.garci.pokegarci.util.playClickEmeraldSound
 import com.garci.pokegarci.util.startGradientBackgroundAnimation
 import com.garci.pokegarci.utils.LocaleManager
 import com.garci.pokegarci.utils.vibrate
@@ -25,11 +26,13 @@ class LanguageActivity : BaseLocaleActivity() {
 
         binding.btnSpanish.setOnClickListener {
             vibrate()
+            playClickEmeraldSound()
             changeLanguage("es")
         }
 
         binding.btnEnglish.setOnClickListener {
             vibrate()
+            playClickEmeraldSound()
             changeLanguage("en")
         }
     }

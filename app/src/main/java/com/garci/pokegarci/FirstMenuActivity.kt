@@ -15,6 +15,7 @@ import com.garci.pokegarci.presentation.firstmenu.FirstMenuViewModel
 import com.garci.pokegarci.util.AppConstants
 import com.garci.pokegarci.util.BaseLocaleActivity
 import com.garci.pokegarci.util.getAppVersionName
+import com.garci.pokegarci.util.playClickEmeraldSound
 import com.garci.pokegarci.util.startGradientBackgroundAnimation
 import com.garci.pokegarci.utils.vibrate
 import dagger.hilt.android.AndroidEntryPoint
@@ -50,6 +51,7 @@ class FirstMenuActivity : BaseLocaleActivity() {
 
         binding.btnPlay.setOnClickListener {
             vibrate()
+            playClickEmeraldSound()
             startActivity(
                 Intent(this, MainMenuActivity::class.java).apply {
                     flags = Intent.FLAG_ACTIVITY_CLEAR_TOP

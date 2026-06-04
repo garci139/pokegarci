@@ -26,6 +26,7 @@ import com.garci.pokegarci.ui.adapter.PokemonDialogAdapter
 import com.garci.pokegarci.util.BaseLocaleActivity
 import com.garci.pokegarci.util.DataLoadingUi
 import com.garci.pokegarci.util.SearchViewUtils
+import com.garci.pokegarci.util.playClickEmeraldSound
 import com.garci.pokegarci.util.TypeBackgroundProvider
 import com.garci.pokegarci.util.startGradientBackgroundAnimation
 import com.garci.pokegarci.utils.vibrate
@@ -126,6 +127,7 @@ class SizeActivity : BaseLocaleActivity() {
 
         binding.changePkmn1Size.setOnClickListener {
             vibrate()
+            playClickEmeraldSound()
             showPokemonSelectorDialog(true) { selectedPokemon ->
                 firstSelectedPokemon = selectedPokemon
                 if (::secondSelectedPokemon.isInitialized) {
@@ -136,6 +138,7 @@ class SizeActivity : BaseLocaleActivity() {
 
         binding.changePkmn2Size.setOnClickListener {
             vibrate()
+            playClickEmeraldSound()
             showPokemonSelectorDialog(false) { selectedPokemon ->
                 secondSelectedPokemon = selectedPokemon
                 if (::firstSelectedPokemon.isInitialized) {
