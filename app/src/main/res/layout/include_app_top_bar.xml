@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/appTopBar"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/app_top_bar_background"
+    android:clipChildren="false"
+    android:clipToPadding="false">
+
+    <ImageButton
+        android:id="@+id/appTopBarBackButton"
+        android:layout_width="@dimen/app_top_bar_back_touch_size"
+        android:layout_height="@dimen/app_top_bar_back_touch_size"
+        android:layout_marginStart="@dimen/app_top_bar_horizontal_inset"
+        android:background="?attr/selectableItemBackgroundBorderless"
+        android:contentDescription="@string/back_to_main_menu"
+        android:padding="@dimen/app_top_bar_back_padding"
+        android:scaleType="fitCenter"
+        android:src="@drawable/ic_app_top_bar_back"
+        app:layout_constraintBottom_toBottomOf="@id/appTopBarTitle"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@id/appTopBarTitle"
+        tools:ignore="SpeakableTextPresentCheck" />
+
+    <View
+        android:id="@+id/appTopBarTitleAccentLine"
+        android:layout_width="0dp"
+        android:layout_height="@dimen/app_top_bar_separator_height"
+        android:background="@color/pokedex_title_accent_line"
+        app:layout_constraintBottom_toBottomOf="@id/appTopBarTitle"
+        app:layout_constraintEnd_toEndOf="@id/appTopBarTitle"
+        app:layout_constraintStart_toStartOf="@id/appTopBarTitle"
+        app:layout_constraintTop_toTopOf="@id/appTopBarTitle" />
+
+    <TextView
+        android:id="@+id/appTopBarTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/app_top_bar_title_margin_top"
+        android:background="@color/app_top_bar_background"
+        android:paddingHorizontal="@dimen/pokedex_title_line_padding_horizontal"
+        android:textColor="@color/white"
+        android:textSize="32sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="PokéDex" />
+
+    <View
+        android:id="@+id/appTopBarBottomSeparator"
+        android:layout_width="0dp"
+        android:layout_height="@dimen/app_top_bar_separator_height"
+        android:layout_marginTop="@dimen/app_top_bar_title_to_separator_gap"
+        android:background="@color/black"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/appTopBarTitle" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

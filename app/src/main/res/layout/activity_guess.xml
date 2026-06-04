@@ -7,8 +7,19 @@
     android:layout_height="match_parent"
     android:clipToPadding="false"
     android:paddingHorizontal="26dp"
-    android:paddingTop="60dp"
     android:paddingBottom="60dp">
+
+    <include
+        android:id="@+id/appTopBarInclude"
+        layout="@layout/include_app_top_bar"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="-26dp"
+        android:layout_marginEnd="-26dp"
+        android:elevation="12dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <ImageView
         tools:visibility="visible"
@@ -355,10 +366,6 @@
     <!-- BUSCADOR -->
     <androidx.appcompat.widget.SearchView
         android:id="@+id/guessPokemonSearchView"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         style="@style/CustomSearchView"
@@ -366,8 +373,12 @@
         android:inputType="text"
         android:queryHint="@string/name"
         app:iconifiedByDefault="false"
-        app:searchIcon="@drawable/search_pokeball_icon"
-        app:queryBackground="@android:color/transparent"/>
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/appTopBarInclude"
+        app:queryBackground="@android:color/transparent"
+        app:searchIcon="@drawable/search_pokeball_icon" />
 
     <View
         android:id="@+id/guessSearchBlockOverlay"
@@ -402,7 +413,7 @@
         android:visibility="invisible"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/appTopBarInclude"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent">
 
@@ -541,10 +552,10 @@
 
     <!-- RESULTS -->
     <LinearLayout
-        tools:visibility="gone"
         android:id="@+id/guessResultsLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:visibility="gone"
         app:layout_constraintTop_toBottomOf="@id/guessScoreboards"
         app:layout_constraintBottom_toTopOf="@id/guessPokemonSearchView"
         app:layout_constraintEnd_toEndOf="parent"

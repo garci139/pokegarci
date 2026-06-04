@@ -79,6 +79,10 @@ class GuessViewModel @Inject constructor(
         return requireNotNull(gameSession.currentSolution)
     }
 
+    fun abandonGame() {
+        gameSession.abandon()
+    }
+
     fun submitGuess(guess: Pokemon): GuessOutcome {
         val outcome = gameSession.submitGuess(guess)
         if (outcome is GuessOutcome.Correct) {

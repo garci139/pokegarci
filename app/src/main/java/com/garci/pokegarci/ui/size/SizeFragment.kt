@@ -28,6 +28,7 @@ import com.garci.pokegarci.presentation.size.SizeViewModel
 import com.garci.pokegarci.ui.adapter.PokemonDialogAdapter
 import com.garci.pokegarci.util.DataLoadingUi
 import com.garci.pokegarci.util.SearchViewUtils
+import com.garci.pokegarci.util.setupAppTopBar
 import com.garci.pokegarci.util.TypeBackgroundProvider
 import com.garci.pokegarci.util.playClickEmeraldSound
 import com.garci.pokegarci.utils.vibrate
@@ -55,6 +56,7 @@ class SizeFragment : Fragment() {
 
     private var lastSelectedPosition1: Int = 0
     private var lastSelectedPosition2: Int = 0
+    private var pokemonSelectorDialog: Dialog? = null
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -113,7 +115,7 @@ class SizeFragment : Fragment() {
                 errorText = binding.dataErrorText,
                 retryButton = binding.dataRetryButton,
                 contentViews = listOf(
-                    binding.sizeInstructions,
+                    binding.appTopBarInclude.root,
                     binding.sizeBox,
                     binding.changePkmn1Size,
                     binding.changePkmn2Size
@@ -147,6 +149,16 @@ class SizeFragment : Fragment() {
                 secondSelectedPokemon = selectedPokemon
                 if (::firstSelectedPokemon.isInitialized) updateSizeComparison()
             }
+        }
+
+        setupAppTopBar(
+            topBar = binding.appTopBarInclude,
+            title = getString(R.string.sizeInstructionsText),
+            insetHost = binding.sizeLayout
+        ) {
+            val dialog = pokemonSelectorDialog ?: return@setupAppTopBar false
+            dialog.dismiss()
+            true
         }
     }
 
@@ -211,6 +223,8 @@ class SizeFragment : Fragment() {
             }
         })
 
+        dialog.setOnDismissListener { pokemonSelectorDialog = null }
+        pokemonSelectorDialog = dialog
         dialog.show()
     }
 

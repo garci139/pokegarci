@@ -13,6 +13,7 @@
     <color name="expanded_card_button_bg">#FFF596</color>
     <color name="light_grey">#DBDBDB</color>
     <color name="pokedex_header_scrim">#920000</color>
+    <color name="app_top_bar_background">#920000</color>
     <color name="pokedex_title_accent_line">#490B0B</color>
 
     <color name="red_badStat">#B84141</color>

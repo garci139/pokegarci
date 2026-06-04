@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">PokeGarci</string>
+    <string name="spanishLanguageButton">Espagnol</string>
+    <string name="englishLanguageButton">Anglais</string>
+    <string name="germanLanguageButton">Allemand</string>
+    <string name="frenchLanguageButton">Français</string>
+    <string name="pokedexMainMenuTitle">PokéDex</string>
+    <string name="sizeMainMenuTitle">Comparer</string>
+    <string name="gameMainMenuTitle">Jeu</string>
+    <string name="settingsMainMenuTitle">Paramètres</string>
+    <string name="testEachPokemonName">Pikachu</string>
+    <string name="textEachPokemonId">0039</string>
+    <string name="queryHintSearchView">Nom ou ID</string>
+    <string name="expandedPokemonName">Nom</string>
+    <string name="expandedPokemonId">#000</string>
+    <string name="expandedPokemonHeight">14,5 m</string>
+    <string name="expandedPokemonWeight">32,5 kg</string>
+    <string name="expandedPokemonAbilities">Engrais</string>
+    <string name="expandedPokemonShinyToggle">Changer le sprite chromatique</string>
+    <string name="expandedPokemonDescriptionTitle">Description</string>
+    <string name="expandedPokemonDescription">Description de test.</string>
+    <string name="expandedStatsTitle">Stats de base</string>
+    <string name="HP">PV</string>
+    <string name="Attack">Attaque</string>
+    <string name="Defense">Défense</string>
+    <string name="SpAttack">Atq. Spé.</string>
+    <string name="SpDefense">Déf. Spé.</string>
+    <string name="Speed">Vitesse</string>
+    <string name="closeExpandedCard">Fermer</string>
+
+    <string name="pokedex_filter_region">Région</string>
+    <string name="pokedex_filter_type">Type</string>
+    <string name="pokedex_filter_stats">Stats</string>
+    <string name="pokedex_filter_clear">Effacer</string>
+    <string name="pokedex_filter_apply">Appliquer</string>
+    <string name="pokedex_filter_region_title">Région</string>
+    <string name="pokedex_filter_type_title">Type</string>
+    <string name="pokedex_filter_stats_title">Stats de base</string>
+    <string name="pokedex_filter_region_hint">Aucune sélection ou toutes les régions affiche le PokéDex complet</string>
+    <string name="pokedex_expanded_prev">Pokémon précédent</string>
+    <string name="pokedex_expanded_next">Pokémon suivant</string>
+    <string name="pokedex_filter_type_hint">Sélectionne au moins un type ou Monotype</string>
+    <string name="pokedex_filter_stats_hint">Valeurs minimales ou maximales optionnelles</string>
+    <string name="pokedex_filter_monotype">Monotype</string>
+    <string name="pokedex_filter_all_types">Tous</string>
+    <string name="pokedex_stat_min_hint">Min</string>
+    <string name="pokedex_stat_max_hint">Max</string>
+    <string name="pokedex_filter_cleared">Filtre supprimé</string>
+
+    <string name="pokedex_region_gen_i">Gen I (Kanto)</string>
+    <string name="pokedex_region_gen_ii">Gen II (Johto)</string>
+    <string name="pokedex_region_gen_iii">Gen III (Hoenn)</string>
+    <string name="pokedex_region_gen_iv">Gen IV (Sinnoh)</string>
+    <string name="pokedex_region_gen_v">Gen V (Unys)</string>
+    <string name="pokedex_region_gen_vi">Gen VI (Kalos)</string>
+    <string name="pokedex_region_gen_vii">Gen VII (Alola)</string>
+    <string name="pokedex_region_gen_viii">Gen VIII (Galar/Hisui)</string>
+    <string name="pokedex_region_gen_ix">Gen IX (Paldea)</string>
+
+    <string name="type_normal">Normal</string>
+    <string name="type_fire">Feu</string>
+    <string name="type_water">Eau</string>
+    <string name="type_grass">Plante</string>
+    <string name="type_electric">Électrik</string>
+    <string name="type_ice">Glace</string>
+    <string name="type_fighting">Combat</string>
+    <string name="type_poison">Poison</string>
+    <string name="type_ground">Sol</string>
+    <string name="type_flying">Vol</string>
+    <string name="type_psychic">Psy</string>
+    <string name="type_bug">Insecte</string>
+    <string name="type_rock">Roche</string>
+    <string name="type_ghost">Spectre</string>
+    <string name="type_dragon">Dragon</string>
+    <string name="type_dark">Ténèbres</string>
+    <string name="type_steel">Acier</string>
+    <string name="type_fairy">Fée</string>
+
+    <string name="pressToEnter">Touche pour entrer !</string>
+    <string name="loadingPokemon">Chargement des Pokémon…</string>
+    <string-array name="loading_status_phrases">
+        <item>Jouer de la Pokéflûte</item>
+        <item>Pêcher un Magicarpe</item>
+        <item>Chercher un Métamorph</item>
+        <item>Entrer dans la Route Victoire</item>
+        <item>Attraper un Évoli</item>
+        <item>Acheter des potions</item>
+    </string-array>
+    <string name="loadingProgressPercent">%1$d%%</string>
+    <string name="hpLabel">PV</string>
+    <string name="loadError">Impossible de charger les données.</string>
+    <string name="retryLoad">Réessayer</string>
+    <string name="loadingInteractionBlocked">Chargement des données</string>
+    <string name="developedBy">Développé par :\n garci139</string>
+    <string name="app_version_format">Ver. %1$s</string>
+    <string name="sizeInstructionsText">Comparer</string>
+    <string name="changePkmn1SizeButton">Changer Gauche</string>
+    <string name="changePkmn2SizeButton">Changer Droite</string>
+
+    <string name="name">Nom</string>
+    <string name="guess_gen_filter_total">TOTAL : %1$d</string>
+    <string name="resetLogoDescription">Réinitialiser</string>
+    <string name="level">Niveau</string>
+    <string name="score">Score</string>
+
+    <string name="losePhrase">"Il te manque la Route Victoire…"</string>
+    <string name="winPhrase">"Tu devrais toucher un peu l'herbe"</string>
+    <string name="resultsScore">Score : %d</string>
+
+    <string name="back_to_main_menu">Retour au menu principal</string>
+    <string name="guess_exit_dialog_title">Quitter la partie ?</string>
+    <string name="guess_exit_dialog_message">Tu perdras la progression de cette partie.</string>
+    <string name="guess_exit_confirm">Quitter</string>
+</resources>

@@ -18,6 +18,7 @@ import androidx.appcompat.widget.SearchView
 import androidx.core.animation.doOnEnd
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
@@ -35,6 +36,8 @@ import com.garci.pokegarci.ui.adapter.PokemonGuessAdapter
 import com.garci.pokegarci.util.DataLoadingUi
 import com.garci.pokegarci.util.SearchViewUtils
 import com.garci.pokegarci.util.playClickEmeraldSound
+import com.garci.pokegarci.util.setupAppTopBar
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.garci.pokegarci.util.typeIconMap
 import com.garci.pokegarci.utils.vibrate
 import dagger.hilt.android.AndroidEntryPoint
@@ -209,6 +212,13 @@ class GuessFragment : Fragment() {
                 viewModel.refreshPokemonList()
                 updatePlayButtonState()
             }
+        )
+
+        setupAppTopBar(
+            topBar = binding.appTopBarInclude,
+            title = getString(R.string.gameMainMenuTitle),
+            insetHost = binding.guessLayout,
+            onBack = ::handleFeatureBack,
         )
 
         observeViewModel()
@@ -403,8 +413,58 @@ class GuessFragment : Fragment() {
         binding.accumulatedScore.visibility = View.VISIBLE
     }
 
+    private fun handleFeatureBack(): Boolean {
+        return when {
+            isResultsOverlayVisible() -> {
+                abortToLobby()
+                true
+            }
+            gameInProgress -> {
+                showExitGameDialog()
+                true
+            }
+            else -> false
+        }
+    }
+
+    private fun isResultsOverlayVisible(): Boolean =
+        binding.guessResultsLayout.visibility == View.VISIBLE
+
+    private fun showExitGameDialog() {
+        MaterialAlertDialogBuilder(requireContext())
+            .setTitle(R.string.guess_exit_dialog_title)
+            .setMessage(R.string.guess_exit_dialog_message)
+            .setPositiveButton(R.string.guess_exit_confirm) { _, _ ->
+                exitGameToMainMenu()
+            }
+            .setNegativeButton(android.R.string.cancel, null)
+            .show()
+    }
+
+    private fun exitGameToMainMenu() {
+        handler.removeCallbacksAndMessages(null)
+        viewModel.abandonGame()
+        findNavController().navigateUp()
+    }
+
+    private fun abortToLobby() {
+        handler.removeCallbacksAndMessages(null)
+        viewModel.abandonGame()
+        binding.guessResultsLayout.visibility = View.GONE
+        binding.guessPikachuWinImage.visibility = View.GONE
+        binding.sadOshawottImage.visibility = View.GONE
+        binding.guessBlockView.visibility = View.GONE
+        applyLobbyState()
+        binding.guessPlayButton.visibility = View.VISIBLE
+        binding.guessPlayButton.alpha = 1f
+        updatePlayButtonState()
+    }
+
     private fun applyLobbyState() {
         gameInProgress = false
+        binding.guessResultsLayout.visibility = View.GONE
+        binding.guessPikachuWinImage.visibility = View.GONE
+        binding.sadOshawottImage.visibility = View.GONE
         binding.guessBlockView.visibility = View.GONE
         hideSearchResults()
         binding.guessPokemonSearchView.setQuery("", false)

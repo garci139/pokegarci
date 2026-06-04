@@ -35,6 +35,14 @@ class GuessGameSession {
         randomList = allPokemon.shuffled()
     }
 
+    fun abandon() {
+        tryCount = 0
+        solutionIndex = 1
+        possiblePoints = MAX_LIVES
+        accumulatedScore = 0
+        randomList = emptyList()
+    }
+
     fun submitGuess(guess: Pokemon): GuessOutcome {
         val solution = currentSolution ?: return GuessOutcome.Defeated
 

@@ -9,6 +9,7 @@ import androidx.navigation.fragment.findNavController
 import com.garci.pokegarci.R
 import com.garci.pokegarci.databinding.ActivityMainMenuBinding
 import com.garci.pokegarci.util.playClickEmeraldSound
+import com.garci.pokegarci.util.setupAppTopBar
 import com.garci.pokegarci.utils.vibrate
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -29,6 +30,13 @@ class MainMenuFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        setupAppTopBar(
+            topBar = binding.appTopBarInclude,
+            title = getString(R.string.main_menu_top_bar_title),
+            insetHost = binding.mainMenu,
+            showBackButton = false
+        )
 
         binding.function1.setOnClickListener {
             requireContext().vibrate()

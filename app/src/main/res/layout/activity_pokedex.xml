@@ -64,79 +64,73 @@
         android:id="@+id/pokedexHeader"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:background="@color/pokedex_header_scrim"
-        android:clickable="true"
         android:clipChildren="false"
         android:clipToPadding="false"
         android:elevation="8dp"
-        android:focusable="true"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-        <View
-            android:id="@+id/pokedexTitleAccentLine"
+        <include
+            android:id="@+id/appTopBarInclude"
+            layout="@layout/include_app_top_bar"
             android:layout_width="0dp"
-            android:layout_height="@dimen/pokedex_filters_separator_height"
-            android:background="@color/pokedex_title_accent_line"
-            app:layout_constraintBottom_toBottomOf="@id/pokedexTitle"
-            app:layout_constraintEnd_toEndOf="@id/searchView"
-            app:layout_constraintStart_toStartOf="@id/searchView"
-            app:layout_constraintTop_toTopOf="@id/pokedexTitle" />
-
-        <TextView
-            android:id="@+id/pokedexTitle"
-            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/pokedex_title_margin_top"
-            android:background="@color/pokedex_header_scrim"
-            android:paddingHorizontal="@dimen/pokedex_title_line_padding_horizontal"
-            android:text="@string/pokedex_title"
-            android:textColor="@color/white"
-            android:textSize="32sp"
-            android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <androidx.appcompat.widget.SearchView
-            android:id="@+id/searchView"
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/pokedexToolbar"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginHorizontal="@dimen/pokedex_content_horizontal_inset"
-            android:layout_marginTop="@dimen/pokedex_title_to_search_gap"
-            android:inputType="text"
-            style="@style/CustomSearchView"
-            android:background="@drawable/search_view_bg"
-            android:queryHint="@string/queryHintSearchView"
-            app:iconifiedByDefault="false"
+            android:background="@color/pokedex_header_scrim"
+            android:clipChildren="false"
+            android:clipToPadding="false"
+            android:paddingTop="@dimen/pokedex_toolbar_padding_top"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/pokedexTitle"
-            app:queryBackground="@android:color/transparent"
-            app:searchIcon="@drawable/search_pokeball_icon" />
+            app:layout_constraintTop_toBottomOf="@id/appTopBarInclude">
 
-        <include
-            android:id="@+id/pokedexFilters"
-            layout="@layout/include_pokedex_filters"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginHorizontal="@dimen/pokedex_content_horizontal_inset"
-            android:layout_marginTop="10dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/searchView" />
+            <androidx.appcompat.widget.SearchView
+                android:id="@+id/searchView"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="@dimen/pokedex_content_horizontal_inset"
+                android:inputType="text"
+                style="@style/CustomSearchView"
+                android:background="@drawable/search_view_bg"
+                android:queryHint="@string/queryHintSearchView"
+                app:iconifiedByDefault="false"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:queryBackground="@android:color/transparent"
+                app:searchIcon="@drawable/search_pokeball_icon" />
 
-        <View
-            android:id="@+id/pokedexFiltersSeparator"
-            android:layout_width="0dp"
-            android:layout_height="@dimen/pokedex_filters_separator_height"
-            android:layout_marginTop="@dimen/pokedex_filters_separator_margin_top"
-            android:background="@color/black"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/pokedexFilters" />
+            <include
+                android:id="@+id/pokedexFilters"
+                layout="@layout/include_pokedex_filters"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="@dimen/pokedex_content_horizontal_inset"
+                android:layout_marginTop="10dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/searchView" />
+
+            <View
+                android:id="@+id/pokedexFiltersSeparator"
+                android:layout_width="0dp"
+                android:layout_height="@dimen/pokedex_filters_separator_height"
+                android:layout_marginTop="@dimen/pokedex_filters_separator_margin_top"
+                android:background="@color/black"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/pokedexFilters" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -168,7 +162,7 @@
         app:strokeColor="@color/black"
         app:cardBackgroundColor="@color/expanded_card_bg"
         android:visibility="gone"
-        tools:visibility="visible"
+        tools:visibility="gone"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

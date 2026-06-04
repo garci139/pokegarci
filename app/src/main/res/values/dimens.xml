@@ -21,4 +21,15 @@
     <dimen name="guess_hints_margin_top">16dp</dimen>
     <dimen name="guess_hints_margin_bottom">24dp</dimen>
     <dimen name="guess_hints_row_min_height">44dp</dimen>
+    <dimen name="feature_back_button_size">44dp</dimen>
+    <dimen name="feature_back_button_padding">10dp</dimen>
+    <dimen name="feature_back_margin">12dp</dimen>
+    <dimen name="app_top_bar_horizontal_inset">16dp</dimen>
+    <dimen name="app_top_bar_title_margin_top">4dp</dimen>
+    <dimen name="app_top_bar_title_to_separator_gap">10dp</dimen>
+    <dimen name="app_top_bar_separator_height">3dp</dimen>
+    <dimen name="app_top_bar_back_touch_size">48dp</dimen>
+    <dimen name="app_top_bar_back_padding">12dp</dimen>
+    <dimen name="pokedex_toolbar_padding_top">10dp</dimen>
+    <dimen name="size_content_horizontal_inset">12dp</dimen>
 </resources>

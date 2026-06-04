@@ -5,13 +5,17 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.annotation.DrawableRes
+import androidx.annotation.StringRes
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.garci.pokegarci.R
-import com.garci.pokegarci.util.NavAnimations.navigateWithSlide
 import com.garci.pokegarci.databinding.ActivityLanguageBinding
+import com.garci.pokegarci.databinding.IncludeLanguageOptionCardBinding
 import com.garci.pokegarci.util.AppConstants
+import com.garci.pokegarci.util.NavAnimations.navigateWithSlide
 import com.garci.pokegarci.util.playClickEmeraldSound
+import com.garci.pokegarci.util.setupAppTopBar
 import com.garci.pokegarci.utils.LocaleManager
 import com.garci.pokegarci.utils.vibrate
 import dagger.hilt.android.AndroidEntryPoint
@@ -34,16 +38,50 @@ class LanguageFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        binding.btnSpanish.setOnClickListener {
-            requireContext().vibrate()
-            requireContext().playClickEmeraldSound()
-            changeLanguage("es")
-        }
+        bindLanguageOption(
+            option = binding.btnSpanish,
+            flagRes = R.drawable.flag_spain,
+            labelRes = R.string.spanishLanguageButton,
+            languageCode = "es",
+        )
+        bindLanguageOption(
+            option = binding.btnEnglish,
+            flagRes = R.drawable.flag_united_kingdom,
+            labelRes = R.string.englishLanguageButton,
+            languageCode = "en",
+        )
+        bindLanguageOption(
+            option = binding.btnGerman,
+            flagRes = R.drawable.flag_germany,
+            labelRes = R.string.germanLanguageButton,
+            languageCode = "de",
+        )
+        bindLanguageOption(
+            option = binding.btnFrench,
+            flagRes = R.drawable.flag_france,
+            labelRes = R.string.frenchLanguageButton,
+            languageCode = "fr",
+        )
 
-        binding.btnEnglish.setOnClickListener {
+        setupAppTopBar(
+            topBar = binding.appTopBarInclude,
+            title = getString(R.string.settingsMainMenuTitle),
+            insetHost = binding.languageLayout,
+        )
+    }
+
+    private fun bindLanguageOption(
+        option: IncludeLanguageOptionCardBinding,
+        @DrawableRes flagRes: Int,
+        @StringRes labelRes: Int,
+        languageCode: String,
+    ) {
+        option.languageOptionFlag.setImageResource(flagRes)
+        option.languageOptionLabel.setText(labelRes)
+        option.root.setOnClickListener {
             requireContext().vibrate()
             requireContext().playClickEmeraldSound()
-            changeLanguage("en")
+            changeLanguage(languageCode)
         }
     }
 

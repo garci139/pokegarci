@@ -8,8 +8,6 @@ import android.view.ViewGroup
 import android.widget.TextView
 import android.view.ViewTreeObserver
 import android.widget.ImageView
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
 import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -30,6 +28,7 @@ import com.garci.pokegarci.presentation.pokedex.PokedexViewModel
 import com.garci.pokegarci.ui.adapter.PokemonAdapter
 import com.garci.pokegarci.util.DataLoadingUi
 import com.garci.pokegarci.util.PokemonCryPlayer
+import com.garci.pokegarci.util.setupAppTopBar
 import com.garci.pokegarci.util.PokemonSpriteFlipAnimator
 import com.garci.pokegarci.util.SearchViewUtils
 import com.garci.pokegarci.util.TypeBackgroundProvider
@@ -89,7 +88,26 @@ class PokedexFragment : Fragment() {
             onFiltersCleared = ::requestPokedexScrollToTop,
         )
         filterUi.setup()
-        setupPokedexHeaderInsets()
+
+        setupAppTopBar(
+            topBar = binding.appTopBarInclude,
+            title = getString(R.string.pokedex_title),
+            insetHost = binding.pokedexLayout,
+        ) {
+            if (binding.expandedPokemonCard.visibility != View.VISIBLE) return@setupAppTopBar false
+            if (expandedCardSlideInProgress) return@setupAppTopBar true
+            closeExpandedCard()
+            true
+        }
+        binding.pokedexLayout.viewTreeObserver.addOnGlobalLayoutListener(
+            object : ViewTreeObserver.OnGlobalLayoutListener {
+                override fun onGlobalLayout() {
+                    binding.pokedexLayout.viewTreeObserver.removeOnGlobalLayoutListener(this)
+                    applyPokedexListInsets()
+                }
+            },
+        )
+        binding.pokedexLayout.post { applyPokedexListInsets() }
 
         binding.searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String?): Boolean {
@@ -190,25 +208,6 @@ class PokedexFragment : Fragment() {
                 }
             }
         }
-    }
-
-    private fun setupPokedexHeaderInsets() {
-        val extraTopInset = resources.getDimensionPixelSize(R.dimen.pokedex_content_top_inset)
-        ViewCompat.setOnApplyWindowInsetsListener(binding.pokedexLayout) { _, insets ->
-            val statusBarTop = insets.getInsets(WindowInsetsCompat.Type.statusBars()).top
-            binding.pokedexHeader.setPadding(0, statusBarTop + extraTopInset, 0, 0)
-            binding.pokedexLayout.post { applyPokedexListInsets() }
-            insets
-        }
-        ViewCompat.requestApplyInsets(binding.pokedexLayout)
-        binding.pokedexLayout.viewTreeObserver.addOnGlobalLayoutListener(
-            object : ViewTreeObserver.OnGlobalLayoutListener {
-                override fun onGlobalLayout() {
-                    binding.pokedexLayout.viewTreeObserver.removeOnGlobalLayoutListener(this)
-                    applyPokedexListInsets()
-                }
-            },
-        )
     }
 
     private fun applyPokedexListInsets() {
