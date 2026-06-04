@@ -7,12 +7,13 @@ import com.garci.pokegarci.domain.model.Pokemon
 
 object PokemonMapper {
 
+    private const val MAX_ABILITIES = 3
+
     fun mapToDomain(
         details: PokemonDetailsResponse,
         species: SpeciesResponse,
         language: String,
     ): Pokemon {
-        val firstAbilityName = details.abilities.firstOrNull()?.ability?.name ?: "unknown"
         val type1 = details.types.getOrNull(0)?.type?.name ?: "unknown"
         val type2 = details.types.getOrNull(1)?.type?.name
         val statsMap = details.stats.associate { stat -> stat.stat.name to stat.base_stat }
@@ -39,10 +40,7 @@ object PokemonMapper {
             speed = statsMap["speed"] ?: 0,
             height = details.height,
             weight = details.weight,
-            firstAbility = Ability(
-                originalName = firstAbilityName,
-                displayName = AbilityNameFormatter.format(firstAbilityName),
-            ),
+            abilities = mapAbilities(details),
         )
     }
 
@@ -59,5 +57,26 @@ object PokemonMapper {
             ?: pokemon.description
 
         return pokemon.copy(description = description)
+    }
+
+    private fun mapAbilities(details: PokemonDetailsResponse): List<Ability> {
+        return details.abilities
+            .sortedBy { it.slot }
+            .take(MAX_ABILITIES)
+            .map { abilitySlot ->
+                val originalName = abilitySlot.ability.name
+                Ability(
+                    originalName = originalName,
+                    displayName = AbilityNameFormatter.format(originalName),
+                )
+            }
+            .ifEmpty {
+                listOf(
+                    Ability(
+                        originalName = "unknown",
+                        displayName = AbilityNameFormatter.format("unknown"),
+                    ),
+                )
+            }
     }
 }

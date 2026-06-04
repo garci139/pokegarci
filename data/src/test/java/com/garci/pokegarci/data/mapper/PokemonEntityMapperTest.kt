@@ -24,9 +24,11 @@ class PokemonEntityMapperTest {
             speed = 90,
             height = 4,
             weight = 60,
-            firstAbility = Ability(
-                originalName = "static",
-                displayName = "Elec. Estática",
+            abilities = listOf(
+                Ability(
+                    originalName = "static",
+                    displayName = "Elec. Estática",
+                ),
             ),
         )
 

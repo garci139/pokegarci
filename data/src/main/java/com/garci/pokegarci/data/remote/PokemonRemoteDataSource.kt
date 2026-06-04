@@ -1,6 +1,7 @@
 package com.garci.pokegarci.data.remote
 
 import com.garci.pokegarci.data.mapper.PokemonMapper
+import com.garci.pokegarci.domain.model.Ability
 import com.garci.pokegarci.domain.model.Pokemon
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
@@ -23,7 +24,9 @@ class PokemonRemoteDataSource @Inject constructor(
             }
         }.awaitAll().filterNotNull()
 
-        val abilityNames = pokemonList.map { it.firstAbility.originalName }.toSet()
+        val abilityNames = pokemonList
+            .flatMap { pokemon -> pokemon.abilities.map(Ability::originalName) }
+            .toSet()
         abilityTranslationService.ensureAllCached(abilityNames)
 
         pokemonList.map { pokemon ->
@@ -35,7 +38,9 @@ class PokemonRemoteDataSource @Inject constructor(
         currentPokemon: List<Pokemon>,
         language: String,
     ): List<Pokemon> = coroutineScope {
-        val abilityNames = currentPokemon.map { it.firstAbility.originalName }.toSet()
+        val abilityNames = currentPokemon
+            .flatMap { pokemon -> pokemon.abilities.map(Ability::originalName) }
+            .toSet()
         abilityTranslationService.ensureAllCached(abilityNames)
 
         currentPokemon.map { pokemon ->

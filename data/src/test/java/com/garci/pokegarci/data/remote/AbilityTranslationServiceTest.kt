@@ -7,6 +7,7 @@ import com.garci.pokegarci.data.remote.dto.AbilityResponse
 import com.garci.pokegarci.data.remote.dto.LanguageDto
 import com.garci.pokegarci.domain.model.Ability
 import com.garci.pokegarci.domain.model.Pokemon
+import com.garci.pokegarci.domain.model.abilitiesDisplayText
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.mockk
@@ -30,7 +31,6 @@ class AbilityTranslationServiceTest {
     fun `ensureAllCached fetches only missing abilities`() = runTest {
         coEvery { abilityDao.getCachedOriginalNames() } returns listOf("overgrow")
         coEvery { api.getAbilityDetails("chlorophyll") } returns abilityResponse(
-            originalName = "chlorophyll",
             esName = "Clorofila",
             enName = "Chlorophyll",
         )
@@ -52,11 +52,17 @@ class AbilityTranslationServiceTest {
     @Test
     fun `applyAbilityLanguage uses cached translation for requested language`() = runTest {
         coEvery { abilityDao.getDisplayName("overgrow", "es") } returns "Espesura"
+        coEvery { abilityDao.getDisplayName("chlorophyll", "es") } returns "Clorofila"
 
-        val pokemon = samplePokemon(ability = Ability("overgrow", "Overgrow"))
+        val pokemon = samplePokemon(
+            abilities = listOf(
+                Ability("overgrow", "Overgrow"),
+                Ability("chlorophyll", "Chlorophyll"),
+            ),
+        )
         val localized = service.applyAbilityLanguage(pokemon, "es")
 
-        assertEquals("Espesura", localized.firstAbility.displayName)
+        assertEquals("Espesura / Clorofila", localized.abilitiesDisplayText())
         coVerify(exactly = 0) { api.getAbilityDetails(any()) }
     }
 
@@ -64,20 +70,20 @@ class AbilityTranslationServiceTest {
     fun `applyAbilityLanguage fetches ability when translation is missing`() = runTest {
         coEvery { abilityDao.getDisplayName("overgrow", "es") } returnsMany listOf(null, "Espesura")
         coEvery { api.getAbilityDetails("overgrow") } returns abilityResponse(
-            originalName = "overgrow",
             esName = "Espesura",
             enName = "Overgrow",
         )
 
-        val pokemon = samplePokemon(ability = Ability("overgrow", "Overgrow"))
+        val pokemon = samplePokemon(
+            abilities = listOf(Ability("overgrow", "Overgrow")),
+        )
         val localized = service.applyAbilityLanguage(pokemon, "es")
 
-        assertEquals("Espesura", localized.firstAbility.displayName)
+        assertEquals("Espesura", localized.abilitiesDisplayText())
         coVerify(exactly = 1) { api.getAbilityDetails("overgrow") }
     }
 
     private fun abilityResponse(
-        originalName: String,
         esName: String,
         enName: String,
     ): AbilityResponse {
@@ -89,7 +95,7 @@ class AbilityTranslationServiceTest {
         )
     }
 
-    private fun samplePokemon(ability: Ability): Pokemon {
+    private fun samplePokemon(abilities: List<Ability>): Pokemon {
         return Pokemon(
             id = 1,
             name = "Bulbasaur",
@@ -105,7 +111,7 @@ class AbilityTranslationServiceTest {
             speed = 45,
             height = 7,
             weight = 69,
-            firstAbility = ability,
+            abilities = abilities,
         )
     }
 }

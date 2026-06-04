@@ -171,6 +171,21 @@
                         android:padding="10dp"/>
 
                     <TextView
+                        android:id="@+id/expandedPokemonAbilities"
+                        android:layout_width="wrap_content"
+                        android:layout_height="26dp"
+                        android:paddingStart="10dp"
+                        android:paddingTop="2dp"
+                        android:paddingEnd="8dp"
+                        android:gravity="center"
+                        android:text="@string/expandedPokemonAbilities"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        android:textSize="12sp"
+                        android:textColor="@color/black"
+                        android:background="@drawable/custom_stats_gridlayout"/>
+
+                    <TextView
                         android:id="@+id/expandedPokemonHeight"
                         android:layout_width="wrap_content"
                         android:paddingEnd="8dp"

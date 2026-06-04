@@ -19,6 +19,5 @@ data class PokemonEntity(
     val speed: Int,
     val height: Int,
     val weight: Int,
-    val abilityOriginalName: String,
-    val abilityDisplayName: String,
+    val abilitiesJson: String,
 )

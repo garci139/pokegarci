@@ -20,5 +20,5 @@ data class Pokemon(
     val speed: Int,
     val height: Int,
     val weight: Int,
-    val firstAbility: Ability,
+    val abilities: List<Ability>,
 )

@@ -3,6 +3,7 @@ package com.garci.pokegarci.data.remote
 import com.garci.pokegarci.data.local.dao.AbilityDao
 import com.garci.pokegarci.data.local.entity.AbilityNameEntity
 import com.garci.pokegarci.data.mapper.AbilityNameFormatter
+import com.garci.pokegarci.domain.model.Ability
 import com.garci.pokegarci.domain.model.Pokemon
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
@@ -29,10 +30,10 @@ class AbilityTranslationService @Inject constructor(
     }
 
     suspend fun applyAbilityLanguage(pokemon: Pokemon, language: String): Pokemon {
-        val displayName = resolveDisplayName(pokemon.firstAbility.originalName, language)
-        return pokemon.copy(
-            firstAbility = pokemon.firstAbility.copy(displayName = displayName),
-        )
+        val localizedAbilities = pokemon.abilities.map { ability ->
+            ability.copy(displayName = resolveDisplayName(ability.originalName, language))
+        }
+        return pokemon.copy(abilities = localizedAbilities)
     }
 
     private suspend fun resolveDisplayName(originalName: String, language: String): String {

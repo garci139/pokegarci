@@ -100,7 +100,7 @@ class PokemonRepositoryImplTest {
             speed = 90,
             height = 4,
             weight = 60,
-            firstAbility = Ability("static", "Static"),
+            abilities = listOf(Ability("static", "Static")),
         )
     }
 }

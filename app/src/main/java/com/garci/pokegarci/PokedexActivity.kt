@@ -15,6 +15,7 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.request.RequestOptions
 import com.garci.pokegarci.databinding.ActivityPokedexBinding
 import com.garci.pokegarci.domain.model.Pokemon
+import com.garci.pokegarci.domain.model.abilitiesDisplayText
 import com.garci.pokegarci.presentation.pokedex.PokedexViewModel
 import com.garci.pokegarci.ui.adapter.PokemonAdapter
 import com.garci.pokegarci.util.BaseLocaleActivity
@@ -105,6 +106,7 @@ class PokedexActivity : BaseLocaleActivity() {
         binding.expandedPokemonName.text = pokemon.name
         binding.expandedPokemonId.text = String.format("#%03d", pokemon.id)
         binding.expandedPokemonDescription.text = pokemon.description
+        binding.expandedPokemonAbilities.text = pokemon.abilitiesDisplayText()
         binding.expandedPokemonHeight.text = String.format(Locale.US, "%.1f m", pokemon.height / 10.0)
         binding.expandedPokemonWeight.text = String.format(Locale.US, "%.1f kg", pokemon.weight / 10.0)
 

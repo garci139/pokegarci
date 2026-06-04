@@ -5,6 +5,7 @@ import androidx.room.Room
 import com.garci.pokegarci.data.local.MIGRATION_1_2
 import com.garci.pokegarci.data.local.MIGRATION_2_3
 import com.garci.pokegarci.data.local.MIGRATION_3_4
+import com.garci.pokegarci.data.local.MIGRATION_4_5
 import com.garci.pokegarci.data.local.PokeGarciDatabase
 import com.garci.pokegarci.data.local.dao.AbilityDao
 import com.garci.pokegarci.data.local.dao.PokemonDao
@@ -26,7 +27,7 @@ object DatabaseModule {
             context,
             PokeGarciDatabase::class.java,
             "pokegarci.db",
-        ).addMigrations(MIGRATION_1_2, MIGRATION_2_3, MIGRATION_3_4).build()
+        ).addMigrations(MIGRATION_1_2, MIGRATION_2_3, MIGRATION_3_4, MIGRATION_4_5).build()
     }
 
     @Provides

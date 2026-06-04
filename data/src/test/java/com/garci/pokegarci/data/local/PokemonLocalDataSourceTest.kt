@@ -2,6 +2,7 @@ package com.garci.pokegarci.data.local
 
 import com.garci.pokegarci.data.local.dao.PokemonDao
 import com.garci.pokegarci.data.local.entity.CacheMetadataEntity
+import com.garci.pokegarci.data.mapper.AbilityJsonCodec
 import com.garci.pokegarci.data.local.entity.PokemonEntity
 import com.garci.pokegarci.data.mapper.PokemonEntityMapper
 import com.garci.pokegarci.data.remote.PokeApiConstants
@@ -122,8 +123,9 @@ class PokemonLocalDataSourceTest {
             speed = 90,
             height = 4,
             weight = 60,
-            abilityOriginalName = "static",
-            abilityDisplayName = "Static",
+            abilitiesJson = AbilityJsonCodec.encode(
+                listOf(Ability("static", "Static")),
+            ),
         )
     }
 
