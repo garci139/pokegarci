@@ -1,8 +1,11 @@
 package com.garci.pokegarci.ui.pokedex
 
 import android.content.Context
+import android.graphics.Color
 import android.util.AttributeSet
 import android.view.MotionEvent
+import androidx.core.content.ContextCompat
+import com.garci.pokegarci.R
 import com.google.android.material.card.MaterialCardView
 
 /**
@@ -16,6 +19,13 @@ class ExpandedPokemonCardView @JvmOverloads constructor(
     attrs: AttributeSet? = null,
     defStyleAttr: Int = 0,
 ) : MaterialCardView(context, attrs, defStyleAttr) {
+
+    init {
+        radius = 0f
+        strokeWidth = 0
+        setCardBackgroundColor(Color.TRANSPARENT)
+        background = ContextCompat.getDrawable(context, R.drawable.emerald_gba_window_bg)
+    }
 
     private val swipeHandler = ExpandedCardSwipeTouchHandler(context)
     private var interceptingSwipe = false

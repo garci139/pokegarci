@@ -156,12 +156,12 @@
         android:layout_width="match_parent"
         android:layout_height="600dp"
         android:layout_marginHorizontal="4dp"
-        app:cardCornerRadius="18dp"
-        app:cardElevation="16dp"
-        app:strokeWidth="5dp"
-        app:strokeColor="@color/black"
-        app:cardBackgroundColor="@color/expanded_card_bg"
+        android:background="@drawable/emerald_gba_window_bg"
         android:visibility="gone"
+        app:cardBackgroundColor="@android:color/transparent"
+        app:cardCornerRadius="0dp"
+        app:cardElevation="16dp"
+        app:strokeWidth="0dp"
         tools:visibility="visible"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -172,34 +172,44 @@
             android:id="@+id/expandedCardContent"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="@drawable/emerald_gba_window_bg"
             android:padding="@dimen/emerald_gba_expanded_content_padding">
 
             <TextView
                 android:id="@+id/expandedPokemonName"
-                android:layout_width="wrap_content"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:textColor="@color/black"
+                android:layout_marginEnd="8dp"
+                android:ellipsize="end"
+                android:gravity="start|center_vertical"
+                android:includeFontPadding="false"
+                android:maxLines="1"
                 android:text="@string/expandedPokemonName"
-                android:layout_gravity="start"
-                android:textStyle="bold"
+                android:textColor="@color/black"
                 android:textSize="22sp"
-                android:gravity="start" />
+                android:textStyle="bold"
+                app:layout_constraintEnd_toStartOf="@id/expandedPokemonId"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
                 android:id="@+id/expandedPokemonId"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
+                android:gravity="end|center_vertical"
+                android:includeFontPadding="false"
                 android:text="@string/expandedPokemonId"
-                android:layout_gravity="end"
-                android:textStyle="bold"
                 android:textColor="@color/black"
                 android:textSize="22sp"
-                android:gravity="end" />
+                android:textStyle="bold"
+                app:layout_constraintBaseline_toBaselineOf="@id/expandedPokemonName"
+                app:layout_constraintEnd_toEndOf="parent" />
+
+            <androidx.constraintlayout.widget.Barrier
+                android:id="@+id/expandedHeaderBottom"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:barrierDirection="bottom"
+                app:constraint_referenced_ids="expandedPokemonName,expandedPokemonId" />
 
             <FrameLayout
                 android:id="@+id/expandedPokemonImageBox"
@@ -210,7 +220,7 @@
                 android:clipChildren="false"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/expandedPokemonName">
+                app:layout_constraintTop_toBottomOf="@id/expandedHeaderBottom">
 
                 <View
                     android:id="@+id/expandedSubView"
