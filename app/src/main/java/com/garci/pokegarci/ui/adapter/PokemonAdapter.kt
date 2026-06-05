@@ -48,11 +48,11 @@ class PokemonAdapter(
         bindTypeIcon(holder.firstTypeIcon, pokemon.type1)
         bindTypeIcon(holder.secondTypeIcon, pokemon.type2)
 
-        val subView = holder.itemView.findViewById<View>(R.id.subView)
+        val subView = holder.cardView.findViewById<View>(R.id.subView)
         subView.setBackgroundColor(Color.TRANSPARENT)
         subView.background = TypeBackgroundProvider.createBackground(pokemon.type1, pokemon.type2)
 
-        holder.itemView.setOnClickListener { onItemClick(pokemon) }
+        holder.cardView.setOnClickListener { onItemClick(pokemon) }
     }
 
     private fun bindTypeIcon(imageView: ImageView, type: String?) {
@@ -66,6 +66,7 @@ class PokemonAdapter(
     }
 
     class PokemonViewHolder(view: View) : RecyclerView.ViewHolder(view) {
+        val cardView: View = view.findViewById(R.id.eachPokemonMaterialCardView)
         val imagePokemon: ImageView = view.findViewById(R.id.imagePokemon)
         val textPokemonName: TextView = view.findViewById(R.id.textPokemonName)
         val textPokemonId: TextView = view.findViewById(R.id.eachPokemonId)

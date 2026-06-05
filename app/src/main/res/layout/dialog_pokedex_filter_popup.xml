@@ -5,29 +5,25 @@
     android:layout_height="match_parent"
     android:padding="20dp">
 
-    <com.google.android.material.card.MaterialCardView
+    <FrameLayout
         android:id="@+id/pokedexFilterCard"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:maxHeight="640dp"
-        app:cardBackgroundColor="@color/expanded_card_bg"
-        app:cardCornerRadius="18dp"
-        app:cardElevation="16dp"
-        app:strokeColor="@color/black"
-        app:strokeWidth="5dp">
+        android:background="@drawable/emerald_gba_window_bg"
+        android:maxHeight="640dp">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:padding="20dp">
+            android:padding="@dimen/emerald_gba_window_fill_inset">
 
             <TextView
                 android:id="@+id/pokedexFilterDialogTitle"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:textColor="@color/black"
-                android:textSize="20sp"
+                android:textSize="18sp"
                 android:textStyle="bold"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -37,9 +33,9 @@
                 android:id="@+id/pokedexFilterDialogHint"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
+                android:layout_marginTop="6dp"
                 android:textColor="@color/black"
-                android:textSize="14sp"
+                android:textSize="13sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/pokedexFilterDialogTitle" />
@@ -48,7 +44,7 @@
                 android:id="@+id/pokedexFilterContentHost"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="12dp"
+                android:layout_marginTop="10dp"
                 app:layout_constraintBottom_toTopOf="@id/pokedexFilterFooter"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -87,7 +83,7 @@
                 android:id="@+id/pokedexFilterFooter"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
+                android:layout_marginTop="14dp"
                 android:gravity="center"
                 android:orientation="horizontal"
                 app:layout_constraintBottom_toBottomOf="parent"
@@ -97,34 +93,22 @@
 
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/pokedexFilterApplyButton"
+                    style="@style/Widget.PokeGarci.EmeraldDialogButton"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="8dp"
                     android:layout_weight="1"
                     android:enabled="false"
-                    android:padding="12dp"
-                    android:text="@string/pokedex_filter_apply"
-                    android:textColor="@color/black"
-                    android:textSize="15sp"
-                    app:backgroundTint="@color/expanded_card_button_bg"
-                    app:cornerRadius="24dp"
-                    app:strokeColor="@color/black"
-                    app:strokeWidth="3dp" />
+                    android:text="@string/pokedex_filter_apply" />
 
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/pokedexFilterCloseButton"
+                    style="@style/Widget.PokeGarci.EmeraldDialogButton"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:padding="12dp"
-                    android:text="@string/closeExpandedCard"
-                    android:textColor="@color/black"
-                    android:textSize="15sp"
-                    app:backgroundTint="@color/expanded_card_button_bg"
-                    app:cornerRadius="24dp"
-                    app:strokeColor="@color/black"
-                    app:strokeWidth="3dp" />
+                    android:text="@string/closeExpandedCard" />
             </LinearLayout>
         </androidx.constraintlayout.widget.ConstraintLayout>
-    </com.google.android.material.card.MaterialCardView>
+    </FrameLayout>
 </FrameLayout>

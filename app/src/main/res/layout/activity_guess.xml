@@ -378,7 +378,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/appTopBarInclude"
         app:queryBackground="@android:color/transparent"
-        app:searchIcon="@drawable/search_pokeball_icon" />
+        app:searchIcon="@drawable/search_emerald_triangle_icon" />
 
     <View
         android:id="@+id/guessSearchBlockOverlay"

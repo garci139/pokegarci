@@ -51,7 +51,7 @@
         <androidx.appcompat.widget.SearchView
             android:id="@+id/searchViewSize"
             app:queryBackground="@android:color/transparent"
-            app:searchIcon="@drawable/search_pokeball_icon"
+            app:searchIcon="@drawable/search_emerald_triangle_icon"
             app:iconifiedByDefault="false"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

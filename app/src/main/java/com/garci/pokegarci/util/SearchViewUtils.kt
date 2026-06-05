@@ -12,27 +12,31 @@ object SearchViewUtils {
 
     fun applyDefaultStyle(searchView: SearchView) {
         val searchEditText = searchView.findViewById<EditText>(androidx.appcompat.R.id.search_src_text)
+        val inset = searchView.resources.getDimensionPixelSize(R.dimen.emerald_gba_chip_fill_inset)
+        searchEditText.setPadding(inset, 0, inset, 0)
         searchEditText.typeface = AppFont.get(searchView.context)
         searchEditText.setTextColor(Color.BLACK)
         searchEditText.setHintTextColor(Color.GRAY)
+        searchEditText.setBackgroundResource(android.R.color.transparent)
 
         val searchCloseButton = searchView.findViewById<ImageView>(androidx.appcompat.R.id.search_close_btn)
         searchCloseButton.setColorFilter(Color.BLACK)
 
-        applySearchPokeballIcon(searchView)
+        applySearchEmeraldIcon(searchView)
     }
 
-    private fun applySearchPokeballIcon(searchView: SearchView) {
+    private fun applySearchEmeraldIcon(searchView: SearchView) {
         val searchIcon = searchView.findViewById<ImageView>(androidx.appcompat.R.id.search_mag_icon) ?: return
         val resources = searchView.resources
-        val outerSize = resources.getDimensionPixelSize(R.dimen.search_pokeball_icon_outer_size)
-        searchIcon.setImageResource(R.drawable.search_pokeball_icon)
-        searchIcon.scaleType = ImageView.ScaleType.CENTER_CROP
-        searchIcon.adjustViewBounds = false
+        val iconWidth = resources.getDimensionPixelSize(R.dimen.search_emerald_icon_width)
+        val iconHeight = resources.getDimensionPixelSize(R.dimen.search_emerald_icon_height)
+        searchIcon.setImageResource(R.drawable.search_emerald_triangle_icon)
+        searchIcon.scaleType = ImageView.ScaleType.FIT_CENTER
+        searchIcon.adjustViewBounds = true
         searchIcon.setPadding(0, 0, 0, 0)
         searchIcon.layoutParams = searchIcon.layoutParams.apply {
-            width = outerSize
-            height = outerSize
+            width = iconWidth
+            height = iconHeight
         }
     }
 

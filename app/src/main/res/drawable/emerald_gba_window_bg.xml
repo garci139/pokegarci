@@ -6,28 +6,28 @@
         </shape>
     </item>
     <item
-        android:bottom="@dimen/emerald_gba_chip_border_outer"
-        android:left="@dimen/emerald_gba_chip_border_outer"
-        android:right="@dimen/emerald_gba_chip_border_outer"
-        android:top="@dimen/emerald_gba_chip_border_outer">
+        android:bottom="@dimen/emerald_gba_border_outer"
+        android:left="@dimen/emerald_gba_border_outer"
+        android:right="@dimen/emerald_gba_border_outer"
+        android:top="@dimen/emerald_gba_border_outer">
         <shape android:shape="rectangle">
             <solid android:color="@color/emerald_gba_border_mid" />
         </shape>
     </item>
     <item
-        android:bottom="@dimen/emerald_gba_chip_content_inset"
-        android:left="@dimen/emerald_gba_chip_content_inset"
-        android:right="@dimen/emerald_gba_chip_content_inset"
-        android:top="@dimen/emerald_gba_chip_content_inset">
+        android:bottom="@dimen/emerald_gba_window_content_inset"
+        android:left="@dimen/emerald_gba_window_content_inset"
+        android:right="@dimen/emerald_gba_window_content_inset"
+        android:top="@dimen/emerald_gba_window_content_inset">
         <shape android:shape="rectangle">
             <solid android:color="@color/emerald_gba_border_inner" />
         </shape>
     </item>
     <item
-        android:bottom="@dimen/emerald_gba_chip_fill_inset"
-        android:left="@dimen/emerald_gba_chip_fill_inset"
-        android:right="@dimen/emerald_gba_chip_fill_inset"
-        android:top="@dimen/emerald_gba_chip_fill_inset">
+        android:bottom="@dimen/emerald_gba_window_fill_inset"
+        android:left="@dimen/emerald_gba_window_fill_inset"
+        android:right="@dimen/emerald_gba_window_fill_inset"
+        android:top="@dimen/emerald_gba_window_fill_inset">
         <shape android:shape="rectangle">
             <solid android:color="@color/emerald_gba_window_fill" />
         </shape>

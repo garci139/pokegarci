@@ -125,72 +125,74 @@
         tools:ignore="ContentDescription" />
 
     <!-- BOTÓN CAMBIAR TAMAÑO 1 -->
-    <com.google.android.material.card.MaterialCardView
+    <FrameLayout
         android:id="@+id/changePkmn1Size"
         android:layout_width="160dp"
         android:layout_height="70dp"
-        app:strokeWidth="3dp"
-        app:strokeColor="@color/black"
-        app:cardCornerRadius="36dp"
+        android:background="@drawable/emerald_gba_chip_bg"
+        android:clickable="true"
+        android:focusable="true"
+        android:foreground="?attr/selectableItemBackground"
         app:layout_constraintTop_toBottomOf="@id/sizeBox"
         app:layout_constraintBottom_toTopOf="@id/pikachuHead"
         app:layout_constraintStart_toStartOf="parent"
         android:layout_marginStart="@dimen/size_content_horizontal_inset">
 
         <View
+            android:id="@+id/typeChangePkmn1Size"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="@color/white"
-            android:padding="1dp"
-            android:id="@+id/typeChangePkmn1Size"/>
+            android:layout_margin="@dimen/emerald_gba_chip_fill_inset"
+            android:background="@color/white" />
 
         <TextView
-            android:layout_width="match_parent"
             android:id="@+id/changePkmn1SizeText"
-            android:layout_gravity="center"
-            android:gravity="center"
+            android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:layout_margin="@dimen/emerald_gba_chip_fill_inset"
+            android:gravity="center"
+            android:padding="10dp"
             android:text="@string/changePkmn1SizeButton"
             android:textColor="@color/black"
             android:textSize="16sp"
-            android:padding="14dp"
-            android:textStyle="bold"/>
+            android:textStyle="bold" />
 
-    </com.google.android.material.card.MaterialCardView>
+    </FrameLayout>
 
     <!-- BOTÓN CAMBIAR TAMAÑO 2 -->
-    <com.google.android.material.card.MaterialCardView
+    <FrameLayout
         android:id="@+id/changePkmn2Size"
         android:layout_width="160dp"
         android:layout_height="70dp"
-        app:strokeWidth="3dp"
-        app:strokeColor="@color/black"
-        app:cardCornerRadius="36dp"
+        android:background="@drawable/emerald_gba_chip_bg"
+        android:clickable="true"
+        android:focusable="true"
+        android:foreground="?attr/selectableItemBackground"
         app:layout_constraintTop_toBottomOf="@id/sizeBox"
         app:layout_constraintBottom_toTopOf="@id/pikachuHead"
         app:layout_constraintEnd_toEndOf="parent"
         android:layout_marginEnd="@dimen/size_content_horizontal_inset">
 
         <View
+            android:id="@+id/typeChangePkmn2Size"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:padding="1dp"
-            android:background="@color/white"
-            android:id="@+id/typeChangePkmn2Size"/>
+            android:layout_margin="@dimen/emerald_gba_chip_fill_inset"
+            android:background="@color/white" />
 
         <TextView
-            android:layout_width="match_parent"
-            android:layout_gravity="center"
-            android:gravity="center"
             android:id="@+id/changePkmn2SizeText"
+            android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:layout_margin="@dimen/emerald_gba_chip_fill_inset"
+            android:gravity="center"
+            android:padding="10dp"
             android:text="@string/changePkmn2SizeButton"
             android:textColor="@color/black"
             android:textSize="16sp"
-            android:padding="14dp"
-            android:textStyle="bold"/>
+            android:textStyle="bold" />
 
-    </com.google.android.material.card.MaterialCardView>
+    </FrameLayout>
 
     <!-- PIKACHU HEAD -->
     <ImageView
@@ -212,7 +214,7 @@
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="@dimen/size_content_horizontal_inset"
         android:layout_marginBottom="66dp"
-        android:background="@color/black"
+        android:background="@color/emerald_gba_border_outer"
         android:padding="2dp"
         android:weightSum="2"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -227,7 +229,7 @@
                 android:layout_gravity="center"
                 android:layout_margin="0.6dp"
                 android:layout_weight="0.6"
-                android:background="@color/white"
+                android:background="@drawable/emerald_gba_field_bg"
                 android:gravity="center"
                 android:padding="6dp"
                 android:text="@string/HP_API"
@@ -239,7 +241,7 @@
                 android:layout_gravity="center"
                 android:layout_margin="0.6dp"
                 android:layout_weight="0.8"
-                android:background="@color/light_grey"
+                android:background="@drawable/emerald_gba_stat_label_bg"
                 android:gravity="center"
                 android:padding="6dp"
                 android:text="@string/HP"
@@ -252,7 +254,7 @@
                 android:layout_gravity="center"
                 android:layout_margin="0.6dp"
                 android:layout_weight="0.6"
-                android:background="@color/white"
+                android:background="@drawable/emerald_gba_field_bg"
                 android:gravity="center"
                 android:padding="6dp"
                 android:text="@string/HP_API"
@@ -269,7 +271,7 @@
                 android:layout_gravity="center"
                 android:layout_margin="0.6dp"
                 android:layout_weight="0.6"
-                android:background="@color/white"
+                android:background="@drawable/emerald_gba_field_bg"
                 android:gravity="center"
                 android:padding="6dp"
                 android:text="@string/Attack_API"
@@ -281,7 +283,7 @@
                 android:layout_gravity="center"
                 android:layout_margin="0.6dp"
                 android:layout_weight="0.8"
-                android:background="@color/light_grey"
+                android:background="@drawable/emerald_gba_stat_label_bg"
                 android:gravity="center"
                 android:padding="6dp"
                 android:text="@string/Attack"
@@ -294,7 +296,7 @@
                 android:layout_gravity="center"
                 android:layout_margin="0.6dp"
                 android:layout_weight="0.6"
-                android:background="@color/white"
+                android:background="@drawable/emerald_gba_field_bg"
                 android:gravity="center"
                 android:padding="6dp"
                 android:text="@string/Attack_API"
@@ -311,7 +313,7 @@
                 android:layout_gravity="center"
                 android:layout_margin="0.6dp"
                 android:layout_weight="0.6"
-                android:background="@color/white"
+                android:background="@drawable/emerald_gba_field_bg"
                 android:gravity="center"
                 android:padding="6dp"
                 android:text="@string/Attack_API"
@@ -323,7 +325,7 @@
                 android:layout_gravity="center"
                 android:layout_margin="0.6dp"
                 android:layout_weight="0.8"
-                android:background="@color/light_grey"
+                android:background="@drawable/emerald_gba_stat_label_bg"
                 android:gravity="center"
                 android:padding="6dp"
                 android:text="@string/Defense"
@@ -336,7 +338,7 @@
                 android:layout_gravity="center"
                 android:layout_margin="0.6dp"
                 android:layout_weight="0.6"
-                android:background="@color/white"
+                android:background="@drawable/emerald_gba_field_bg"
                 android:gravity="center"
                 android:padding="6dp"
                 android:text="@string/Attack_API"
@@ -353,7 +355,7 @@
                 android:layout_gravity="center"
                 android:layout_margin="0.6dp"
                 android:layout_weight="0.6"
-                android:background="@color/white"
+                android:background="@drawable/emerald_gba_field_bg"
                 android:gravity="center"
                 android:padding="6dp"
                 android:text="@string/SpAttack_API"
@@ -365,7 +367,7 @@
                 android:layout_gravity="center"
                 android:layout_margin="0.6dp"
                 android:layout_weight="0.8"
-                android:background="@color/light_grey"
+                android:background="@drawable/emerald_gba_stat_label_bg"
                 android:gravity="center"
                 android:padding="6dp"
                 android:text="@string/SpAttack"
@@ -378,7 +380,7 @@
                 android:layout_gravity="center"
                 android:layout_margin="0.6dp"
                 android:layout_weight="0.6"
-                android:background="@color/white"
+                android:background="@drawable/emerald_gba_field_bg"
                 android:gravity="center"
                 android:padding="6dp"
                 android:text="@string/SpAttack_API"
@@ -395,7 +397,7 @@
                 android:layout_gravity="center"
                 android:layout_margin="0.6dp"
                 android:layout_weight="0.6"
-                android:background="@color/white"
+                android:background="@drawable/emerald_gba_field_bg"
                 android:gravity="center"
                 android:padding="6dp"
                 android:text="@string/SpDefense_API"
@@ -407,7 +409,7 @@
                 android:layout_gravity="center"
                 android:layout_margin="0.6dp"
                 android:layout_weight="0.8"
-                android:background="@color/light_grey"
+                android:background="@drawable/emerald_gba_stat_label_bg"
                 android:gravity="center"
                 android:padding="6dp"
                 android:text="@string/SpDefense"
@@ -420,7 +422,7 @@
                 android:layout_gravity="center"
                 android:layout_margin="0.6dp"
                 android:layout_weight="0.6"
-                android:background="@color/white"
+                android:background="@drawable/emerald_gba_field_bg"
                 android:gravity="center"
                 android:padding="6dp"
                 android:text="@string/SpDefense_API"
@@ -437,7 +439,7 @@
                 android:layout_gravity="center"
                 android:layout_margin="0.6dp"
                 android:layout_weight="0.6"
-                android:background="@color/white"
+                android:background="@drawable/emerald_gba_field_bg"
                 android:gravity="center"
                 android:padding="6dp"
                 android:text="@string/Speed_API"
@@ -449,7 +451,7 @@
                 android:layout_gravity="center"
                 android:layout_margin="0.6dp"
                 android:layout_weight="0.8"
-                android:background="@color/light_grey"
+                android:background="@drawable/emerald_gba_stat_label_bg"
                 android:gravity="center"
                 android:padding="6dp"
                 android:text="@string/Speed"
@@ -462,7 +464,7 @@
                 android:layout_gravity="center"
                 android:layout_margin="0.6dp"
                 android:layout_weight="0.6"
-                android:background="@color/white"
+                android:background="@drawable/emerald_gba_field_bg"
                 android:gravity="center"
                 android:padding="6dp"
                 android:text="@string/Speed_API"

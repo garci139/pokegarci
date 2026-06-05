@@ -12,7 +12,7 @@
         <item name="android:layout_gravity">center</item>
         <item name="android:gravity">center</item>
         <item name="android:padding">4dp</item>
-        <item name="android:background">@drawable/guess_try_text_bg</item>
+        <item name="android:background">@drawable/emerald_gba_stat_label_bg</item>
         <item name="android:textSize">20sp</item>
         <item name="android:textColor">@color/black</item>
         <item name="android:textAllCaps">true</item>
@@ -30,5 +30,23 @@
     <style name="Widget.PokeGarci.Button" parent="Widget.MaterialComponents.Button">
         <item name="fontFamily">@font/pokemon_emerald</item>
         <item name="android:fontFamily">@font/pokemon_emerald</item>
+    </style>
+
+    <style name="Widget.PokeGarci.EmeraldDialogButton" parent="Widget.MaterialComponents.Button">
+        <item name="fontFamily">@font/pokemon_emerald</item>
+        <item name="android:fontFamily">@font/pokemon_emerald</item>
+        <item name="android:background">@drawable/emerald_gba_button_bg</item>
+        <item name="backgroundTint">@null</item>
+        <item name="android:textColor">@color/black</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:paddingTop">10dp</item>
+        <item name="android:paddingBottom">10dp</item>
+        <item name="android:minHeight">40dp</item>
+        <item name="android:insetTop">0dp</item>
+        <item name="android:insetBottom">0dp</item>
+        <item name="cornerRadius">0dp</item>
+        <item name="elevation">0dp</item>
+        <item name="android:stateListAnimator">@null</item>
+        <item name="rippleColor">@android:color/transparent</item>
     </style>
 </resources>

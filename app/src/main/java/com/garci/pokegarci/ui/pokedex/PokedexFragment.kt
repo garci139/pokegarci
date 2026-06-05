@@ -27,6 +27,7 @@ import com.garci.pokegarci.domain.model.spriteUrl
 import com.garci.pokegarci.presentation.pokedex.PokedexViewModel
 import com.garci.pokegarci.ui.adapter.PokemonAdapter
 import com.garci.pokegarci.util.DataLoadingUi
+import com.garci.pokegarci.util.GridSpacingItemDecoration
 import com.garci.pokegarci.util.PokemonCryPlayer
 import com.garci.pokegarci.util.setupAppTopBar
 import com.garci.pokegarci.util.PokemonSpriteFlipAnimator
@@ -80,6 +81,14 @@ class PokedexFragment : Fragment() {
         binding.pokedexBox.layoutManager = GridLayoutManager(requireContext(), 3)
         binding.pokedexBox.adapter = adapter
         binding.pokedexBox.isNestedScrollingEnabled = false
+        if (binding.pokedexBox.itemDecorationCount == 0) {
+            binding.pokedexBox.addItemDecoration(
+                GridSpacingItemDecoration(
+                    spanCount = 3,
+                    spacingPx = resources.getDimensionPixelSize(R.dimen.pokedex_card_spacing)
+                ),
+            )
+        }
 
         filterUi = PokedexFilterUi(
             fragment = this,
@@ -212,8 +221,11 @@ class PokedexFragment : Fragment() {
 
     private fun applyPokedexListInsets() {
         val topInset = binding.pokedexListTopAnchor.bottom - binding.pokedexBox.top
-        if (topInset > 0 && binding.pokedexBox.paddingTop != topInset) {
-            binding.pokedexBox.setPadding(0, topInset, 0, 0)
+        val bottomInset = resources.getDimensionPixelSize(R.dimen.pokedex_list_bottom_inset)
+        if (topInset > 0 &&
+            (binding.pokedexBox.paddingTop != topInset || binding.pokedexBox.paddingBottom != bottomInset)
+        ) {
+            binding.pokedexBox.setPadding(0, topInset, 0, bottomInset)
         }
     }
 

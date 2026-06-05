@@ -8,11 +8,16 @@
     <dimen name="pokedex_filters_separator_margin_top">8dp</dimen>
     <dimen name="pokedex_list_below_separator_gap">6dp</dimen>
     <dimen name="pokedex_content_horizontal_inset">16dp</dimen>
-    <dimen name="pokedex_list_horizontal_inset">14dp</dimen>
+    <dimen name="pokedex_list_horizontal_inset">12dp</dimen>
+    <dimen name="pokedex_list_bottom_inset">8dp</dimen>
+    <dimen name="pokedex_card_spacing">8dp</dimen>
     <dimen name="pokedex_content_top_inset">6dp</dimen>
     <dimen name="search_view_stroke_width">3dp</dimen>
     <dimen name="search_pokeball_icon_outer_size">26dp</dimen>
     <dimen name="search_pokeball_icon_inner_size">22dp</dimen>
+    <dimen name="search_emerald_icon_width">10dp</dimen>
+    <dimen name="search_emerald_icon_height">12dp</dimen>
+    <dimen name="emerald_gba_expanded_content_padding">19dp</dimen>
     <dimen name="pokedex_title_margin_top">4dp</dimen>
     <dimen name="pokedex_title_line_padding_horizontal">10dp</dimen>
     <dimen name="expanded_card_nav_divider_width">2dp</dimen>
@@ -32,4 +37,20 @@
     <dimen name="app_top_bar_back_padding">12dp</dimen>
     <dimen name="pokedex_toolbar_padding_top">10dp</dimen>
     <dimen name="size_content_horizontal_inset">12dp</dimen>
+
+    <dimen name="emerald_gba_border_outer">3dp</dimen>
+    <dimen name="emerald_gba_border_mid">2dp</dimen>
+    <dimen name="emerald_gba_border_inner">2dp</dimen>
+    <dimen name="emerald_gba_chip_border_outer">2dp</dimen>
+    <dimen name="emerald_gba_chip_border_mid">1dp</dimen>
+    <dimen name="emerald_gba_chip_border_inner">1dp</dimen>
+    <dimen name="emerald_gba_window_content_inset">5dp</dimen>
+    <dimen name="emerald_gba_window_fill_inset">7dp</dimen>
+    <dimen name="emerald_gba_chip_content_inset">3dp</dimen>
+    <dimen name="emerald_gba_chip_fill_inset">4dp</dimen>
+
+    <dimen name="pokedex_card_inner_padding">10dp</dimen>
+    <dimen name="pokedex_card_inner_padding_vertical">10dp</dimen>
+    <dimen name="pokedex_card_inner_padding_horizontal">13dp</dimen>
+    <dimen name="pokedex_card_image_max_size">64dp</dimen>
 </resources>

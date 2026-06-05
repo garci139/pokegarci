@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:state_enabled="false">
+        <layer-list>
+            <item>
+                <shape android:shape="rectangle">
+                    <solid android:color="@color/emerald_gba_border_mid" />
+                </shape>
+            </item>
+            <item
+                android:bottom="@dimen/emerald_gba_chip_border_outer"
+                android:left="@dimen/emerald_gba_chip_border_outer"
+                android:right="@dimen/emerald_gba_chip_border_outer"
+                android:top="@dimen/emerald_gba_chip_border_outer">
+                <shape android:shape="rectangle">
+                    <solid android:color="@color/emerald_gba_button_disabled_fill" />
+                </shape>
+            </item>
+        </layer-list>
+    </item>
+    <item android:state_pressed="true">
+        <layer-list>
+            <item>
+                <shape android:shape="rectangle">
+                    <solid android:color="@color/emerald_gba_border_outer" />
+                </shape>
+            </item>
+            <item
+                android:bottom="@dimen/emerald_gba_chip_border_outer"
+                android:left="@dimen/emerald_gba_chip_border_outer"
+                android:right="@dimen/emerald_gba_chip_border_outer"
+                android:top="@dimen/emerald_gba_chip_border_outer">
+                <shape android:shape="rectangle">
+                    <solid android:color="@color/emerald_gba_border_mid" />
+                </shape>
+            </item>
+            <item
+                android:bottom="@dimen/emerald_gba_chip_fill_inset"
+                android:left="@dimen/emerald_gba_chip_fill_inset"
+                android:right="@dimen/emerald_gba_chip_fill_inset"
+                android:top="@dimen/emerald_gba_chip_fill_inset">
+                <shape android:shape="rectangle">
+                    <solid android:color="@color/emerald_gba_button_pressed_fill" />
+                </shape>
+            </item>
+        </layer-list>
+    </item>
+    <item>
+        <layer-list>
+            <item>
+                <shape android:shape="rectangle">
+                    <solid android:color="@color/emerald_gba_border_outer" />
+                </shape>
+            </item>
+            <item
+                android:bottom="@dimen/emerald_gba_chip_border_outer"
+                android:left="@dimen/emerald_gba_chip_border_outer"
+                android:right="@dimen/emerald_gba_chip_border_outer"
+                android:top="@dimen/emerald_gba_chip_border_outer">
+                <shape android:shape="rectangle">
+                    <solid android:color="@color/emerald_gba_border_mid" />
+                </shape>
+            </item>
+            <item
+                android:bottom="@dimen/emerald_gba_chip_fill_inset"
+                android:left="@dimen/emerald_gba_chip_fill_inset"
+                android:right="@dimen/emerald_gba_chip_fill_inset"
+                android:top="@dimen/emerald_gba_chip_fill_inset">
+                <shape android:shape="rectangle">
+                    <solid android:color="@color/emerald_gba_window_fill" />
+                </shape>
+            </item>
+        </layer-list>
+    </item>
+</selector>

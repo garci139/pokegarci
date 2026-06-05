@@ -275,8 +275,10 @@ class GuessFragment : Fragment() {
     private fun syncGenFilterButtons(selected: Set<PokemonGeneration>) {
         syncingGenFilters = true
         genFilterSlots.forEach { slot ->
+            val isSelected = slot.generation in selected
+            slot.binding.root.isSelected = isSelected
             slot.binding.genFilterIndicator.visibility =
-                if (slot.generation in selected) View.VISIBLE else View.INVISIBLE
+                if (isSelected) View.VISIBLE else View.INVISIBLE
         }
         syncingGenFilters = false
     }
